@@ -4,6 +4,8 @@
  * It is extraordinarily rare that you will ever need to edit this file. (no, no its not -thomas ricci)
  */
 
+apply plugin: 'java'
+
 configurations {
     doc { transitive false }
 }
