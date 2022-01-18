@@ -51,7 +51,7 @@ dependencies {
     doc 'org.firstinspires.ftc:RobotCore:7.0.0'
     doc 'org.firstinspires.ftc:FtcCommon:7.0.0'
     doc 'org.firstinspires.ftc:OnBotJava:7.0.0'
-    doc 'org.firstinspires.ftc:Inspection:7.0.0'
+    doc 'org.firstinspires.ftc:Inspection:7.1.0'
 }
 
 task extractJavadoc {
