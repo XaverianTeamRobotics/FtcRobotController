@@ -18,7 +18,7 @@ jobs:
       # Set up our environment.
   
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up the JDK environment
         uses: actions/setup-java@v2
@@ -46,7 +46,7 @@ jobs:
       # Checkout repository to place FTC SDK into.
           
       - name: Prepare link update
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'gh-pages'
           path: './docs/tempgit/FtcRobotController/'
@@ -159,7 +159,7 @@ jobs:
           mkdir ./tjdmp/
       
       - name: Checkout Pages in Action Workspace
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: 'gh-pages'
           path: './tjdmp/'
