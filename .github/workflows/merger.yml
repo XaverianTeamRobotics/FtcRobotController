@@ -45,7 +45,7 @@ jobs:
           TOKEN: ${{ github.event.inputs.token }}
           OG: ${{ secrets.MASS_MERGE_INDIVIDUAL_TOKEN }}
       - name: Branch Merge
-        uses: everlytic/branch-merge@1.1.3
+        uses: everlytic/branch-merge@1.1.4
         with:
           target_branch: ${{ github.event.inputs.into }}
           commit_message_template: Fetched Local Upstream
