@@ -10,7 +10,7 @@ repositories {
 
 dependencies {
     implementation 'org.firstinspires.ftc:Inspection:7.2.0'
-    implementation 'org.firstinspires.ftc:Blocks:7.2.0'
+    implementation 'org.firstinspires.ftc:Blocks:8.0.0'
     implementation 'org.firstinspires.ftc:Tfod:7.2.0'
     implementation 'org.firstinspires.ftc:RobotCore:7.2.0'
     implementation 'org.firstinspires.ftc:RobotServer:7.2.0'
