@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Docs" pattern="file[robot]:HelpPage//*||file[robot*]:*//*||file[robot.PathVisualizer]:*/||file[robot.FtcRobotController]:*/||file[robot.TeamCode]:*/||file[robot.TeamCode*]:*//*||file[robot.TeamCode.main]:*/||file[robot.FtcRobotController*]:*//*||file[robot.FtcRobotController.main]:*/" />
+</component>
