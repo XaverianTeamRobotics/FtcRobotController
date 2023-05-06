@@ -12,16 +12,6 @@ module.exports = {
         "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended"
       ],
-      "overrides": [
-        {
-          "files": [ "**/*.{cjs,cts,js}" ],
-          "rules": {
-            "@typescript-eslint/no-var-requires": [
-              "off"
-            ]
-          }
-        }
-      ],
       "settings": { "react": { "version": "detect" }, },
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
@@ -31,6 +21,24 @@ module.exports = {
       "plugins": [
         "react",
         "@typescript-eslint"
+      ],
+      "overrides": [
+        {
+          "files": [ "**/*.{js,cjs,cts,tsx}" ],
+          "rules": {
+            "@typescript-eslint/no-var-requires": [
+              "off"
+            ],
+          }
+        },
+        {
+          "files": [ "**/*.{js,cjs}" ],
+          "rules": {
+            "react/prop-types": [
+              "off"
+            ]
+          }
+        }
       ],
       "rules": {
         "indent": [
