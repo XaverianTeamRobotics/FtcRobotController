@@ -54,7 +54,7 @@ const config = {
     ({
       // Replace with your project's social card
       navbar: {
-        title: "19460 | Documentation",
+        title: "19460 Hawks Robotics",
         logo: {
           alt: "Hawkbot",
           src: "img/favicon.png",
@@ -70,8 +70,7 @@ const config = {
             label: "GitHub",
             position: "right",
           },
-        ],
-        hideOnScroll: false,
+        ]
       },
       footer: {
         style: "dark",
