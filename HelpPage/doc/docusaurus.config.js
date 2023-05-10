@@ -52,7 +52,6 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // Replace with your project's social card
       navbar: {
         title: "19460 Hawks Robotics",
         logo: {
@@ -71,6 +70,14 @@ const config = {
             position: "right",
           },
         ]
+      },
+      colorMode: {
+        defaultMode: "light",
+        disableSwitch: true
+      },
+      prism: {
+        theme: require("prism-react-renderer/themes/dracula"),
+        darkTheme: darkCodeTheme,
       },
       footer: {
         style: "dark",
@@ -116,11 +123,7 @@ const config = {
           },
         ],
         copyright: `Copyright © ${ new Date().getFullYear() } My Project, Inc. Built with Docusaurus.`,
-      },
-      prism: {
-        theme: lightCodeTheme,
-        darkTheme: darkCodeTheme,
-      },
+      }
     }),
 };
 

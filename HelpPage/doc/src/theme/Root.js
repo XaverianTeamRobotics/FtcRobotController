@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { NavbarBreadcrumbHeightContext } from "@site/src/utils/NavbarBreadcrumbHeightContext";
 import { DocumentHeightContext } from "@site/src/utils/DocumentHeightContext";
 
-// Default implementation, that you can customize
 export default function Root({ children }) {
 
-  const heightState = useState(0);
+  const breadcrumbHeightState = useState(0);
 
+  const documentHeightState = useState(0);
+
+  // height mgmt using javascript. normally i would be against this for perf reasons but this will have an incredibly minimal effect on perf
   const observer = new ResizeObserver(entries => {
     let height = 0;
     for(const entry of entries) {
@@ -13,7 +16,7 @@ export default function Root({ children }) {
         height = entry.target.clientHeight;
       }
     }
-    heightState[1](height);
+    breadcrumbHeightState[1](height);
   });
 
   useEffect(() => {
@@ -28,8 +31,10 @@ export default function Root({ children }) {
 
   return (
     <>
-      <DocumentHeightContext.Provider value={heightState}>
-        {children}
+      <DocumentHeightContext.Provider value={documentHeightState}>
+        <NavbarBreadcrumbHeightContext.Provider value={breadcrumbHeightState}>
+          {children}
+        </NavbarBreadcrumbHeightContext.Provider>
       </DocumentHeightContext.Provider>
     </>
   );
