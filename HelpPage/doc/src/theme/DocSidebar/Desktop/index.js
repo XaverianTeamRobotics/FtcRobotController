@@ -21,6 +21,7 @@ function DocSidebarDesktop({ path, sidebar, onCollapse, isHidden }) {
       ) } sidebar-pt`}>
       <Logo tabIndex={-1} className={styles.sidebarLogo}/>
       <Content path={path} sidebar={sidebar} />
+      <div className={"scrollbar-footer"}/>
       {hideable && <CollapseButton onClick={onCollapse} />}
     </div>
   );
