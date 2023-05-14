@@ -316,6 +316,15 @@ a:hover {
         padding-left: 0rem;
         padding-right: 0rem;
     }
+
+    .docItemContainer_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-Layout-styles-module {
+        max-width: 1000px;
+    }
+
+    .doc-scroll > :first-child {
+        max-width: 100%;
+    }
+
 }
 
 @media only screen and (max-width: 996px) {
