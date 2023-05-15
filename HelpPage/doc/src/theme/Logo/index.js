@@ -35,16 +35,20 @@ export default function Logo(props) {
     navbar: { title: navbarTitle, logo },
   } = useThemeConfig();
   const { imageClassName, titleClassName, ...propsRest } = props;
-  const logoLink = useBaseUrl(logo?.href || "/");
+  const logoLink = "/";
   // If visible title is shown, fallback alt text should be
   // an empty string to mark the logo as decorative.
   const fallbackAlt = navbarTitle ? "" : title;
   // Use logo alt text if provided (including empty string),
   // and provide a sensible fallback otherwise.
   const alt = logo?.alt ?? fallbackAlt;
+
+  // todo: make this render "/". to do this, we need to send the current url as the to prop, add an id to the link, and useEffect(, ) (second arg is empty, no deps) to get the link and remove the target="_blank" and rel="noopener noreferrer". we then need to do this for the breadcrumb home too.
+
   return (
     <Link
       to={logoLink}
+      autoAddBaseUrl={false}
       {...propsRest}
       {...(logo?.target && { target: logo.target })}>
       {logo && (
