@@ -4,6 +4,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import { useThemeConfig } from "@docusaurus/theme-common";
 import ThemedImage from "@theme/ThemedImage";
+
 function LogoThemedImage({ logo, alt, imageClassName }) {
   const sources = {
     light: useBaseUrl(logo.src),
@@ -43,12 +44,11 @@ export default function Logo(props) {
   // and provide a sensible fallback otherwise.
   const alt = logo?.alt ?? fallbackAlt;
 
-  // todo: make this render "/". to do this, we need to send the current url as the to prop, add an id to the link, and useEffect(, ) (second arg is empty, no deps) to get the link and remove the target="_blank" and rel="noopener noreferrer". we then need to do this for the breadcrumb home too.
+  // todo: make this not be the whole navbar, so its easier to touch the hamburger menu
 
   return (
     <Link
       to={logoLink}
-      autoAddBaseUrl={false}
       {...propsRest}
       {...(logo?.target && { target: logo.target })}>
       {logo && (
