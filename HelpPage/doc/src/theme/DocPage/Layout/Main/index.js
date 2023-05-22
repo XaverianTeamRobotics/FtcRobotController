@@ -5,9 +5,9 @@ import styles from "./styles.module.css";
 import Navbar from "@site/src/theme/Navbar";
 import { FooterContext } from "@site/src/utils/FooterContext";
 import Footer from "@theme/Footer";
-import { NavbarBreadcrumbHeightContext } from "@site/src/utils/NavbarBreadcrumbHeightContext";
 import { NavbarHR } from "@site/src/components/NavbarHR";
 import { DocumentHeightContext } from "@site/src/utils/DocumentHeightContext";
+
 export default function DocPageLayoutMain({ hiddenSidebarContainer, children }) {
 
   let sidebar = useDocsSidebar();
