@@ -43,9 +43,6 @@ export default function Logo(props) {
   // Use logo alt text if provided (including empty string),
   // and provide a sensible fallback otherwise.
   const alt = logo?.alt ?? fallbackAlt;
-
-  // todo: make this not be the whole navbar, so its easier to touch the hamburger menu
-
   return (
     <Link
       to={logoLink}
