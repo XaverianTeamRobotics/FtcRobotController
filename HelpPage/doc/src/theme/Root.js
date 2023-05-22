@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavbarBreadcrumbHeightContext } from "@site/src/utils/NavbarBreadcrumbHeightContext";
 import { DocumentHeightContext } from "@site/src/utils/DocumentHeightContext";
 import { sidebarEventManager } from "@site/src/utils/sidebarEventManager";
@@ -47,7 +47,10 @@ export default function Root({ children }) {
       observer.observe(elem);
     }
 
-    sidebarObserver.observe(document.getElementsByClassName("theme-doc-sidebar-menu menu__list")[0]);
+    const sidebarElem = document.getElementsByClassName("theme-doc-sidebar-menu menu__list")[0];
+    if(sidebarElem !== undefined) {
+      sidebarObserver.observe(sidebarElem);
+    }
 
     const sidebarEventManagerCleanup = sidebarEventManager();
 
