@@ -65,15 +65,57 @@ const config = {
         },
         items: [
           {
-            href: "../",
-            label: "Home",
+            type: "dropdown",
+            label: "2.0.0",
+            position: "right",
+            items: [
+              {
+                type: "html",
+                value: "<span class='dropdown-title dropdown-mb'>Active Versions</span>",
+              },
+              {
+                href: "/",
+                label: "2.0.0"
+              },
+              {
+                type: "html",
+                value: `${ "" }<span class="dropdown-title dropdown-mt dropdown-mb">Archived Versions</span>`
+              },
+              {
+                type: "html",
+                value: `${ "" } <a class="dropdown__link" href="https://robotics.xbhs.net/v1.0.0">1.1.0</a>`,
+              },
+              {
+                type: "html",
+                value: `${ "" } <a class="dropdown__link" href="https://github.com/XaverianTeamRobotics/freight-frenzy-archive/blob/gh-pages/guides/index.md">1.0.0</a>`,
+              }
+            ]
+          },
+          {
+            type: "dropdown",
+            label: "Debugging Tools",
+            position: "right",
+            items: [
+              {
+                href: "https://robotics.xbhs.net/apk",
+                label: "Flash APK"
+              },
+              {
+                href: "https://robotics.xbhs.net/legacy-apk",
+                label: "Download APK"
+              },
+            ]
+          },
+          {
+            type: "html",
+            value: `${ "" } <a class="navbar__item navbar__link" href="https://robotics.xbhs.net/book">The Book</a>`,
             position: "right",
           },
           {
             href: "https://github.com/XaverianTeamRobotics/",
             label: "GitHub",
             position: "right",
-          },
+          }
         ]
       },
       colorMode: {

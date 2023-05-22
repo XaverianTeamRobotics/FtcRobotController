@@ -23,6 +23,49 @@
     --ifm-scrollbar-track-background-color: var(--xb__transparent);
 }
 
+.skipToContent_node_modules-\@docusaurus-theme-classic-lib-theme-SkipToContent-styles-module {
+    background-color: var(--xb__background) !important;
+    box-shadow: var(--ifm-global-shadow-md) !important;
+}
+
+#nav-with-breadcrumbs > div.navbar__inner > div.navbar__items.navbar__items--right.h-nav > a:nth-child(3) > svg {
+    display: none;
+}
+
+.dropdown-title {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.dropdown-mt {
+    margin-top: 0.2rem;
+}
+
+.dropdown-mb {
+    margin-bottom: 0.2rem;
+}
+
+.dropdown__menu {
+    background-color: var(--xb__background);
+    border: 1px solid var(--xb__border-and-highlight-and-line-seperator);
+}
+
+.dropdown--hoverable:hover > a, .dropdown--hoverable:active > a {
+    color: var(--xb__accent);
+}
+
+.h-nav:has(> .dropdown--hoverable:hover) {
+    cursor: pointer;
+}
+
+.dropdown__menu {
+    cursor: auto !important;
+}
+
+.dropdown__link {
+    transition: all var(--ifm-transition-fast) var(--ifm-transition-timing-default) !important;
+}
+
  div.col.docItemCol_node_modules-\@docusaurus-theme-classic-lib-theme-DocItem-Layout-styles-module img {
     border-radius: var(--ifm-global-radius);
 }
