@@ -11,7 +11,7 @@ const date = () => {
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "19460 | Documentation",
+  title: "19460 Docs",
   favicon: "img/favicon.png",
 
   // Set the production url of your site here

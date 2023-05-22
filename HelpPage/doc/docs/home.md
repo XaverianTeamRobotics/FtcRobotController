@@ -1,23 +1,31 @@
 ---
 slug: /
+sidebar_position: 0
+sidebar_label: Welcome
+title: Welcome
 ---
 
-# Tutorial Intro
+# Hawks Robotics Documentation
 
-Let's discover **Docusaurus in less than 5 minutes**.
+Welcome to our documentation hub! This website contains all the information you'll need to write code for our team.
 
-## Getting Started
+## New to this?
 
-Get started by **creating a new site**.
+If you are new to programming as a whole, consider watching [this Java tutorial](https://www.youtube.com/watch?v=eIrMbAQSU34). You don't have to follow the tutorial; we'll go over everything and let you begin writing code later. 
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+Java is our most commonly used programming language, and it's pretty essential to understand at least a little of it to get started.
 
-### What you'll need
+:::tip
+### Want to build up to programming?
+If you don't want to jump into text-based code right away, you can use the First Tech Challenge's [Blocks](https://github.com/FIRST-Tech-Challenge/FtcRobotController/wiki/Blocks-Tutorial) language. It's a visual programming language that looks a lot like Scratch.
+:::
+
+## Need Help?
 
 - [Node.js](https://nodejs.org/en/download/) version 16.14 or above:
   - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
 
-## Generate a new site
+## Know what you're doing?
 
 Generate a new Docusaurus site using the **classic template**.
 
