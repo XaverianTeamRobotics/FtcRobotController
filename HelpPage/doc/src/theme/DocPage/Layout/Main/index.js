@@ -10,12 +10,7 @@ import { DocumentHeightContext } from "@site/src/utils/DocumentHeightContext";
 
 export default function DocPageLayoutMain({ hiddenSidebarContainer, children }) {
 
-  let sidebar = useDocsSidebar();
-  try {
-    sidebar = useDocsSidebar();
-  } catch(e) {
-    console.error(e);
-  }
+  const sidebar = useDocsSidebar();
 
   const [ noFooter ] = useContext(FooterContext);
   const [ height ] = useContext(DocumentHeightContext);
