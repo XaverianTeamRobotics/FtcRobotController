@@ -63,7 +63,9 @@ export default function NavbarContent({ disabled }) {
               </div>
             </div>
             <div className={"md-disp flex flex-col place-center"}>
-              <DocBreadcrumbsWrapper navbarinsert className={"flex m-0"}/>
+              { !disabled &&
+                <DocBreadcrumbsWrapper navbarinsert className={"flex m-0"}/>
+              }
             </div>
             <div className={"nav-left"}>
               <NavbarItems items={leftItems} />
