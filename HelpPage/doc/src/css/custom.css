@@ -28,6 +28,10 @@
     --ifm-scrollbar-track-background-color: var(--xb__transparent);
 }
 
+hr {
+    background-color: var(--xb__border-and-line-seperator);
+}
+
 .pagination-nav:empty {
     margin: 0;
 }
