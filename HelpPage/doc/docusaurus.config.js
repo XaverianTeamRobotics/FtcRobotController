@@ -44,6 +44,10 @@ const config = {
         docs: {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.js"),
+          admonitions: {
+            tag: ":::",
+            keywords: [ "note", "tip", "caution", "danger" ],
+          },
         },
         blog: false,
         pages: false,
