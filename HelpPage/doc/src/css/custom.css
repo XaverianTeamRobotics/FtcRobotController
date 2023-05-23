@@ -58,7 +58,7 @@
 }
 
 .alert--danger {
-    --ifm-alert-background-color: var(--xb__danger);
+    --ifm-alert-border-color: var(--xb__danger);
 }
 
 .theme-admonition {
