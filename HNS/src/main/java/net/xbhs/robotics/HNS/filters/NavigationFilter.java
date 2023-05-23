@@ -1,4 +1,6 @@
-package net.xbhs.robotics.HNS;
+package net.xbhs.robotics.HNS.filters;
+
+import net.xbhs.robotics.HNS.Localizer;
 
 public abstract class NavigationFilter {
     // Estimated error gain. 0 = any jerk is 0% error, 1 = the jerk is equal to our % confidence

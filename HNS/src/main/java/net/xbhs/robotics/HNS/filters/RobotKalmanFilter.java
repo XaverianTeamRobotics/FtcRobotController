@@ -1,5 +1,6 @@
-package net.xbhs.robotics.HNS;
+package net.xbhs.robotics.HNS.filters;
 
+import net.xbhs.robotics.HNS.Localizer;
 import org.apache.commons.math3.filter.*;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
