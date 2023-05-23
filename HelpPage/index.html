@@ -346,5 +346,71 @@ public class <a id="emuOpModeName">OpModeName</a> extends EmulatedOpMode impleme
      be used to test what different gamepad inputs will do. <br> <br>
      </p>
 </div>
+<div id="Wireless Connection">
+     <h2>Wireless Communication</h2>
+     <p>
+          Sometimes, you might want to connect to the robot wirelessly to connect to ADB, view the Dashboard, push code to the bot, etc.<br>This is possible in 2 ways:
+          <ul>
+               <li>REV Hardware Client (windows only)</li>
+               <li>In-House Remote Debugger or in-house Pi-based bridge. (indev & undocumented as of now)</li>
+          </ul>
+     </p>
+     <h3>REV Hardware Client</h3>
+     <p>
+          The <a href="https://docs.revrobotics.com/rev-hardware-client/">REV Hardware Client</a> is useful for management of hardware. If you don't have it already&mdash;and you run Windows&mdash;you should install it even if you don't plan to use its wireless functions so you can still manage hardware. It is <strong>necessary</strong> for at least one computer to have this installed because the Control Hub's operating system and firmware <strong>must</strong> be updated every season.<br><br>With that out of the way, using the REV Hardware Client to connect to the robot wirelessly is simple.
+          <ol>
+               <li>
+                    Connect to the Control Hub's wifi network.
+               </li>
+               <li>
+                    Open the client. Wait a few seconds for the Control Hub to appear in the client. If it does not, reboot your computer. The client has connection issues sometimes.
+               </li>
+               <li>
+                    You are now connected! In Android Studio or IntelliJ IDEA Ultimate, you can use Logcat via the ADB connection to view robot logs, interact with the filesystem, and install code. You can also access the FTC Dashboard via <a href="192.168.43.1:8080/dash">192.168.43.1:8080/dash</a> and the robot management portal, blocks, etc. via <a href="192.168.43.1:8080">192.168.43.1:8080</a> or through the <i>Program and Manage</i> tab in the REV Hardware Client. 
+               </li>
+          </ol>
+     </p>
+     <h3>
+          Connecting to the Internet and the Robot
+     </h3>
+     <p>
+          You may have noticed that you can't access the internet using the REV Hardware Client to wirelessly communicate with the robot as you're on the robot's wifi network. There are two ways to solve this.
+          <ul>
+               <li>
+                    Using the in-house methods.
+               </li>
+               <li>
+                    Using 2 network adapters.
+               </li>
+          </ul>
+          If you're on Windows, you can use two network adapters to connect to the internet and the robot at the same time by following this method:
+          <ol>
+               <li>
+                    Connect a second network adapter to your computer. We have some in the robotics room in the hardware box near the whiteboard and the window outside. They're in a box labeled something similar to "Wifi Adapters".
+               </li>
+               <li>
+                    Open Settings.
+               </li>
+               <li>
+                    Go to your wifi settings and connect the second adapter to the robot's wifi network.
+               </li>
+               <li>
+                    View the adapter's properties to see its private IP address. Alternatively, you can open Command Prompt, execute <code>ipconfig</code>, and view the IP of the default gateway for the second adapter.
+               </li>
+               <li>
+                    Open PowerShell as an administrator.
+               </li>
+               <li>
+                    Paste the following command into PowerShell:<br><code>route -p ADD 192.168.43.0 MASK 255.255.255.0 192.168.1.X METRIC 1</code><br>Make sure to replace 192.168.1.X with the private IP address you just found.
+               </li>
+               <li>
+                    Reboot your computer.
+               </li>
+               <li>
+                    Now, as long as the network adapter's IP doesn't change, you will be able to access the internet while connected to the robot. Just make sure your main wifi adapter inside your computer is connected to a real wifi network that can access the internet and the second adapter is connected to the robot. If the adapter's IP changes, you can re-run the PowerShell command with the new IP address. You will still need to use the REV Hardware Client using this method.
+               </li>
+          </ol>
+     </p>
+</div>
 </body>
 </html>

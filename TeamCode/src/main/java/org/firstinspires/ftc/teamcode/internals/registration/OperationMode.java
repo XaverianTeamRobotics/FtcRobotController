@@ -128,4 +128,19 @@ public abstract class OperationMode extends LinearOpMode {
         throw new RobotRebootException(reason);
     }
 
+    interface ConditionalWait {
+        /**
+         * Returns whether or not the condition is met.
+         * @return True if the condition is met, false otherwise.
+         */
+        boolean isDone();
+    }
+
+    public void waitUntil(ConditionalWait condition) {
+        while(!condition.isDone()) {
+            if (HardwareGetter.getJloopingRunner() != null) {
+                HardwareGetter.getJloopingRunner().scriptParametersGlobal.doOneLoop();
+            }
+        }
+    }
 }
