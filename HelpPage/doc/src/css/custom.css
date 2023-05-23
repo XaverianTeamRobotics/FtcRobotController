@@ -28,6 +28,10 @@
     --ifm-scrollbar-track-background-color: var(--xb__transparent);
 }
 
+.pagination-nav:empty {
+    margin: 0;
+}
+
 .flex-row {
     flex-direction: row;
 }
@@ -51,6 +55,10 @@
 
 .alert--success {
     --ifm-alert-border-color: var(--xb__tip)
+}
+
+.alert--info {
+    --ifm-alert-border-color: var(--xb__note);
 }
 
 .alert--warning {
