@@ -10,3 +10,5 @@ TODO:
  - maybe we do something like i did for my sona portfolio where i have a static folder and all the files in there get put in the root of HelpPage statically
 
  TODO: we need to add the kdoc and ftc javadoc to the doc versions dropdown! or just the kdoc if we can include all the ftc stuff idk
+
+ TODO: fix 404 not working on the docusaurus site
