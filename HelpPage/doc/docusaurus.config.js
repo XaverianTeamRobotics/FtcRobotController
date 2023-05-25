@@ -28,6 +28,10 @@ const config = {
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
 
+  // ooh spooky scary this is in the deep web ghost emoji
+  // (communications would get mad at us if this site was indexable because it doesn't follow the branding guide)
+  noIndex: true,
+
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
   // to replace "en" with "zh-Hans".

@@ -28,6 +28,10 @@
     --ifm-scrollbar-track-background-color: var(--xb__transparent);
 }
 
+.footer .container {
+    max-width: unset !important;
+}
+
 hr {
     background-color: var(--xb__border-and-line-seperator);
 }
@@ -453,7 +457,24 @@ a:hover {
     text-align: right;
 }
 
+@media only screen and (max-width: 1210px) {
+
+    #nav-with-breadcrumbs a[href="https://github.com/XaverianTeamRobotics/"] {
+        display: none;
+    }
+
+    #nav-with-breadcrumbs a[href="https://github.com/XaverianTeamRobotics"] {
+        display: none;
+    }
+
+}
+
 @media only screen and (min-width: 997px) {
+
+    .navbar__item > .navbar__item.navbar__link {
+        padding-right: 0 !important;
+        padding-left: 0;
+    }
 
     .h-0 {
         height: 0;
@@ -539,6 +560,10 @@ a:hover {
 
 @media only screen and (max-width: 996px) {
 
+    .menu__list-item {
+        cursor: pointer;
+    }
+    
     .w-full {
         width: 100%;
         justify-content: center;
