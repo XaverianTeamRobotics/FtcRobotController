@@ -1,15 +1,37 @@
 import os
 import shutil
 
-# Build docusaurus site
-os.system("cd ../doc && npm run build")
 
-# Prep build output
-if os.path.exists("../opt"):
-    os.rmdir("../opt")
-os.mkdir("../opt")
+def run():
 
-# Copy docusaurus build to final output
-shutil.copytree("../doc/build", "../opt")
+    # Build docusaurus site
+    os.system("cd ../doc && npm run build")
 
-# Copy static files to final output
+    # Prep build output
+    maybe_rmdir("../opt")
+
+    # Copy docusaurus build to final output
+    shutil.copytree("../doc/build", "../opt")
+
+    # Copy static files to final output
+    maybe_rmdir("../opt/apk")
+    shutil.copytree("../apk", "../opt/apk")
+    maybe_rmdir("../opt/book")
+    shutil.copytree("../book", "../opt/book")
+    maybe_rmdir("../opt/legacy-apk")
+    shutil.copytree("../legacy-apk", "../opt/legacy-apk")
+    maybe_rmdir("../opt/kdoc")
+    shutil.copytree("../kdoc", "../opt/kdoc")
+
+    # Delete extra build artifacts
+    maybe_rmdir("../doc/build")
+
+    exit(0)
+
+
+def maybe_rmdir(pth):
+    if os.path.exists(pth):
+        shutil.rmtree(pth)
+
+
+run()
