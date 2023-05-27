@@ -1,0 +1,2 @@
+# Running Scripts
+Please create a virtualenv in this directory and run the scripts via the corresponding IntelliJ run action, for stability. I don't trust Python with the system env. (Also, it helps a bit with dependency mgmt).

@@ -94,3 +94,7 @@ lint/tmp/
 *hprof*/
 !.idea/scopes
 .idea/deploymentTargetDropDown.xml
+
+# node
+node_modules
+package-lock.json
