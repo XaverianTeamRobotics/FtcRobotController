@@ -91,7 +91,7 @@ const config = {
               },
               {
                 type: "html",
-                value: `${ "" } <a class="dropdown__link" href="https://robotics.xbhs.net/v1.0.0">1.1.0</a>`,
+                value: `${ "" } <a class="dropdown__link" href="https://robotics.xbhs.net/v1.1.0">1.1.0</a>`,
               },
               {
                 type: "html",
@@ -113,6 +113,11 @@ const config = {
                 label: "Download APK"
               },
             ]
+          },
+          {
+            type: "html",
+            value: `${ "" } <a class="navbar__item navbar__link" href="https://robotics.xbhs.net/kdoc">KDoc</a>`,
+            position: "right",
           },
           {
             type: "html",
