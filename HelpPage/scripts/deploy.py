@@ -1,4 +1,4 @@
-import os
+import subprocess
 import shutil
 
 
@@ -8,6 +8,9 @@ def run():
     print("Building Docusaurus...")
 
     # Build docusaurus site
+    os.system("ls")
+
+#     output = subprocess.check_output(["command", "arg1", "arg2"])
     os.system("cd ../doc && npm run build")
 
     print("Docusaurus build complete.")
