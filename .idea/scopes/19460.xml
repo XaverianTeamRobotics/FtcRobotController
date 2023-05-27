@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="19460" pattern="src[robot.PathVisualizer.main]:*..*||src[robot.TeamCode.main]:org.firstinspires.ftc.teamcode..*||src[robot.TeamCode.main]:xml..*||src[robot.TeamCode.main]:roboscript..*" />
+  <scope name="19460" pattern="src[robot.PathVisualizer.main]:*..*||src[robot.TeamCode.main]:org.firstinspires.ftc.teamcode..*||src[robot.TeamCode.main]:xml..*||src[robot.TeamCode.main]:roboscript..*||file[robot]:settings.gradle||file[robot]:README.md||file[robot]:gradle.properties||file[robot]:build.gradle||file[robot]:build.dependencies.gradle||file[robot]:build.common.gradle||file[robot]:.gitignore||file[robot]:gradlew.bat||file[robot]:gradlew" />
 </component>
