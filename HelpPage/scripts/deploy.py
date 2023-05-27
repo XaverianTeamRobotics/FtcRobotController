@@ -10,9 +10,10 @@ def run():
 
     # Build docusaurus site
     os.system("ls")
+    print("ls logged")
 
 #     output = subprocess.check_output(["command", "arg1", "arg2"])
-    os.system("cd ../doc && npm run build")
+    os.system("cd ../doc && npm i && npm run build")
 
     print("Docusaurus build complete.")
 
