@@ -4,11 +4,18 @@ import shutil
 
 def run():
 
+    print("Running build...")
+    print("Building Docusaurus...")
+
     # Build docusaurus site
     os.system("cd ../doc && npm run build")
 
+    print("Docusaurus build complete.")
+
     # Prep build output
     maybe_rmdir("../opt")
+
+    print("Bundling...")
 
     # Copy docusaurus build to final output
     shutil.copytree("../doc/build", "../opt")
@@ -23,8 +30,12 @@ def run():
     maybe_rmdir("../opt/kdoc")
     shutil.copytree("../kdoc", "../opt/kdoc")
 
+    print("Cleaning up artifacts...")
+
     # Delete extra build artifacts
     maybe_rmdir("../doc/build")
+
+    print("Build complete.")
 
     exit(0)
 
