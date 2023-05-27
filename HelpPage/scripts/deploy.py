@@ -7,7 +7,7 @@ def run():
     print("Running build...")
     print("Building Docusaurus...")
 
-    # Build Docusaurus
+    # Build Docusaurus site
     os.system("cd ../doc && npm i && npm run build")
 
     print("Docusaurus build complete.")
