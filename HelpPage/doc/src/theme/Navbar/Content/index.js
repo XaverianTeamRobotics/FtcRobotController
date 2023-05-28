@@ -11,7 +11,6 @@ import NavbarLogo from "@site/src/theme/Navbar/Logo";
 import DocBreadcrumbsWrapper from "@site/src/theme/DocBreadcrumbs";
 
 function useNavbarItems() {
-  // TODO temporary casting until ThemeConfig type is improved
   return useThemeConfig().navbar.items;
 }
 function NavbarItems({ items }) {
@@ -51,7 +50,6 @@ export default function NavbarContent({ disabled }) {
     <Fragment>
       <NavbarContentLayout
         left={
-          // TODO stop hardcoding items?
           <>
             {!mobileSidebar.disabled && <Fragment>
               <NavbarMobileSidebarToggle />
@@ -76,7 +74,6 @@ export default function NavbarContent({ disabled }) {
           </>
         }
         right={
-          // TODO stop hardcoding items?
           // Ask the user to add the respective navbar items => more flexible
 
           // hi!! im the user. that is precisely why i am swizzling this. cant put the things where i want them :(
