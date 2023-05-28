@@ -21,7 +21,7 @@ export default function NotFound() {
               404 Not Found
             </Translate>
           </h1>
-          <p className="nfp">
+          <p>
             ¯\_(ツ)_/¯
           </p>
         </main>
