@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import clsx from "clsx";
 import ErrorBoundary from "@docusaurus/ErrorBoundary";
-import {
-  PageMetadata,
-  SkipToContentFallbackId,
-  ThemeClassNames,
-} from "@docusaurus/theme-common";
+import { PageMetadata, SkipToContentFallbackId, ThemeClassNames, } from "@docusaurus/theme-common";
 import { useKeyboardNavigation } from "@docusaurus/theme-common/internal";
 import SkipToContent from "@theme/SkipToContent";
 import AnnouncementBar from "@theme/AnnouncementBar";
@@ -14,6 +10,7 @@ import LayoutProvider from "@theme/Layout/Provider";
 import ErrorPageContent from "@theme/ErrorPageContent";
 import styles from "./styles.module.css";
 import { FooterContext } from "@site/src/utils/FooterContext";
+
 export default function Layout(props) {
   const {
     children,
@@ -33,7 +30,7 @@ export default function Layout(props) {
       <AnnouncementBar />
 
       <div className={"h-0"}>
-        <Navbar disabled />
+        <Navbar disabled screw_it_i_dont_care_if_its_disabled_i_want_to_enable_it_now={props.nav}/>
       </div>
 
       <FooterContext.Provider value={useState(noFooter ?? false)}>

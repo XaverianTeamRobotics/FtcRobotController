@@ -28,6 +28,37 @@
     --ifm-scrollbar-track-background-color: var(--xb__transparent);
 }
 
+/* this should be left empty */
+.h-0-ignore {}
+
+#__docusaurus > div > button {
+    border: none !important;
+}
+
+.vp {
+    width: 100vw;
+    height: 100vh;
+}
+
+.nf {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+}
+
+/* no way !! non fungible tokens in my css file. crazy. this is web version 4 right here */
+
+.nft {
+    font-size: 4rem;
+}
+
+.nfp {
+
+}
+
 .footer .container {
     max-width: unset !important;
 }
