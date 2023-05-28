@@ -45,11 +45,17 @@ hr {
 }
 
 .admonition-side {
-    width: 1rem;
-    background-color: white;
-    margin-right: 1rem;
-    border-radius: 1rem;
-    background-color: var(--ifm-alert-border-color);
+    width: 0.6875rem !important;
+    min-height: 1rem !important;
+    overflow: hidden !important;
+    background-color: white !important;
+    margin-right: 1rem !important;
+    border-radius: 1rem !important;
+    background-color: var(--ifm-alert-border-color) !important;
+}
+
+.admonition-side + .flex.flex-col {
+    width: 95% !important;
 }
 
 .alert {
@@ -92,6 +98,10 @@ hr {
 .skipToContent_node_modules-\@docusaurus-theme-classic-lib-theme-SkipToContent-styles-module {
     background-color: var(--xb__background) !important;
     box-shadow: var(--ifm-global-shadow-md) !important;
+}
+
+.skipToContent_fXgn {
+    background-color: var(--xb__background) !important;
 }
 
 #nav-with-breadcrumbs > div.navbar__inner > div.navbar__items.navbar__items--right.h-nav > a:nth-child(3) > svg {
@@ -309,15 +319,15 @@ img::-moz-selection, svg::-moz-selection {
 }
 
 .thin-scrollbar::-webkit-scrollbar-track {
-    background-color: var(--xb__background);
+    background-color: var(--xb__background) !important;
 }
 
 .thin-scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--xb__scrollbar__default);
+    background-color: var(--xb__scrollbar__default) !important;
 }
 
 .thin-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: var(--xb__scrollbar__interact);
+    background-color: var(--xb__scrollbar__interact) !important;
 }
 
 @media (pointer: fine) {
@@ -331,15 +341,15 @@ img::-moz-selection, svg::-moz-selection {
     }
 
     .menu.thin-scrollbar::-webkit-scrollbar-track {
-        background: var(--xb__transparent);
+        background: var(--xb__transparent) !important;
     }
 
     .menu.thin-scrollbar::-webkit-scrollbar-thumb {
-        background-color: var(--xb__menu-scrollbar__default);
+        background-color: var(--xb__menu-scrollbar__default) !important;
     }
 
     .menu.thin-scrollbar::-webkit-scrollbar-thumb:hover {
-        background-color: var(--xb__menu-scrollbar__interact);
+        background-color: var(--xb__menu-scrollbar__interact) !important;
     }
 
 }
@@ -457,13 +467,21 @@ a:hover {
     text-align: right;
 }
 
-@media only screen and (max-width: 1210px) {
+@media only screen and (max-width: 1310px) {
 
     #nav-with-breadcrumbs a[href="https://github.com/XaverianTeamRobotics/"] {
         display: none;
     }
 
     #nav-with-breadcrumbs a[href="https://github.com/XaverianTeamRobotics"] {
+        display: none;
+    }
+
+}
+
+@media only screen and (max-width: 1210px) {
+
+    #nav-with-breadcrumbs .dropdown:nth-child(2) {
         display: none;
     }
 
