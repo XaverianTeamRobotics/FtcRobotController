@@ -33,7 +33,7 @@ export default function MDXPage(props) {
       <Layout nav >
         <main className="container--page">
           <div style={{ height: `${ height }px` }}/>
-          <div className={clsx("row", styles.mdxPageWrapper)}>
+          <div className={`${ clsx("row", styles.mdxPageWrapper) } p1rmdxc`}>
             <div className={clsx("col npx", !hideTableOfContents && "col--12")}>
               <article>
                 <MDXContent>
