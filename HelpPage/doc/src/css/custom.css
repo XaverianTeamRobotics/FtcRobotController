@@ -28,8 +28,84 @@
     --ifm-scrollbar-track-background-color: var(--xb__transparent);
 }
 
-/* this should be left empty */
+/* these should be left empty */
 .h-0-ignore {}
+.d-n-ignore {}
+
+#doc-breadcrumbs > div.w-full.sm\:flex > div > a > b {
+    color: var(--xb__white);
+}
+
+.navbar__link {
+    color: var(--xb__white);
+}
+
+.mdln {
+    margin-left: 1.5rem;
+}
+
+.npx {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+.bgp {
+    background-color: var(--xb__background) !important;
+    z-index: var(--ifm-z-index-fixed) !important;
+    position: fixed !important;
+    width: calc(100% - 4rem) !important;
+    top: 0 !important;
+    left: 0 !important;
+}
+
+.pgf .footer {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+.container--page {
+    width: 100% !important;
+    padding-right: 2rem !important;
+    padding-left: 2rem !important;
+}
+
+.mdxPageWrapper_src-theme-MDXPage-styles-module {
+    padding: 1rem !important;
+}
+
+.mdxPageWrapper_src-theme-MDXPage-styles-module h1 {
+    --ifm-h1-font-size: 3rem !important;
+}
+
+.markdown h1 {
+    --ifm-h1-font-size: 3rem !important;
+}
+
+.nb {
+    margin-left: 2rem !important;
+    margin-right: 2rem !important;
+}
+
+.nbb {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    height: 1px !important;
+    width: calc(100% - 4rem) !important;
+    margin-left: 2rem !important;
+    margin-right: 2rem !important;
+    background-color: var(--xb__border-and-line-seperator) !important;
+}
+
+.mdxpgc {
+    height: 100vh !important;
+    overflow: auto !important;
+}
+
+.nb-ignore {
+    margin-left: -2rem !important;
+    margin-right: -2rem !important;
+}
 
 #__docusaurus > div > button {
     border: none !important;

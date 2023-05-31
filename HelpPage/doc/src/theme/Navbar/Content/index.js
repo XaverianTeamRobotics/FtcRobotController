@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import { ErrorCauseBoundary, useThemeConfig } from "@docusaurus/theme-common";
 import { splitNavbarItems, useNavbarMobileSidebar, } from "@docusaurus/theme-common/internal";
 import NavbarItem from "@theme/NavbarItem";
@@ -9,6 +9,7 @@ import NavbarSearch from "@theme/Navbar/Search";
 import styles from "./styles.module.css";
 import NavbarLogo from "@site/src/theme/Navbar/Logo";
 import DocBreadcrumbsWrapper from "@site/src/theme/DocBreadcrumbs";
+import { NavReenabler } from "@site/src/utils/NavReenabler";
 
 function useNavbarItems() {
   return useThemeConfig().navbar.items;
@@ -46,6 +47,7 @@ export default function NavbarContent({ disabled }) {
   const items = useNavbarItems();
   const [ leftItems, rightItems ] = splitNavbarItems(items);
   const searchBarItem = items.find((item) => item.type === "search");
+  const [ screw_it_i_dont_care_if_its_disabled_i_want_to_enable_it_now ] = useContext(NavReenabler);
   return (
     <Fragment>
       <NavbarContentLayout
@@ -56,7 +58,7 @@ export default function NavbarContent({ disabled }) {
             </Fragment>
             }
             <div className={"w-full sm:flex"}>
-              <div className={"d-n"}>
+              <div className={`${ !screw_it_i_dont_care_if_its_disabled_i_want_to_enable_it_now ? "d-n" : "mdln" }`}>
                 <NavbarLogo />
               </div>
             </div>

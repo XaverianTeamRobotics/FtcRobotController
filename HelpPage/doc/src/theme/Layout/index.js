@@ -36,11 +36,11 @@ export default function Layout(props) {
       <FooterContext.Provider value={useState(noFooter ?? false)}>
         <div
           id={SkipToContentFallbackId}
-          className={clsx(
+          className={`${ clsx(
             ThemeClassNames.wrapper.main,
             styles.mainWrapper,
             wrapperClassName,
-          )}>
+          ) } ${ props.nav ? "thin-scrollbar mdxpgc" : "" }`}>
           <ErrorBoundary fallback={(params) => <ErrorPageContent {...params} />}>
             {children}
           </ErrorBoundary>
