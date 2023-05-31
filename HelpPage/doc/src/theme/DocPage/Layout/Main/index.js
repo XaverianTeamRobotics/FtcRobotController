@@ -16,7 +16,6 @@ export default function DocPageLayoutMain({ hiddenSidebarContainer, children }) 
   const [ height ] = useContext(DocumentHeightContext);
   const [ containerHeight, setContainerHeight ] = useState(window.innerHeight);
 
-
   const navbarHeight = () => {
     let h = 0;
     for(const elem of document.querySelectorAll("#nav-with-breadcrumbs")) {

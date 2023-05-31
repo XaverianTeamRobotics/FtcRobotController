@@ -65,7 +65,6 @@ public class PoleNavigator extends OpenCvPipeline {
 //        Imgproc.GaussianBlur(input, blurred, new Size(11, 11), 2);
         detector.detect(input, detections);
 
-        // TODO: For now, draw blobs. Might remove when done developing
         for (KeyPoint kpt :
                 detections.toArray()) {
             Imgproc.rectangle(

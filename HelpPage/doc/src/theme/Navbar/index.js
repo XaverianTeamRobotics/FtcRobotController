@@ -4,28 +4,18 @@ import NavbarContent from "@theme/Navbar/Content";
 
 // WARNING: this is an unsafe swizzled component (including all subdirs of Navbar). might break on the next major version
 
-export default function Navbar({ disabled }) {
+export default function Navbar({ disabled, screw_it_i_dont_care_if_its_disabled_i_want_to_enable_it_now }) {
   if(window.location.pathname.includes("/.")) {
     return <Fragment/>;
   }
 
-  // Disable breadcrumbs in navbar if the current page doesn't support them
-  const breadcrumbsDisabled = false;
-
-
-  // DONT REMOVE! might need later idk
-  // if we use the src/pages, we'll need this. however it is currently unstable.
-  //
-  // please do not use the src/pages directory
-
-  // if(routes.find(value => value.path.replace("/", "") === window.location.pathname.replace("/", "") && !("routes" in value)) !== undefined) {
-  //   breadcrumbsDisabled = true;
-  // }
-
   return (
     <Fragment>
-      <NavbarLayout disabled={disabled} >
-        <NavbarContent disabled={breadcrumbsDisabled} />
+      <NavbarLayout
+        disabled={disabled}
+        screw_it_i_dont_care_if_its_disabled_i_want_to_enable_it_now={screw_it_i_dont_care_if_its_disabled_i_want_to_enable_it_now}
+      >
+        <NavbarContent disabled={disabled} />
       </NavbarLayout>
     </Fragment>
   );
