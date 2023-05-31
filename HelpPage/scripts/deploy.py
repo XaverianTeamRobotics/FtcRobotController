@@ -23,8 +23,6 @@ def run():
     # Copy static files to final output
     maybe_rmdir("../opt/apk")
     shutil.copytree("../apk", "../opt/apk")
-    maybe_rmdir("../opt/book")
-    shutil.copytree("../book", "../opt/book")
     maybe_rmdir("../opt/legacy-apk")
     shutil.copytree("../legacy-apk", "../opt/legacy-apk")
     maybe_rmdir("../opt/kdoc")
