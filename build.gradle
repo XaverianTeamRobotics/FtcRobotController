@@ -16,6 +16,14 @@ buildscript {
     }
 }
 
+plugins {
+    id 'org.jetbrains.dokka' version '1.8.10'
+}
+
+subprojects {
+    apply plugin: 'org.jetbrains.dokka'
+}
+
 if (hasProperty('buildScan')) {
     buildScan {
         termsOfServiceUrl = 'https://gradle.com/terms-of-service'
