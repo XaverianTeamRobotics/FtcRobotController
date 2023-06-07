@@ -1,0 +1,3 @@
+.library-name a::before {
+    background: url("./ico.png") center no-repeat !important;
+}

@@ -4,6 +4,8 @@
  * It is extraordinarily rare that you will ever need to edit this file.
  */
 
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
+
 buildscript {
     ext.kotlin_version = '1.8.21'
     repositories {
@@ -22,6 +24,112 @@ plugins {
 
 subprojects {
     apply plugin: 'org.jetbrains.dokka'
+
+    tasks.withType(DokkaTaskPartial.class).configureEach {
+        dokkaSourceSets.configureEach {
+            /*
+
+                 Notes on Updating Documentation Dependencies
+                  - When you update a dependency, also update the links to that dependency's Javadoc if they change in the new version.
+                  - If there is no entry for a dependency here, the dependency doesn't have a Javadoc (obviously if you add a dependency this isn't true).
+                  - Most dependencies don't need to be updated, although any dependencies added after 6/7/23 may need to be updated.
+                  - RoadRunner specifically DOES need to be updated.
+
+                 */
+
+            externalDocumentationLink {
+                url.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/Inspection/latest/"))
+                packageListUrl.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/Inspection/latest/element-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/RobotCore/latest/"))
+                packageListUrl.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/RobotCore/latest/element-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/RobotServer/latest/"))
+                packageListUrl.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/RobotServer/latest/element-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/OnBotJava/latest/"))
+                packageListUrl.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/OnBotJava/latest/element-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/Hardware/latest/"))
+                packageListUrl.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/Hardware/latest/element-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/FtcCommon/latest/"))
+                packageListUrl.set(new URL("https://javadoc.io/doc/org.firstinspires.ftc/FtcCommon/latest/element-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://kotlinlang.org/api/kotlinx.serialization/"))
+                packageListUrl.set(new URL("https://kotlinlang.org/api/kotlinx.serialization/package-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://kotlinlang.org/api/kotlinx.coroutines/"))
+                packageListUrl.set(new URL("https://kotlinlang.org/api/kotlinx.coroutines/package-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://junit.org/junit5/docs/current/api/"))
+                packageListUrl.set(new URL("https://junit.org/junit5/docs/current/api/element-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://javadoc.io/doc/org.openftc/easyopencv/latest/"))
+                packageListUrl.set(new URL("https://javadoc.io/doc/org.openftc/easyopencv/latest/package-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://acmerobotics.github.io/ftc-dashboard/javadoc/"))
+                packageListUrl.set(new URL("https://acmerobotics.github.io/ftc-dashboard/javadoc/package-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://acmerobotics.github.io/road-runner/core/0.5.5/javadoc/"))
+                packageListUrl.set(new URL("https://acmerobotics.github.io/road-runner/core/0.5.5/javadoc/package-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://michaell4438.github.io/jlooping/"))
+                packageListUrl.set(new URL("https://michaell4438.github.io/jlooping/element-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/"))
+                packageListUrl.set(new URL("https://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/package-list"))
+            }
+            externalDocumentationLink {
+                url.set(new URL("https://javadoc.io/doc/org.jetbrains/annotations/latest/"))
+                packageListUrl.set(new URL("https://javadoc.io/doc/org.jetbrains/annotations/latest/element-list"))
+            }
+        }
+    }
+
+//    dokkaHtmlPartial {
+//        dokkaSourceSets.configureEach {
+//
+//            perPackageOption {
+//                matchingRegex.set("*")
+//                suppress.set(false)
+//            }
+//
+//
+//            }
+//        }
+}
+
+dokkaHtmlMultiModule {
+    moduleName.set("Hawks Robotics KDoc")
+//    moduleVersion.set(project.version.toString())
+    outputDirectory.set(file("build/dokka/$name"))
+    failOnWarning.set(false)
+    suppressObviousFunctions.set(false)
+    suppressInheritedMembers.set(false)
+    offlineMode.set(false)
+    String dokkaBaseConfiguration = """
+    {
+      "footerMessage": "Copyright (c) 2023 Xaverian Brothers High School. All rights reserved."
+    }
+    """
+    pluginsMapConfiguration.set(
+            // fully qualified plugin name to json configuration
+            ["org.jetbrains.dokka.base.DokkaBase": dokkaBaseConfiguration]
+    )
 }
 
 if (hasProperty('buildScan')) {
