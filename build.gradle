@@ -4,6 +4,8 @@
  * It is extraordinarily rare that you will ever need to edit this file.
  */
 
+
+import org.jetbrains.dokka.DokkaConfiguration
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 
 buildscript {
@@ -26,8 +28,32 @@ subprojects {
     apply plugin: 'org.jetbrains.dokka'
 
     tasks.withType(DokkaTaskPartial.class).configureEach {
+
+        moduleName.set("Hawks Robotics KDoc")
+        moduleVersion.set("2.0.0")
+        outputDirectory.set(file("build/dokka/$name"))
+        failOnWarning.set(false)
+        suppressObviousFunctions.set(false)
+        suppressInheritedMembers.set(false)
+        offlineMode.set(false)
+        String dokkaBaseConfiguration = """
+    {
+      "footerMessage": "Copyright © 2023 Xaverian Brothers High School. All rights reserved."
+    }
+    """
+        pluginsMapConfiguration.set(
+                // fully qualified plugin name to json configuration
+                ["org.jetbrains.dokka.base.DokkaBase": dokkaBaseConfiguration]
+        )
+
         dokkaSourceSets.configureEach {
-            /*
+            documentedVisibilities.set([DokkaConfiguration.Visibility.PUBLIC, DokkaConfiguration.Visibility.PRIVATE, DokkaConfiguration.Visibility.PROTECTED, DokkaConfiguration.Visibility.PACKAGE, DokkaConfiguration.Visibility.INTERNAL])
+            perPackageOption {
+                matchingRegex.set("FtcRobotController.internal")
+                suppress.set(true)
+            }
+
+                /*
 
                  Notes on Updating Documentation Dependencies
                   - When you update a dependency, also update the links to that dependency's Javadoc if they change in the new version.
@@ -99,38 +125,26 @@ subprojects {
             }
         }
     }
-
-//    dokkaHtmlPartial {
-//        dokkaSourceSets.configureEach {
-//
-//            perPackageOption {
-//                matchingRegex.set("*")
-//                suppress.set(false)
-//            }
-//
-//
-//            }
-//        }
 }
 
-dokkaHtmlMultiModule {
-    moduleName.set("Hawks Robotics KDoc")
-//    moduleVersion.set(project.version.toString())
-    outputDirectory.set(file("build/dokka/$name"))
-    failOnWarning.set(false)
-    suppressObviousFunctions.set(false)
-    suppressInheritedMembers.set(false)
-    offlineMode.set(false)
-    String dokkaBaseConfiguration = """
-    {
-      "footerMessage": "Copyright (c) 2023 Xaverian Brothers High School. All rights reserved."
-    }
-    """
-    pluginsMapConfiguration.set(
-            // fully qualified plugin name to json configuration
-            ["org.jetbrains.dokka.base.DokkaBase": dokkaBaseConfiguration]
-    )
-}
+//dokkaHtmlMultiModule {
+//    moduleName.set("Hawks Robotics KDoc")
+//    moduleVersion.set("2.0.0")
+//    outputDirectory.set(file("build/dokka/$name"))
+//    failOnWarning.set(false)
+//    suppressObviousFunctions.set(false)
+//    suppressInheritedMembers.set(false)
+//    offlineMode.set(false)
+//    String dokkaBaseConfiguration = """
+//    {
+//      "footerMessage": "Copyright © 2023 Xaverian Brothers High School. All rights reserved."
+//    }
+//    """
+//    pluginsMapConfiguration.set(
+//            // fully qualified plugin name to json configuration
+//            ["org.jetbrains.dokka.base.DokkaBase": dokkaBaseConfiguration]
+//    )
+//}
 
 if (hasProperty('buildScan')) {
     buildScan {
