@@ -11,7 +11,7 @@
 
 // Custom definitions may go here
 plugins {
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.21'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.22'
 
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
@@ -40,7 +40,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1'
     implementation 'org.openftc:easyopencv:1.6.2'
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.21"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.22"
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'com.acmerobotics.roadrunner:core:0.5.5'
 }
