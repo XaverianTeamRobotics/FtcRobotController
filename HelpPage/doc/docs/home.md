@@ -23,7 +23,7 @@ With that being said, as a beginner you'll mostly be writing in **Java** and may
 
 If you are new to the Java language or just programming as a whole, consider watching [this Java tutorial](https://www.youtube.com/watch?v=eIrMbAQSU34). You don't have to follow the tutorial, just watch it. We'll go over everything you need to do later. We'll also glance at Kotlin later on as well.
 
-When you feel ready to begin, head over to our [onboarding guide](/getting-started/download).
+When you feel ready to begin, head over to our [onboarding guide](/getting-started/download). Alternatively, you can take a course. We offer programming courses in the spring which use [The Book](/book) to get you started.
 
 :::tip
 If you don't want to jump into text-based code right away, you can use the First Tech Challenge's [Blocks](https://github.com/FIRST-Tech-Challenge/FtcRobotController/wiki/Blocks-Tutorial) language. It's a visual programming language that looks a lot like Scratch.

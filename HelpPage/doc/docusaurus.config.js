@@ -71,6 +71,12 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      mermaid: {
+        "theme": "dark",
+        "gitGraph": {
+          "mainBranchName": "master"
+        }
+      },
       navbar: {
         title: "19460 Hawks Robotics",
         logo: {
