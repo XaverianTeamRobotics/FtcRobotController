@@ -1,6 +1,9 @@
 ---
 pagination_prev: null
+#sidebar_label: Setup
 ---
+
+import ReactPlayer from 'react-player'
 
 # Setup Your Environment
 Before you can begin writing code, you need to set things up. You need to:
@@ -33,11 +36,9 @@ We use a version-control-system (VCS) called Git to help facilitate collaboratio
 Then, you can edit some files again, commit again, and now you have two back-ups: one with the first set of changes, and one with the next. Git lets you **checkout**, or switch between these versions, so you can revert any changes you've made if you made a mistake and keep track of what has changed over time. You can visualize it like this, which is called a commit graph:
 
 ```mermaid
----
-title: Time Moves To The Right
----
+
 gitGraph
-   commit id: "Initial state of the code"
+   commit id: "Initial state"
    commit id: "My first changes"
    commit id: "My second changes"
 ```
@@ -46,64 +47,52 @@ gitGraph
 If it's not already obvious, commits on the left of the graph are older, and commits on the right of the graph are newer.
 :::
 
-If you wanted to, you could roll the repository back to the "My first changes" commit or even the "Initial state of the code" commit by **checking out** the corresponding commit.
+If you wanted to, you could roll the repository back to the "My first changes" commit or even the "Initial state" commit by **checking out** the corresponding commit.
 
 Git also allows you to create **branches**. These are different lines of backups that branch off from the main line of backups, also called the `main` or `master` branch, letting you have multiple different versions of a repository side-by-side. Let's say you made a branch called `my-other-code`:
 
 ```mermaid
----
-title: Time Moves To The Right
----
 gitGraph
-   commit id: "Initial state of the code"
-   commit id: "My first changes"
-   commit id: "My second changes"
-   branch "my-other-code"
-   checkout "my-other-code"
-   commit id: "New branch created"
+commit id: "Initial state"
+commit id: "My first changes"
+commit id: "My second changes"
+branch "my-other-code"
+checkout "my-other-code"
+commit id: "New branch created"
 ```
 
 If you checked out the original line of commits (the `master` branch), made some changes, and committed again, it would add a commit to the `master` branch like this:
 
 ```mermaid
----
-title: Time Moves To The Right
----
 gitGraph
-   commit id: "Initial state of the code"
-   commit id: "My first changes"
-   commit id: "My second changes"
-   branch "my-other-code"
-   checkout "my-other-code"
-   commit id: "New branch created"
-   checkout "master"
-   commit id: "My third changes"
+commit id: "Initial state"
+commit id: "My first changes"
+commit id: "My second changes"
+branch "my-other-code"
+checkout "my-other-code"
+commit id: "New branch created"
+checkout "master"
+commit id: "My third changes"
 ```
 
 But, if you checked out the `my-other-code` branch, made some changes, and committed again, it would add a commit to the `my-other-code` branch like this:
 
 ```mermaid
----
-title: Time Moves To The Right
----
 gitGraph
-  commit id: "Initial state of the code"
-  commit id: "My first changes"
-  commit id: "My second changes"
-  branch "my-other-code"
-  checkout "my-other-code"
-  commit id: "New branch created"
-  commit id: "My third changes"
+commit id: "Initial state"
+commit id: "My first changes"
+commit id: "My second changes"
+branch "my-other-code"
+checkout "my-other-code"
+commit id: "New branch created"
+commit id: "My third changes"
 ```
 
 Using branches, you can split up your commits into multiple lines of commits, so you can make and backup changes independent of eachother. Let's make a few more commits to visualize this:
 
 ```mermaid
----
-title: Time Moves To The Right
----
 gitGraph
-commit id: "Initial state of the code"
+commit id: "Initial state"
 commit id: "My first changes"
 commit id: "My second changes"
 branch "my-other-code"
@@ -123,11 +112,8 @@ commit id: "Last change on this branch"
 You can also merge branches back into eachother. When you merge branches, the changes from one branch are combined with the changes from another branch. If any changes conflict with eachother, Git prompts you to choose which change you want to keep. You can visualize it like this:
 
 ```mermaid
----
-title: Time Moves To The Right
----
 gitGraph
-commit id: "Initial state of the code"
+commit id: "Initial state"
 commit id: "My first changes"
 commit id: "My second changes"
 branch "my-other-code"
@@ -154,4 +140,4 @@ Our repository has a bunch of branches. The `master` branch is the main bug-free
 ### Creating your branch
 Now that you understand how branches work, you can create your own. First of all, head over to our [repository](https://github.com/XaverianTeamRobotics/FtcRobotController). Click on the branch button, type in `dev/<your-first-name>`, and click Create Branch. For example, if your name was Lasagna Man:
 
-<video src="./assets/create-branch.mp4">
+<ReactPlayer playing loop width={400} height={400} url="/assets/create-branch.mp4"/>

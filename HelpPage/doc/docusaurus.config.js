@@ -40,6 +40,10 @@ const config = {
     locales: [ "en" ],
   },
 
+  markdown: {
+    mermaid: true,
+  },
+
   presets: [
     [
       "classic",
@@ -68,13 +72,16 @@ const config = {
     ],
   ],
 
+  themes: [ "@docusaurus/theme-mermaid" ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       mermaid: {
-        "theme": "dark",
-        "gitGraph": {
-          "mainBranchName": "master"
+        options: {
+          "gitGraph": {
+            "mainBranchName": "master"
+          }
         }
       },
       navbar: {

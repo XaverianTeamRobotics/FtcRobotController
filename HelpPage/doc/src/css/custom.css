@@ -249,6 +249,10 @@ hr {
     border-radius: var(--ifm-global-radius);
 }
 
+video {
+    border-radius: var(--ifm-global-radius);
+}
+
 .table-of-contents__link--active, .table-of-contents__link--active code {
     color: unset;
 }
