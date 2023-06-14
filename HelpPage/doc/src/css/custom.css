@@ -574,7 +574,7 @@ a:hover {
     text-align: right;
 }
 
-@media only screen and (max-width: 1310px) {
+@media only screen and (max-width: 1310px) and (min-width: 997px) {
 
     #nav-with-breadcrumbs a[href="https://github.com/XaverianTeamRobotics/"] {
         display: none;
@@ -586,7 +586,7 @@ a:hover {
 
 }
 
-@media only screen and (max-width: 1210px) {
+@media only screen and (max-width: 1210px) and (min-width: 997px) {
 
     #nav-with-breadcrumbs .dropdown:nth-child(2) {
         display: none;
