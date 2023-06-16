@@ -3,6 +3,8 @@ package net.xbhs.robotics.HNS.filters;
 import net.xbhs.robotics.HNS.Localizer;
 import net.xbhs.robotics.HNS.roles.TimestampedLocalizer;
 import org.apache.commons.math3.analysis.polynomials.PolynomialFunction;
+import org.apache.commons.math3.fitting.PolynomialCurveFitter;
+import org.apache.commons.math3.fitting.WeightedObservedPoint;
 
 import java.util.ArrayList;
 
@@ -30,8 +32,6 @@ public class PolynomailFilter extends NavigationFilter {
 
     @Override
     public Localizer correct(Localizer localizer, double dt) {
-        history.add(new TimestampedLocalizer(localizer, System.currentTimeMillis() - t_offset));
-        this.currentLocalizer = localizer;
         return correct();
     }
 
@@ -84,9 +84,81 @@ public class PolynomailFilter extends NavigationFilter {
         toRet.vY = (toRet.vY + vY_expected) / 2;
         toRet.vAzimuth = (toRet.vAzimuth + vAzimuth_expected) / 2;
 
+        // Calculate the expected velocity using the polynomial
+        double X_expected = xPoly.value(t);
+        double Y_expected = yPoly.value(t);
+        double Azimuth_expected = azimuthPoly.value(t);
 
+        // Calculate the velocity estimate for 0.25 seconds ago and add that to the acceleration estimate * 0.25
+        toRet.x = X_expected + toRet.vX * 0.25;
+        toRet.y = Y_expected + toRet.vY * 0.25;
+        toRet.azimuth = Azimuth_expected + toRet.vAzimuth * 0.25;
 
-        return super.correct();
+        // Average the expected v and the calculated v
+        toRet.x = (toRet.x + vX_expected) / 2;
+        toRet.y = (toRet.y + vY_expected) / 2;
+        toRet.azimuth = (toRet.azimuth + Azimuth_expected) / 2;
+
+        // Update the history
+        update(toRet);
+
+        return toRet;
+    }
+
+    private void fitCurves() {
+        // Create a table with the times and position, acceleration, and velocity
+        ArrayList<WeightedObservedPoint> x = new ArrayList<>();
+        ArrayList<WeightedObservedPoint> y = new ArrayList<>();
+        ArrayList<WeightedObservedPoint> az = new ArrayList<>();
+        ArrayList<WeightedObservedPoint> vX = new ArrayList<>();
+        ArrayList<WeightedObservedPoint> vY = new ArrayList<>();
+        ArrayList<WeightedObservedPoint> vAZ = new ArrayList<>();
+        ArrayList<WeightedObservedPoint> aX = new ArrayList<>();
+        ArrayList<WeightedObservedPoint> aY = new ArrayList<>();
+        ArrayList<WeightedObservedPoint> aAZ = new ArrayList<>();
+        for (TimestampedLocalizer i :
+                history) {
+            x.add(new WeightedObservedPoint(1, i.getTime(), i.x));
+            y.add(new WeightedObservedPoint(1, i.getTime(), i.y));
+            az.add(new WeightedObservedPoint(1, i.getTime(), i.azimuth));
+
+            vX.add(new WeightedObservedPoint(1, i.getTime(), i.vX));
+            vY.add(new WeightedObservedPoint(1, i.getTime(), i.vY));
+            vAZ.add(new WeightedObservedPoint(1, i.getTime(), i.vAzimuth));
+
+            aX.add(new WeightedObservedPoint(1, i.getTime(), i.aX));
+            aY.add(new WeightedObservedPoint(1, i.getTime(), i.aY));
+            aAZ.add(new WeightedObservedPoint(1, i.getTime(), i.aAzimuth));
+        }
+
+        // Predict the next 10 points assuming a constant acceleration and add them to the list
+        // Assume the time between points will be 50 ms, so predict half a second in the future
+        for (int i=0; i<=500; i+=50) {
+            x.add(new WeightedObservedPoint(1, System.currentTimeMillis() + i, currentLocalizer.x + (currentLocalizer.vX * i) + Math.pow((currentLocalizer.aX * i), 2)));
+            y.add(new WeightedObservedPoint(1, System.currentTimeMillis() + i, currentLocalizer.y + (currentLocalizer.vY * i) + Math.pow((currentLocalizer.aY * i), 2)));
+            az.add(new WeightedObservedPoint(1, System.currentTimeMillis() + i, currentLocalizer.azimuth + (currentLocalizer.vAzimuth * i) + Math.pow((currentLocalizer.aAzimuth * i), 2)));
+
+            vX.add(new WeightedObservedPoint(1, System.currentTimeMillis() + i, currentLocalizer.vX + (currentLocalizer.aX * i)));
+            vY.add(new WeightedObservedPoint(1, System.currentTimeMillis() + i, currentLocalizer.vY + (currentLocalizer.aY * i)));
+            vAZ.add(new WeightedObservedPoint(1, System.currentTimeMillis() + i, currentLocalizer.vAzimuth + (currentLocalizer.aAzimuth * i)));
+
+            aX.add(new WeightedObservedPoint(1, System.currentTimeMillis() + i, currentLocalizer.aX));
+            aY.add(new WeightedObservedPoint(1, System.currentTimeMillis() + i, currentLocalizer.aY));
+            aAZ.add(new WeightedObservedPoint(1, System.currentTimeMillis() + i, currentLocalizer.aAzimuth));
+        }
+
+        // Fit the curves
+        xPoly = new PolynomialFunction(PolynomialCurveFitter.create(5).fit(x));
+        yPoly = new PolynomialFunction(PolynomialCurveFitter.create(5).fit(y));
+        azimuthPoly = new PolynomialFunction(PolynomialCurveFitter.create(5).fit(az));
+
+        vXPoly = new PolynomialFunction(PolynomialCurveFitter.create(5).fit(vX));
+        vYPoly = new PolynomialFunction(PolynomialCurveFitter.create(5).fit(vY));
+        vAzimuthPoly = new PolynomialFunction(PolynomialCurveFitter.create(5).fit(vAZ));
+
+        aXPoly = new PolynomialFunction(PolynomialCurveFitter.create(5).fit(aX));
+        aYPoly = new PolynomialFunction(PolynomialCurveFitter.create(5).fit(aY));
+        aAzimuthPoly = new PolynomialFunction(PolynomialCurveFitter.create(5).fit(aAZ));
     }
 }
 
