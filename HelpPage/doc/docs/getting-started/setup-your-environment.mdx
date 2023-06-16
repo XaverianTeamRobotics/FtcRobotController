@@ -3,6 +3,7 @@ pagination_prev: null
 #sidebar_label: Setup
 ---
 
+
 import { Video } from "@site/src/components/Video";
 
 # Setup Your Environment
@@ -133,11 +134,43 @@ merge "my-other-code" id: "Merged the changes!"
 commit id: "More changes"
 ```
 
-Using commits, branches, and merges, we can manage our codebase quite efficently. We have one Git repository that we share between everyone. We store it on GitHub which is a cloud service that's designed to store Git repositories. Think of GitHub like Google Drive but it's for coding. 
+Using commits, branches, and merges, we can manage our codebase quite efficently. We have one Git repository that we share between everyone. We store it on GitHub which is a cloud service that's designed to store Git repositories. Think of GitHub as if it was Google Drive but for coding.
 
-Our repository has a bunch of branches. The `master` branch is the main bug-free and stable robot code that we use for competitions. Each team member (who wants to write code) branches off of the `master` branch onto their own branches. When they're ready, they merge the changes they made on their branch into the `master` branch. They can then delete their branch, continue coding on their branch, or even merge the `master` branch into their branch so their branch can be up-to-date with the latest code from other team members.
+Our repository has a bunch of branches. The `master` branch is the main bug-free and stable robot code that we use for competitions. Each team member (who wants to write code) branches off of the `master` branch onto their own branches. When they're ready, they merge the changes they made on their branch into the `master` branch. They can then delete their branch, continue coding on their branch, or even merge the `master` branch into their branch so their branch can stay up-to-date with the latest code from other team members.
 
 ### Creating your branch
 Now that you understand how branches work, you can create your own. First of all, head over to our [repository](https://github.com/XaverianTeamRobotics/FtcRobotController). Click on the branch button, type in `dev/<your-first-name>`, and click Create Branch. For example, if your name was Lasagna Man:
 
 <Video src="/assets/create-branch.mp4" height={"400px"} width={"400px"} loop/>
+
+## Download an IDE
+The next step of this process is downloading a code editor, or IDE. You have two options:
+1. IntelliJ IDEA Ultimate
+2. Android Studio
+
+This guide will assume you picked **IntelliJ IDEA Ultimate**. We recommend choosing IntelliJ over Android Studio as it's much more powerful, albeit you may want to choose Android Studio if you need support for the bleeding-edge of Android development (IntelliJ usually releases support for new Android features a few months after Android Studio supports them).
+
+:::note
+Unlike this guide, the spring programming course begins with Android Studio before moving on to IntelliJ IDEA Ultimate because it's easier for beginners to learn.
+:::
+
+### Getting a License
+
+Before you download IntelliJ, you'll need to get a JetBrains license (we're using the paid version). The good thing is that it's completely free for Xaverian students! You'll first need to [create a JetBrains account](https://account.jetbrains.com/login). After creating an account, head over to the [student license application](https://www.jetbrains.com/shop/eform/students). Make sure to enter your Xaverian email!
+
+<p>
+  <img src="/assets/xbhs-email.png" alt="On the application, there is an email address field. This should be your Xaverian email address, regardless of what email address you entered for your JetBrains account." width="60%"/>
+</p>
+
+After you finish the process, you should see your license on your [account page](https://account.jetbrains.com/licenses):
+
+<p>
+  <img src="/assets/jetbrains-student-license.png" alt="On your account page, you should see a license called something like 'JetBrains Product Pack for Students'. If you see that, you have a license." width="70%"/>
+</p>
+
+:::caution
+Your license needs to be renewed yearly. You can do this by clicking "Buy new license" and selecting to renew your student license at the bottom of the pop-up.
+:::
+
+### Downloading IntelliJ IDEA Ultimate
+
