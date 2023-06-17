@@ -8,6 +8,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.internals.bindings.ControllerBindings;
 import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetterKt;
@@ -42,6 +43,7 @@ public abstract class OperationMode extends LinearOpMode {
             HardwareGetter.setEmulated(false);
             HardwareGetter.setHardwareMap(hardwareMap);
             HardwareGetter.setOpMode(this);
+            ControllerBindings.initialize();
             ScriptTemplate jloopingScript;
             ScriptRunner runner;
             try {
