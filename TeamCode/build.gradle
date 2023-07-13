@@ -33,7 +33,7 @@ dependencies {
     implementation project(':FtcRobotController')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'org.tensorflow:tensorflow-lite-task-vision:0.4.3'
+    implementation 'org.tensorflow:tensorflow-lite-task-vision:0.4.4'
     implementation "androidx.core:core-ktx:1.10.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly 'com.google.android.wearable:wearable:2.9.0'
