@@ -25,7 +25,6 @@ public class HNSTest extends OperationMode implements TeleOperation {
             throw new RuntimeException(e);
         }
         lastTimeStamp = System.currentTimeMillis();
-        registerFeature(new MecanumDrivetrain(false, false));
     }
 
     @Override

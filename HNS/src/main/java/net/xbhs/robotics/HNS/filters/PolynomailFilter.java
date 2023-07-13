@@ -102,6 +102,8 @@ public class PolynomailFilter extends NavigationFilter {
         // Update the history
         update(toRet);
 
+        fitCurves();
+
         return toRet;
     }
 

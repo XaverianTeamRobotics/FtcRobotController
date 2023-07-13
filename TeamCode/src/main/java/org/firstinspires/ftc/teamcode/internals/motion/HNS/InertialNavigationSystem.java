@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.internals.motion.HNS;
 
 import net.xbhs.robotics.HNS.*;
+import net.xbhs.robotics.HNS.filters.PolynomailFilter;
 import net.xbhs.robotics.HNS.filters.RobotKalmanFilter;
 import net.xbhs.robotics.HNS.limitations.HNSRequiresZero;
 import net.xbhs.robotics.HNS.roles.HNSRole_PrimaryNavigator;
@@ -12,7 +13,7 @@ import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.getImu;
 @HNSRequiresZero
 @HNSRole_PrimaryNavigator
 public class InertialNavigationSystem extends NavigationSystem {
-    public RobotKalmanFilter filter = new RobotKalmanFilter(localizer);
+    public PolynomailFilter filter = new PolynomailFilter(localizer);
     private ControlHubOrientation orientation;
     double dt;
     double previousAZ = 0;
@@ -62,14 +63,17 @@ public class InertialNavigationSystem extends NavigationSystem {
         double y = localizer.y + localizer.vY * dt + 0.5 * aYField * dt * dt;
 
         // Update the localizer with the new values
-        localizer.setPose(x, y, azimuth, vX, vY, azimuthVelocity);
-        localizer.setAcceleration(aXField, aYField, azimuthAcceleration);
+        localizer.setPose(x, y, azimuth, vX, vY, 0);
+        localizer.setAcceleration(aXField, aYField, 0);
 
         // Update the Kalman Filter
         filter.update(localizer, dt);
 
         // Correct the localizer with the new values
         localizer = filter.correct();
+        localizer.azimuth = azimuth;
+        localizer.vAzimuth = azimuthVelocity;
+        localizer.aAzimuth = azimuthAcceleration;
 
         // Update the azimuth previous values
         previousAZ = localizer.azimuth;
