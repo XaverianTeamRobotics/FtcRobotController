@@ -48,6 +48,40 @@ public class MeanDataFilter extends NavigationFilter {
         Localizer toRet = new Localizer();
         long t = System.currentTimeMillis() - t_offset;
 
+        // Get the average acceleration from the last 10 points of data
+        double[] ax = new double[10];
+        double[] ay = new double[10];
+        double[] aAzimuth = new double[10];
+        for (int i = 0; i < 10; i++) {
+            TimestampedLocalizer tl = history.get(history.size() - i - 1);
+            ax[i] = tl.x;
+            ay[i] = tl.y;
+            aAzimuth[i] = tl.azimuth;
+        }
+
+        double avgAX = 0;
+        double avgAY = 0;
+        double avgAAzimuth = 0;
+        for (int i = 0; i < 10; i++) {
+            avgAX += ax[i];
+            avgAY += ay[i];
+            avgAAzimuth += aAzimuth[i];
+        }
+        avgAX /= 10;
+        avgAY /= 10;
+        avgAAzimuth /= 10;
+        toRet.aX = avgAX;
+        toRet.aY = avgAY;
+        toRet.aAzimuth = avgAAzimuth;
+
+        toRet.vX = avgAX * (t - history.get(history.size() - 1).getTime());
+        toRet.vY = avgAY * (t - history.get(history.size() - 1).getTime());
+        toRet.vAzimuth = avgAAzimuth * (t - history.get(history.size() - 1).getTime());
+
+        toRet.x = avgAX * Math.pow(t - history.get(history.size() - 1).getTime(), 2) / 2;
+        toRet.y = avgAY * Math.pow(t - history.get(history.size() - 1).getTime(), 2) / 2;
+        toRet.azimuth = avgAAzimuth * Math.pow(t - history.get(history.size() - 1).getTime(), 2) / 2;
+
         return toRet;
     }
 
