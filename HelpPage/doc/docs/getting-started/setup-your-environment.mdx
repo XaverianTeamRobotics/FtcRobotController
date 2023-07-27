@@ -4,7 +4,11 @@ pagination_prev: null
 ---
 
 
+
 import { Video } from "@site/src/components/Video";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Admonition from "@theme/Admonition";
 
 # Setup Your Environment
 Before you can begin writing code, you need to set things up. You need to:
@@ -173,4 +177,88 @@ Your license needs to be renewed yearly. You can do this by clicking "Buy new li
 :::
 
 ### Downloading IntelliJ IDEA Ultimate
+Now we can install the IDE itself!
 
+First of all, head over to [the download page](https://jetbrains.com/idea/download) and then follow the steps below for your operating system.
+
+<Tabs>
+  <TabItem value="windows" label="Windows" default>
+    <h3>Downloading</h3>
+    <p>
+      Simply download the <code>.exe</code> version. If you're running windows on an ARM processor (you probably aren't), you will need to choose the ARM version in the dropdown.
+    </p>
+    <h3>Installing</h3>
+    <p>
+      Once the installer has finished downloading, find it in your Downloads folder and run it:
+    </p>
+    <Video src="/assets/windows-open-intellij.mp4" width="864px" height="486px" loop/>
+    <p/>
+    <p>
+      If it asks you to "allow this app to make changes to your device", select Yes.
+    </p>
+    <p>Then, follow the prompts in the installer. Once you get to the "Installation Options" step, you need to check everything off:</p>
+    <p>
+      <img src="/assets/windows-installer-2.PNG" alt="On the application, there is an email address field. This should be your Xaverian email address, regardless of what email address you entered for your JetBrains account." width="40%"/>
+    </p>
+    <p>
+      Once you've finished the installation process, restart your computer.
+    </p>
+  </TabItem>
+  <TabItem value="macOS" label="macOS">
+    <h3>Downloading</h3>
+    <p>
+      You'll need to download the correct <code>.dmg</code> for your computer. If you have an Apple Silicon based computer (for example, the Macbook M1 or M2), use the dropdown to select the Apple Silicon version. If you're using an Intel-based computer (for example, most of Apple's other machines), use the dropdown to select the Intel version.
+    </p>
+    <h3>Installing</h3>
+    <p>
+      a
+    </p>
+  </TabItem>
+  <TabItem value="Linux" label="Linux">
+    <h3>Downloading</h3>
+    <p>
+      We recommend installing IntelliJ IDEA from your system's package manager instead of downloading it directly from JetBrains. It's available on Snap and Flatpak.
+      If you need to download it directly from JetBrains, you can download a tarball. Make sure you choose the ARM version if you have an ARM-based system!
+    </p>
+    <Admonition type="tip">
+      The Snap version is more stable than the Flatpak version! If your system supports Snap, we recommend using it.
+    </Admonition>
+    <h3>Installing</h3>
+    <p>
+      If you downloaded either the Snap or Flatpak version, you don't have to do anything! IntelliJ is already installed for you. Just restart your computer.
+    </p>
+    <p>
+      If you downloaded the tarball directly from JetBrains, you first need to unzip it using the <code>tar -xzf</code> command in the terminal. Then, open the unzipped folder, open the <code>bin</code> directory, and run <code>IntelliJ IDEA.sh</code>.
+    </p>
+  </TabItem>
+</Tabs>
+
+### setup instructions, todo
+
+accept eula
+choose to send statistics (or not)
+when activation screen pops up, select activate, jb acct, login
+if you have a "windows firewall err. u need to allow this program to connect to networks select which types" dialog just select all
+finally press activate
+then press continue
+
+then press import from vcs
+then dl & install git
+if u get "do u want to allow this app to make changes to ur device :3" from git bash, say yes
+wait until it finishes installing
+click github, then add token
+
+go to github.com/settings/tokens, make sure ur logged in, make token with admin:org, admin:repo_hook, gist, notifications, repo, workflow, name it something, set expiration date to never
+let them know when u leave the team u should remove this token unless you plan to keep using it, since its not very secure (classic token + no expiry date)
+COPY COPY COPY!!!!! copy the token, save it somewhere safe. you wont be able to see the token again
+once u copied it, reload the page (press ctrl/cmd+r)
+
+paste it in the token section, press login or whatever the button is
+go back to repo url button, paste in https://github.com/XaverianTeamRobotics/FtcRobotController.git
+press Clone
+click trust project when its done and opens the menu
+install the python plugin if it prompts you
+choose the jdk its telling u to choose
+select always download pre-built JDK indexes
+
+// todo: I NEED A IMAGE OF THE CLONING UI!!!
