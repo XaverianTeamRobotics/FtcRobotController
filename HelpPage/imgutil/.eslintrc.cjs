@@ -146,6 +146,9 @@ module.exports = {
           "error",
           { "before": true, "after": true }
         ],
+        "@typescript-eslint/no-unused-vars": [
+          "warn"
+        ],
         "no-unused-vars": [
           "off"
         ],
