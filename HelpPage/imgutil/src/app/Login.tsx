@@ -1,5 +1,5 @@
-import React, { FC, ReactElement } from "react";
 import { Field, Form, Formik } from "formik";
+import React, { FC, ReactElement } from "react";
 import * as Yup from "yup";
 import { Symbol } from "../lib/Symbol.tsx";
 
@@ -10,7 +10,7 @@ interface Props {
 export const Login: FC<Props> = (): ReactElement => {
   return (
     <React.Fragment>
-      <div className={"w-screen h-screen flex justify-center items-center bg-blue-500"}>
+      <div className={"w-screen h-screen flex justify-center items-center bg-blue-500 p-4"}>
         <div className={"container"}>
           <div className={"max-w-[30rem] mx-auto"}>
             <Formik

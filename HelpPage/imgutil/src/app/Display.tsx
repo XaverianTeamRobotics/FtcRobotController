@@ -1,8 +1,7 @@
-import React, { FC, ReactElement, useContext, useState } from "react";
 import { Octokit } from "octokit";
-import { Login } from "./Login.tsx";
-import { Dashboard } from "./Dashboard.tsx";
+import React, { FC, ReactElement, useContext } from "react";
 import { createStatefulContext } from "../lib/createStatefulContext.ts";
+import { Dashboard } from "./dashboard/Dashboard.tsx";
 
 interface Props {
 
@@ -16,9 +15,10 @@ export const Display: FC<Props> = (): ReactElement => {
 
   return (
     <React.Fragment>
-      <AuthContext.Provider value={useState<[ boolean, Octokit | null ]>([ false, null ])}>
-        { auth ? <Dashboard/> : <Login/> }
-      </AuthContext.Provider>
+      <Dashboard/>
+      {/*<AuthContext.Provider value={useState<[ boolean, Octokit | null ]>([ false, null ])}>*/}
+      {/*  { auth ? <Dashboard/> : <Login/> }*/}
+      {/*</AuthContext.Provider>*/}
     </React.Fragment>
   );
 };

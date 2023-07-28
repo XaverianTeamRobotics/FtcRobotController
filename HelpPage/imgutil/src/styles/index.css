@@ -13,3 +13,7 @@
 *::selection {
     background-color: theme("colors.indigo.700");
 }
+
+.dashboard *::selection {
+    background-color: theme("colors.slate.600");
+}
