@@ -98,3 +98,6 @@ lint/tmp/
 # node
 node_modules
 package-lock.json
+
+# imgutils
+/HelpPage/imgutil/src/DO_NOT_TRACK_MUST_DELETE
