@@ -8,7 +8,7 @@ interface Props {
 export const Dashboard: FC<Props> = (): ReactElement => {
   return (
     <React.Fragment>
-      <div className={"w-screen h-screen bg-slate-700 dashboard"}>
+      <div className={"w-screen h-screen bg-slate-700 dashboard overflow-auto"}>
         <div className={"flex flex-row"}>
           <div className={"shrink-0"}>
             <ImageUploader/>
