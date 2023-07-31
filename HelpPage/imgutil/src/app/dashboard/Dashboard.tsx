@@ -1,5 +1,6 @@
 import React, { FC, ReactElement } from "react";
 import { ImageUploader } from "./ImageUploader.tsx";
+import { ImageViewer } from "./ImageViewer.tsx";
 
 interface Props {
 
@@ -14,7 +15,7 @@ export const Dashboard: FC<Props> = (): ReactElement => {
             <ImageUploader/>
           </div>
           <div className={"grow"}>
-
+            <ImageViewer/>
           </div>
         </div>
       </div>

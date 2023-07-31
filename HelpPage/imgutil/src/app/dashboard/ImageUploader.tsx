@@ -55,7 +55,7 @@ export const ImageUploader: FC<Props> = (): ReactElement => {
             .notRequired()
       })}
       onSubmit={async (values, helpers) => {
-        uploadFile(values, helpers);
+        await uploadFile(values, helpers);
       }}>
         {({ handleBlur, setFieldValue, values }) => {
           return (
