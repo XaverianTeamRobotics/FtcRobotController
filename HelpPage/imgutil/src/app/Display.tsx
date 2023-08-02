@@ -14,8 +14,6 @@ export const Display: FC<Props> = (): ReactElement => {
 
   const [ [ auth ] ] = useContext(AuthContext);
 
-  console.log(auth);
-
   return (
     <React.Fragment>
       { auth ? <Dashboard/> : <Login/> }

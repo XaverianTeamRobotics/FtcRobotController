@@ -1,8 +1,11 @@
 import { ArrayHelpers, ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
-import React, { FC, Fragment, ReactElement } from "react";
+import { FormikHelpers } from "formik/dist/types";
+import { Octokit } from "octokit";
+import React, { FC, Fragment, ReactElement, useContext } from "react";
 import * as Yup from "yup";
 import { Symbol } from "../../lib/Symbol.tsx";
-import { FormikHelpers } from "formik/dist/types";
+import { AuthContext } from "../Display.tsx";
+import { ImageContext, StateContext } from "./Dashboard.tsx";
 
 
 interface Props {
@@ -16,6 +19,11 @@ Yup.addMethod(Yup.array, "unique", function(message, mapper = (a: unknown) => a)
 });
 
 export const ImageUploader: FC<Props> = (): ReactElement => {
+
+  const [ [ , octokit ] ] = useContext(AuthContext);
+  const [ , setImageContext ] = useContext(ImageContext);
+  const [ , setStatus ] = useContext(StateContext);
+
   return (
     <React.Fragment>
       <Formik initialValues={{
@@ -36,11 +44,15 @@ export const ImageUploader: FC<Props> = (): ReactElement => {
               const file = value as File;
               return file.size <= 26214400;
             })
+            .test("name-correct", "Names can only contain letters, numbers, . and _", value => {
+              const file = value as File;
+              return !/[^a-zA-Z0-9_.]/.test(file.name);
+            })
             .required("Required"),
         description:
           Yup
             .string()
-            .required("Required"),
+            .notRequired(),
         tags:
           Yup
             .array()
@@ -55,7 +67,23 @@ export const ImageUploader: FC<Props> = (): ReactElement => {
             .notRequired()
       })}
       onSubmit={async (values, helpers) => {
-        await uploadFile(values, helpers);
+
+        setStatus("pending");
+
+        const res = await uploadFile(values, helpers, octokit);
+
+        if(res) {
+          console.log("Image uploaded successfully.");
+        }else{
+          console.error("Image failed to upload. Read the errors for more details. You probably want to either retry uploading now, retry uploading later, or manually upload to the database. Contact tom if this is your first time manually updating the database, or if you get stuck.");
+        }
+
+        setImageContext(([ , i ]) => {
+          return [ res, i + 1 ];
+        });
+
+        setStatus(res ? "good" : "bad");
+
       }}>
         {({ handleBlur, setFieldValue, values }) => {
           return (
@@ -79,7 +107,7 @@ export const ImageUploader: FC<Props> = (): ReactElement => {
                           console.log(r);
                         }
                       });
-                    }} className={"w-full bg-slate-800 border-slate-800 focus:border-gray-50 rounded-xl border-[1px] text-lg text-gray-50 px-1 py-1 file:bg-slate-800 file:border-gray-50 file:border-[1px] file:border-solid file:text-gray-50 file:px-3 file:py-2 file:rounded-lg file:mr-3"}/>
+                    }} className={"w-full bg-slate-800 border-slate-800 focus:border-gray-50 rounded-xl border-[1px] text-lg text-gray-50 px-1 py-1 file:bg-slate-800 file:border-gray-50 file:border-[1px] file:border-solid file:text-gray-50 file:px-3 file:py-2 file:rounded-lg file:mr-3 cursor-pointer file:cursor-pointer"}/>
                   </div>
                 </label>
               </div>
@@ -87,7 +115,6 @@ export const ImageUploader: FC<Props> = (): ReactElement => {
               <div>
                 <label className={"text-red-500 h-[1lh] text-lg"}>
                   <div className={"inline-flex flex-row w-full px-3"}>
-                    <div className={"mr-2"}>*</div>
                     <div className={"text-gray-50"}>Description</div>
                     <div className={"grow"}/>
                     <div>
@@ -180,7 +207,319 @@ export const ImageUploader: FC<Props> = (): ReactElement => {
   );
 };
 
-const uploadFile = async (values: {file: File, description: string, tags: string[]}, helpers: FormikHelpers<{file: File, description: string, tags: string[]}>) => {
+const uploadFile = async (values: {file: File, description: string, tags: string[]}, helpers: FormikHelpers<{file: File, description: string, tags: string[]}>, octokit: Octokit | null): Promise<boolean> => {
+
+  console.log("Beginning upload process...");
   console.log(values);
   console.log(helpers);
+
+  if(octokit === null) {
+    console.log("Octokit is null. Upload failed. Maybe you didn't log in properly?");
+    // todo: failed upload div or smth
+    return false;
+  }
+
+  const owner = "XaverianTeamRobotics";
+  const repo = "imgs";
+  const [ name, email ] = [ "Lasagna Man", "lasagnaman@xbhs.net" ];
+  const time = Date.now();
+  let step = 1;
+  let cancel = false;
+
+  const bmp = await createImageBitmap(values.file);
+  const { width, height } = bmp;
+  let ar: "horizontal" | "vertical" | "square";
+  if(width > height) {
+    ar = "horizontal";
+  }else if(width < height) {
+    ar = "vertical";
+  }else{
+    ar = "square";
+  }
+  bmp.close();
+
+  console.log(`The time of upload is ${ time }, storing data in /data/${ time }`);
+
+  console.log("Uploading name...");
+
+  await octokit.rest.repos.createOrUpdateFileContents(
+    {
+      owner,
+      repo,
+      path: `data/${ time }/${ values.file.name }.file.dbe`,
+      content: btoa("file-name"),
+      committer: {
+        name,
+        email,
+      },
+      author: {
+        name,
+        email
+      },
+      message: `Uploading an image. Step [${ step }/${ values.tags.length + 4 }]`
+    }
+  ).catch(reason => {
+    console.error(reason);
+    cancel = true;
+  });
+
+  if(cancel) {
+    await rmdb(octokit, time);
+    return false;
+  }
+
+  console.log("Uploaded name!");
+  step++;
+
+  console.log("Uploading image file...");
+
+  const imageContent = (await blobToBase64(values.file) as string).split("base64,")[1];
+  console.log("Base64 Image Content:");
+  console.log(imageContent);
+
+  await octokit.rest.repos.createOrUpdateFileContents(
+    {
+      owner,
+      repo,
+      path: `data/${ time }/${ values.file.name }`,
+      content: imageContent,
+      committer: {
+        name,
+        email,
+      },
+      author: {
+        name,
+        email
+      },
+      message: `Uploading an image. Step [${ step }/${ values.tags.length + 4 }]`
+    }
+  ).catch(reason => {
+    console.error(reason);
+    cancel = true;
+  });
+
+  if(cancel) {
+    await rmdb(octokit, time);
+    return false;
+  }
+
+  console.log("Uploaded image file!");
+  step++;
+
+  console.log("Uploading A/R...");
+
+  await octokit.rest.repos.createOrUpdateFileContents(
+    {
+      owner,
+      repo,
+      path: `data/${ time }/${ ar }.ar.dbe`,
+      content: btoa("a/r"),
+      committer: {
+        name,
+        email,
+      },
+      author: {
+        name,
+        email
+      },
+      message: `Uploading an image. Step [${ step }/${ values.tags.length + 4 }]`
+    }
+  ).catch(reason => {
+    console.error(reason);
+    cancel = true;
+  });
+
+  if(cancel) {
+    await rmdb(octokit, time);
+    return false;
+  }
+
+  console.log("Uploaded A/R!");
+  step++;
+
+  if(values.description.length > 0) {
+    console.log("Uploading description...");
+
+    await octokit.rest.repos.createOrUpdateFileContents(
+      {
+        owner,
+        repo,
+        path: `data/${ time }/description.dbe`,
+        content: btoa(values.description),
+        committer: {
+          name,
+          email,
+        },
+        author: {
+          name,
+          email
+        },
+        message: `Uploading an image. Step [${ step }/${ values.tags.length + 4 }]`
+      }
+    ).catch(reason => {
+      console.error(reason);
+      cancel = true;
+    });
+
+    if(cancel) {
+      await rmdb(octokit, time);
+      return false;
+    }
+
+    console.log("Uploaded description!");
+    step++;
+  }
+
+  if(values.tags.length > 0) {
+
+    const oldTags: string[] = [];
+
+    for(const tag of values.tags) {
+      console.log(`Uploading a tag (${ tag })...`);
+
+      if(oldTags.includes(tag)) {
+        console.log(`Tag (${ tag }) already uploaded, skipping...`);
+        continue;
+      }
+
+      await octokit.rest.repos.createOrUpdateFileContents(
+        {
+          owner,
+          repo,
+          path: `data/${ time }/${ tag }.tag.dbe`,
+          content: btoa("tagfile"),
+          committer: {
+            name,
+            email,
+          },
+          author: {
+            name,
+            email
+          },
+          message: `Uploading an image. Step [${ step }/${ values.tags.length + 4 }]`
+        }
+      ).catch(reason => {
+        console.error(reason);
+        cancel = true;
+      });
+
+      if(cancel) {
+        await rmdb(octokit, time);
+        return false;
+      }
+
+      console.log(`Uploaded a tag (${ tag })!`);
+      step++;
+      oldTags.push(tag);
+    }
+  }
+
+  console.log("Upload completed successfully!");
+  return true;
+
+};
+
+const rmdb = async (octokit: Octokit, time: number) => {
+  console.error("Something went wrong while uploading files. Reverting changes...");
+
+  const attempt = async () => {
+
+    const owner = "XaverianTeamRobotics";
+    const repo = "imgs";
+    const [ name, email ] = [ "Lasagna Man", "lasagnaman@xbhs.net" ];
+
+    const repository = await octokit.rest.repos.get({
+      owner,
+      repo
+    });
+
+    const branch = repository.data.default_branch;
+
+    const ref = await octokit.rest.git.getRef({
+      owner,
+      repo,
+      ref: `heads/${ branch }`,
+    });
+
+    const data = await octokit.rest.git.getTree({
+      owner,
+      repo,
+      tree_sha: ref.data.object.sha,
+      recursive: "true"
+    });
+
+    console.log(data);
+
+    const folder = data.data.tree.find(value => value.path === `data/${ time }`);
+
+    if(folder === undefined) {
+      throw `XaverianTeamRobotics/imgs/data/${ time } doesn't exist! This is bad!!! Error: folder undefined`;
+    }
+
+    if(folder.sha === undefined) {
+      throw `XaverianTeamRobotics/imgs/data/${ time } doesn't exist! This is bad!!! Error: sha undefined`;
+    }
+
+    const folders = await octokit.rest.git.getTree({
+      owner,
+      repo,
+      tree_sha: folder.sha,
+      recursive: "true"
+    });
+
+    if(folders === undefined) {
+      throw "Images undefined";
+    }
+
+    const paths: [ string, string ][] = [];
+
+    for(const path of folders.data.tree) {
+      if(path.path !== undefined && path.sha !== undefined) {
+        paths.push([ `data/${ time }/${ path.path }`, path.sha ]);
+      }
+    }
+
+    for(const [ path, sha ] of paths) {
+
+      const message = "Error occured, reverting changes. Step [?/?]";
+      await octokit.rest.repos.deleteFile({
+        owner,
+        repo,
+        path,
+        message,
+        sha,
+        author: {
+          name,
+          email
+        },
+        committer: {
+          name,
+          email
+        }
+      }).catch(reason => {
+        console.error(reason);
+        console.error(`Deleting ${ path } with SHA ${ sha } failed. Cancelling automatic cleanup...`);
+        throw new Error(`Deleting ${ path } with SHA ${ sha } failed with the error ${ reason }`);
+      });
+
+    }
+
+  };
+
+  attempt().then(() => {
+    console.log("Reverted changes. Please try uploading again or manually upload the file. Contact tom if this is your first time manually uploading a file, or if you forgot.");
+  }).catch(reason => {
+    console.error(`Something went wrong while reverting changes. Please delete the '/data/${ time }' folder manually if it still exists.\n\n(clone repo, delete folder, commit change, push commit)`);
+    console.error(reason);
+  });
+
+  return;
+};
+
+const blobToBase64 = (blob: Blob) => {
+  return new Promise((resolve, _) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result);
+    reader.readAsDataURL(blob);
+  });
 };

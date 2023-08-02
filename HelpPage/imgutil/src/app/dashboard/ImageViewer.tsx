@@ -1,7 +1,7 @@
 import React, { FC, Fragment, ReactElement, useContext } from "react";
+import { Async, AsyncProps } from "react-async";
+import { Oval } from "../../lib/Oval.tsx";
 import { AuthContext } from "../Display.tsx";
-import { Async } from "react-async";
-import { string } from "yup";
 
 interface Props {
 
@@ -15,6 +15,14 @@ type ImageMeta = {
   description: string | null
 };
 
+type Image = {
+  time: number,
+  file: `https://raw.githubusercontent.com/XaverianTeamRobotics/imgs/main/data/${ number }/${ string }`,
+  ar: "horizontal" | "vertical" | "square",
+  tags: [string, ...string[]] | [ "No tags" ],
+  description: `https://raw.githubusercontent.com/XaverianTeamRobotics/imgs/main/data/${ number }/description.dbe` | "https://raw.githubusercontent.com/XaverianTeamRobotics/imgs/main/nd.txt"
+};
+
 type TreeNode = {
   name: string,
   type: "file" | "directory",
@@ -22,6 +30,8 @@ type TreeNode = {
 }
 
 export const ImageViewer: FC<Props> = (): ReactElement => {
+
+  console.log("Starting image fetch process...");
 
   const [ [ , octokit ] ] = useContext(AuthContext);
 
@@ -86,14 +96,102 @@ export const ImageViewer: FC<Props> = (): ReactElement => {
 
     const meta = convertToMetadata(tree);
 
+    console.log("Images from GH:");
     console.log(meta);
+
+    const images: Image[] = [];
+
+    for(const m of meta) {
+
+      const tags = m.tags ?? [ "No tags" ];
+      const filename = m.file as Image["file"];
+      const description = (m.description ?? "https://raw.githubusercontent.com/XaverianTeamRobotics/imgs/main/nd.txt") as Image["description"];
+
+      images.push({
+        time: m.time,
+        file: filename,
+        tags,
+        description,
+        ar: m.ar
+      });
+    }
+
+    return images;
 
   };
 
   return (
     <Fragment>
       <Async promiseFn={getImages}>
-
+        <Async.Pending>
+          <div className={"flex justify-center items-center h-screen"}>
+            <div>
+              <Oval/>
+            </div>
+          </div>
+        </Async.Pending>
+        <Async.Rejected>
+          { error => {
+            return (
+              <Fragment>
+                <div className={"flex justify-center flex-col items-center h-screen text-red-500"}>
+                  <div>
+                    <span>An error occurred while loading the images already in the database.</span>
+                  </div>
+                  <div>
+                    <div className={"flex justify-center flex-row"}>
+                      <div>
+                        <pre>Error: </pre>
+                      </div>
+                      <div>
+                        <div>
+                          <span>{ error.name }</span>
+                        </div>
+                        <div>
+                          <span>{ error.message }</span>
+                        </div>
+                        <div>
+                          <span>{ error.stack }</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Fragment>
+            );
+          }}
+        </Async.Rejected>
+        <Async.Fulfilled>
+          { (data: Image[]) => {
+            return (
+              <Fragment>
+                { data.map((value, index) => {
+                  return (
+                    <Fragment key={index}>
+                      <div className={"border-2 flex flex-col"}>
+                        <img src={value.file} alt={"An image from our team"} className={"w-12"}/>
+                        <p>Time: { new Date(value.time).toString() }</p>
+                        <p>A/R: { value.ar }</p>
+                        <p>Desc: <Description src={value.description}/></p>
+                        <ul>
+                          { value.tags.map((value, index) => {
+                            return (
+                              <Fragment key={index}>
+                                <li>
+                                  { value }
+                                </li>
+                              </Fragment>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    </Fragment>
+                  );
+                }) }
+              </Fragment>
+            );
+          }}
+        </Async.Fulfilled>
       </Async>
     </Fragment>
   );
@@ -178,4 +276,38 @@ const convertToMetadata = (root: TreeNode): ImageMeta[] => {
 
   return arr;
 
+};
+
+const Description: FC<{ src: string }> = ({ src }): ReactElement => {
+
+  const getDescription = async ({ src }: AsyncProps<string>) => {
+    src = src as string;
+    console.log("Pinging GH");
+    const res = await fetch(src);
+    console.log("Desc response:");
+    console.log(res);
+    return res.text();
+  };
+
+  return (
+    <Fragment>
+      <Async promiseFn={getDescription} src={src}>
+        <Async.Fulfilled>
+          { (data: string) => {
+            return (
+              <Fragment>
+                <span>{ data }</span>
+              </Fragment>
+            );
+          }}
+        </Async.Fulfilled>
+        <Async.Pending>
+          <span>Loading...</span>
+        </Async.Pending>
+        <Async.Rejected>
+          <span>Description failed to load. Check console for details.</span>
+        </Async.Rejected>
+      </Async>
+    </Fragment>
+  );
 };
