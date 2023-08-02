@@ -215,7 +215,6 @@ const uploadFile = async (values: {file: File, description: string, tags: string
 
   if(octokit === null) {
     console.log("Octokit is null. Upload failed. Maybe you didn't log in properly?");
-    // todo: failed upload div or smth
     return false;
   }
 
