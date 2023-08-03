@@ -1,7 +1,8 @@
-import React, { FC, Fragment, ReactElement, useContext } from "react";
+import React, { Dispatch, FC, Fragment, ReactElement, SetStateAction, useContext } from "react";
 import { Async, AsyncProps } from "react-async";
 import { Oval } from "../../lib/Oval.tsx";
 import { AuthContext } from "../Display.tsx";
+import { StateContext, SyncContext } from "./Dashboard.tsx";
 
 interface Props {
 
@@ -34,6 +35,8 @@ export const ImageViewer: FC<Props> = (): ReactElement => {
   console.log("Starting image fetch process...");
 
   const [ [ , octokit ] ] = useContext(AuthContext);
+  const [ , setStatus ] = useContext(StateContext);
+  const [ sync, setSync ] = useContext(SyncContext);
 
   const getImages = async (props: object, controller: AbortController) => {
 
@@ -188,12 +191,27 @@ export const ImageViewer: FC<Props> = (): ReactElement => {
                     </Fragment>
                   );
                 }) }
+                <TrillEmAll1989 sync={sync} setSync={setSync} setStatus={setStatus}/>
               </Fragment>
             );
           }}
         </Async.Fulfilled>
       </Async>
     </Fragment>
+  );
+};
+
+const TrillEmAll1989: FC<{ sync: boolean, setSync: Dispatch<SetStateAction<boolean>>, setStatus: Dispatch<SetStateAction<"good" | "pending" | "bad">>}> = ({ sync, setSync, setStatus }): ReactElement => {
+
+  if(sync) {
+    setSync(false);
+    setTimeout(() => {
+      setStatus("good");
+    }, 500);
+  }
+
+  return (
+    <Fragment/>
   );
 };
 
