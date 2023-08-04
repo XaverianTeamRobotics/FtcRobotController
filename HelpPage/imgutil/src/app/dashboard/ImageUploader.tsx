@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { Symbol } from "../../lib/Symbol.tsx";
 import { AuthContext } from "../Display.tsx";
 import { ImageContext, StateContext } from "./Dashboard.tsx";
+import { bool } from "yup";
 
 
 interface Props {
@@ -418,8 +419,15 @@ const uploadFile = async (values: {file: File, description: string, tags: string
 
 };
 
-const rmdb = async (octokit: Octokit, time: number) => {
-  console.error("Something went wrong while uploading files. Reverting changes...");
+export const rmdb = async (octokit: Octokit, time: number, error: boolean = true, reducer:  React.Dispatch<React.SetStateAction<"good" | "pending" | "bad">> | null = null) => {
+
+  if(error) {
+    console.error("Something went wrong while uploading files. Reverting changes...");
+  }else{
+    reducer!("pending");
+  }
+
+  const commitMsg = error ? "Error occured, reverting changes. Step [?/?]" : "Deleting an image. Step [?/?]";
 
   const attempt = async () => {
 
@@ -480,7 +488,7 @@ const rmdb = async (octokit: Octokit, time: number) => {
 
     for(const [ path, sha ] of paths) {
 
-      const message = "Error occured, reverting changes. Step [?/?]";
+      const message = commitMsg;
       await octokit.rest.repos.deleteFile({
         owner,
         repo,
@@ -505,12 +513,28 @@ const rmdb = async (octokit: Octokit, time: number) => {
 
   };
 
-  attempt().then(() => {
-    console.log("Reverted changes. Please try uploading again or manually upload the file. Contact tom if this is your first time manually uploading a file, or if you forgot.");
-  }).catch(reason => {
-    console.error(`Something went wrong while reverting changes. Please delete the '/data/${ time }' folder manually if it still exists.\n\n(clone repo, delete folder, commit change, push commit)`);
-    console.error(reason);
-  });
+  if(error) {
+    attempt().then(() => {
+      console.log("Reverted changes. Please try uploading again or manually upload the file. Contact tom if this is your first time manually uploading a file, or if you forgot.");
+    }).catch(reason => {
+      console.error(`Something went wrong while reverting changes. Please delete the '/data/${ time }' folder manually if it still exists.\n\n(clone repo, delete folder, commit change, push commit)`);
+      console.error(reason);
+    });
+  }else{
+    attempt().then(() => {
+      console.log("Deleted image from database.");
+    }).catch(reason => {
+      if(!(reason.message as string).includes("failed with the error HttpError: Not Found")) {
+        console.error(`Something went wrong while deleting the image. Please delete the '/data/${ time }' folder manually if it still exists.\n\n(clone repo, delete folder, commit change, push commit)`);
+        console.error(reason);
+        reducer!("bad");
+      }else{
+        console.warn("We 404ed while deleting, this is probably fine, but you might want to know about it just in case.");
+        console.warn(reason);
+        reducer!("good");
+      }
+    });
+  }
 
   return;
 };

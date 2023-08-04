@@ -2,7 +2,9 @@ import React, { Dispatch, FC, Fragment, ReactElement, SetStateAction, useContext
 import { Async, AsyncProps } from "react-async";
 import { Oval } from "../../lib/Oval.tsx";
 import { AuthContext } from "../Display.tsx";
-import { StateContext, SyncContext } from "./Dashboard.tsx";
+import { Dashboard, StateContext, SyncContext } from "./Dashboard.tsx";
+import { ImageComponent } from "./ImageComponent.tsx";
+import { Symbol } from "../../lib/Symbol.tsx";
 
 interface Props {
 
@@ -16,7 +18,7 @@ type ImageMeta = {
   description: string | null
 };
 
-type Image = {
+export type Image = {
   time: number,
   file: `https://raw.githubusercontent.com/XaverianTeamRobotics/imgs/main/data/${ number }/${ string }`,
   ar: "horizontal" | "vertical" | "square",
@@ -39,6 +41,8 @@ export const ImageViewer: FC<Props> = (): ReactElement => {
   const [ sync, setSync ] = useContext(SyncContext);
 
   const getImages = async (props: object, controller: AbortController) => {
+
+    const startTime = Date.now();
 
     if(octokit === null) {
       throw "Octokit null";
@@ -168,29 +172,29 @@ export const ImageViewer: FC<Props> = (): ReactElement => {
           { (data: Image[]) => {
             return (
               <Fragment>
+                <div className={"bg-slate-800 text-gray-50 py-2 px-3 rounded-xl text-lg m-4"}>
+                  <div className={"flex flex-row items-center"}>
+                    <div className={"flex flex-col justify-center"}>
+                      <Symbol glyph={"chevron_right"} design={"sharp"} className={"text-red-500 text-3xl mr-2"}/>
+                    </div>
+                    <div className={"flex flex-col justify-center relative"}>
+                      <p>
+                        Don't see an image you just posted? Still see an image you just deleted? It's cached.
+                      </p>
+                    </div>
+                  </div>
+                  <p className={"text-gray-400"}>
+                    In a minute, sync the image library with the database using the button below. You should be able to see your changes then.
+                  </p>
+                </div>
                 { data.map((value, index) => {
                   return (
                     <Fragment key={index}>
-                      <div className={"border-2 flex flex-col"}>
-                        <img src={value.file} alt={"An image from our team"} className={"w-12"}/>
-                        <p>Time: { new Date(value.time).toString() }</p>
-                        <p>A/R: { value.ar }</p>
-                        <p>Desc: <Description src={value.description}/></p>
-                        <ul>
-                          { value.tags.map((value, index) => {
-                            return (
-                              <Fragment key={index}>
-                                <li>
-                                  { value }
-                                </li>
-                              </Fragment>
-                            );
-                          })}
-                        </ul>
-                      </div>
+                      <ImageComponent value={value}/>
                     </Fragment>
                   );
                 }) }
+                <div className={"h-4"}/>
                 <TrillEmAll1989 sync={sync} setSync={setSync} setStatus={setStatus}/>
               </Fragment>
             );
@@ -205,9 +209,7 @@ const TrillEmAll1989: FC<{ sync: boolean, setSync: Dispatch<SetStateAction<boole
 
   if(sync) {
     setSync(false);
-    setTimeout(() => {
-      setStatus("good");
-    }, 500);
+    setStatus("good");
   }
 
   return (
@@ -296,7 +298,7 @@ const convertToMetadata = (root: TreeNode): ImageMeta[] => {
 
 };
 
-const Description: FC<{ src: string }> = ({ src }): ReactElement => {
+export const Description: FC<{ src: string }> = ({ src }): ReactElement => {
 
   const getDescription = async ({ src }: AsyncProps<string>) => {
     src = src as string;
