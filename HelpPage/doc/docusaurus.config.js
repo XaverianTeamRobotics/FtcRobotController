@@ -118,6 +118,10 @@ const config = {
                 href: "https://robotics.xbhs.net/legacy-apk",
                 label: "Download APK"
               },
+              {
+                href: "https://robotics.xbhs.net/imgutil",
+                label: "Upload Image"
+              },
             ]
           },
           {
