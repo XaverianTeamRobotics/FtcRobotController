@@ -29,61 +29,42 @@
 
 package org.firstinspires.ftc.robotcontroller.external.samples;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /*
- * Demonstrates an empty iterative OpMode
+ * This OpMode illustrates how to use the Modern Robotics Range Sensor.
+ *
+ * The OpMode assumes that the range sensor is configured with a name of "sensor_range".
+ *
+ * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
+ *
+ * @see <a href="http://modernroboticsinc.com/range-sensor">MR Range Sensor</a>
  */
-@TeleOp(name = "Concept: NullOp", group = "Concept")
-@Disabled
-public class ConceptNullOp extends OpMode {
+@TeleOp(name = "Sensor: MR range sensor", group = "Sensor")
+@Disabled   // comment out or remove this line to enable this OpMode
+public class SensorMRRangeSensor extends LinearOpMode {
 
-  private ElapsedTime runtime = new ElapsedTime();
+    ModernRoboticsI2cRangeSensor rangeSensor;
 
-  /**
-   * This method will be called once, when the INIT button is pressed.
-   */
-  @Override
-  public void init() {
-    telemetry.addData("Status", "Initialized");
-  }
+    @Override public void runOpMode() {
 
-  /**
-   * This method will be called repeatedly during the period between when
-   * the init button is pressed and when the play button is pressed (or the
-   * OpMode is stopped).
-   */
-  @Override
-  public void init_loop() {
-  }
+        // get a reference to our compass
+        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
 
-  /**
-   * This method will be called once, when the play button is pressed.
-   */
-  @Override
-  public void start() {
-    runtime.reset();
-  }
+        // wait for the start button to be pressed
+        waitForStart();
 
-  /**
-   * This method will be called repeatedly during the period between when
-   * the play button is pressed and when the OpMode is stopped.
-   */
-  @Override
-  public void loop() {
-    telemetry.addData("Status", "Run Time: " + runtime.toString());
-  }
-
-  /**
-   * This method will be called once, when this OpMode is stopped.
-   * <p>
-   * Your ability to control hardware from this method will be limited.
-   */
-  @Override
-  public void stop() {
-
-  }
+        while (opModeIsActive()) {
+            telemetry.addData("raw ultrasonic", rangeSensor.rawUltrasonic());
+            telemetry.addData("raw optical", rangeSensor.rawOptical());
+            telemetry.addData("cm optical", "%.2f cm", rangeSensor.cmOptical());
+            telemetry.addData("cm", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
+            telemetry.update();
+        }
+    }
 }
