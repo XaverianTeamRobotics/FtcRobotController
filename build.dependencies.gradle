@@ -21,7 +21,6 @@ dependencies {
     implementation 'org.firstinspires.ftc:gameAssets-CenterStage:1.0.0'
     implementation 'org.tensorflow:tensorflow-lite-task-vision:0.4.4'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'org.firstinspires.ftc:gameAssets-PowerPlay:1.0.0'
     implementation 'com.acmerobotics.dashboard:dashboard:0.4.12'
     implementation 'org.jetbrains:annotations:24.0.1'
     implementation 'com.michaell:jlooping:2.0.1'
