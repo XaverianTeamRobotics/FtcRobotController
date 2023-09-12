@@ -24,8 +24,8 @@ dependencies {
     implementation 'com.acmerobotics.dashboard:dashboard:0.4.12'
     implementation 'org.jetbrains:annotations:24.0.1'
     implementation 'com.michaell:jlooping:2.0.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-core:1.5.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.0'
 
     testImplementation 'junit:junit:4.13.2'
 }
