@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.internals.image;
+package org.firstinspires.ftc.teamcode.internals.image.powerplay;
 
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 
-public class PoleLocalizerTest extends OperationMode implements TeleOperation {
-    PoleLocalizer navigator = new PoleLocalizer();
+public class PoleNavigatorTest extends OperationMode implements TeleOperation {
+    PoleNavigator navigator = new PoleNavigator();
     @Override
     public void construct() {
         navigator.startStreaming();

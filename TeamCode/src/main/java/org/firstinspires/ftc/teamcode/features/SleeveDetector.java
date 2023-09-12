@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
 import org.firstinspires.ftc.teamcode.internals.image.MultipleCameraManager;
-import org.firstinspires.ftc.teamcode.internals.image.SleeveColorDetection;
+import org.firstinspires.ftc.teamcode.internals.image.powerplay.SleeveColorDetection;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.AdvancedLogging;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;

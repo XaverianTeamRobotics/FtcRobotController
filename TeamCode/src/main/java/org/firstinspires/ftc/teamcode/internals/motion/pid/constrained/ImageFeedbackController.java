@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.internals.motion.pid.constrained;
 
 import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.internals.image.PoleNavigator;
+import org.firstinspires.ftc.teamcode.internals.image.powerplay.PoleNavigator;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DashboardLogging;
 
 /**

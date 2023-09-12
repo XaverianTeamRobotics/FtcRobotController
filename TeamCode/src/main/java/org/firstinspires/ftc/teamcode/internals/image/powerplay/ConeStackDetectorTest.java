@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals.image;
+package org.firstinspires.ftc.teamcode.internals.image.powerplay;
 
 import org.firstinspires.ftc.teamcode.internals.registration.AutonomousOperation;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;

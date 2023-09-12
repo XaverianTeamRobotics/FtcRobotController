@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals.image;
+package org.firstinspires.ftc.teamcode.internals.image.powerplay;
 
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
@@ -8,7 +8,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.Arrays;
 
-import static org.firstinspires.ftc.teamcode.internals.image.ImageProcessingConstants.*;
+import static org.firstinspires.ftc.teamcode.internals.image.powerplay.ImageProcessingConstants.*;
 import static org.opencv.core.Core.inRange;
 import static org.opencv.core.Core.sumElems;
 import static org.opencv.imgproc.Imgproc.*;

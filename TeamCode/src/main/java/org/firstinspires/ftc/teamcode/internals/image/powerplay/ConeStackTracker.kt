@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals.image
+package org.firstinspires.ftc.teamcode.internals.image.powerplay
 
 import com.acmerobotics.dashboard.FtcDashboard
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices
@@ -32,11 +32,27 @@ class ConeStackTracker(val isBlueTeam: Boolean, val enableDisplayOfAngles: Boole
 
         // Define some colors
 
-        val blueLowerBound = Scalar(ImageProcessingConstants.BLUE_H_MIN, ImageProcessingConstants.BLUE_S_MIN, ImageProcessingConstants.BLUE_V_MIN)
-        val blueUpperBound = Scalar(ImageProcessingConstants.BLUE_H_MAX, ImageProcessingConstants.BLUE_S_MAX, ImageProcessingConstants.BLUE_V_MAX)
+        val blueLowerBound = Scalar(
+            ImageProcessingConstants.BLUE_H_MIN,
+            ImageProcessingConstants.BLUE_S_MIN,
+            ImageProcessingConstants.BLUE_V_MIN
+        )
+        val blueUpperBound = Scalar(
+            ImageProcessingConstants.BLUE_H_MAX,
+            ImageProcessingConstants.BLUE_S_MAX,
+            ImageProcessingConstants.BLUE_V_MAX
+        )
 
-        val redLowerBound = Scalar(ImageProcessingConstants.RED_H_MIN, ImageProcessingConstants.RED_S_MIN, ImageProcessingConstants.RED_V_MIN)
-        val redUpperBound = Scalar(ImageProcessingConstants.RED_H_MAX, ImageProcessingConstants.RED_S_MAX, ImageProcessingConstants.RED_V_MAX)
+        val redLowerBound = Scalar(
+            ImageProcessingConstants.RED_H_MIN,
+            ImageProcessingConstants.RED_S_MIN,
+            ImageProcessingConstants.RED_V_MIN
+        )
+        val redUpperBound = Scalar(
+            ImageProcessingConstants.RED_H_MAX,
+            ImageProcessingConstants.RED_S_MAX,
+            ImageProcessingConstants.RED_V_MAX
+        )
 
         // Apply an edge detector to just get the cones
         val lowerBound = if (isBlueTeam) blueLowerBound else redLowerBound

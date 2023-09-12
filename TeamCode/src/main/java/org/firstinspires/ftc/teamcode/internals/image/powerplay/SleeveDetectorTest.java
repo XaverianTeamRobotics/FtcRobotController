@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals.image;
+package org.firstinspires.ftc.teamcode.internals.image.powerplay;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.features.SleeveDetector;

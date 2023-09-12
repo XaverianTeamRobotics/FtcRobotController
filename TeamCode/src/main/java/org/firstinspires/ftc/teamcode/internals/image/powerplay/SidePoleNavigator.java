@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals.image;
+package org.firstinspires.ftc.teamcode.internals.image.powerplay;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.features.SleeveDetector;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
 import org.firstinspires.ftc.teamcode.internals.image.MultipleCameraManager;
-import org.firstinspires.ftc.teamcode.internals.image.PoleLocalizer;
+import org.firstinspires.ftc.teamcode.internals.image.powerplay.PoleLocalizer;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.AutoRunner;
