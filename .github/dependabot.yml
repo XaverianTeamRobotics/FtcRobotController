@@ -7,7 +7,7 @@ updates:
     allow:
       - dependency-name: "*"
         dependency-type: "all"
-    assignees: ["MatthewL246", "tom-ricci"]
+    assignees: ["MatthewL246", "michaell4438"]
     open-pull-requests-limit: 10
 
   - package-ecosystem: "gradle"
@@ -17,7 +17,7 @@ updates:
     allow:
       - dependency-name: "*"
         dependency-type: "all"
-    assignees: ["tom-ricci"]
+    assignees: ["MatthewL246", "michaell4438"]
     open-pull-requests-limit: 10
 
   - package-ecosystem: "gradle"
@@ -27,7 +27,7 @@ updates:
     allow:
       - dependency-name: "*"
         dependency-type: "all"
-    assignees: ["tom-ricci"]
+    assignees: ["MatthewL246", "michaell4438"]
     open-pull-requests-limit: 10
 
   - package-ecosystem: "gradle"
@@ -37,7 +37,7 @@ updates:
     allow:
       - dependency-name: "*"
         dependency-type: "all"
-    assignees: ["tom-ricci"]
+    assignees: ["MatthewL246", "michaell4438"]
     open-pull-requests-limit: 10
 
   - package-ecosystem: "gitsubmodule"
@@ -47,5 +47,5 @@ updates:
     allow:
       - dependency-name: "*"
         dependency-type: "all"
-    assignees: ["tom-ricci"]
+    assignees: ["MatthewL246", "michaell4438"]
     open-pull-requests-limit: 10
