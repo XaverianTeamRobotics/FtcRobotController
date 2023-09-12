@@ -1,0 +1,64 @@
+<roboscript id="roboscript" type="linear">  
+  <mode>teleop</mode>
+  
+  <group>XML OpModes</group>
+  <name>TestOpMode</name>
+  
+  <code>    
+    <expression type="VariableStatement">      
+      <name>myVar</name>
+      <type>IntegerType</type>
+      
+      <value>
+        <expression type="BinaryOperation" operand="+">
+          <expression type="IntegerConstant">5</expression>
+          <expression type="IntegerConstant">2</expression>
+        </expression>
+      </value>
+    </expression>
+    <expression type="VariableStatement">      
+      <name>2ndVar</name>
+      <type>DoubleType</type>
+      
+      <value>
+        <expression type="IntegerConstant">7</expression>
+      </value>
+    </expression>
+    <expression type="VariableSetStatement">      
+      <reference>myVar</reference>
+      <value>        
+        <expression type="BinaryOperation" operand="+">
+          <expression type="BinaryOperation" operand="+">
+            <expression type="VariableUsageExpression">2ndVar</expression>
+            <expression type="BinaryOperation" operand="*">
+              <expression type="IntegerConstant">2</expression>
+              <expression type="ParenthesizedExpression">
+                <expression type="BinaryOperation" operand="+">
+                  <expression type="IntegerConstant">3</expression>
+                  <expression type="IntegerConstant">1</expression>
+                </expression>
+              </expression>
+            </expression>
+          </expression>
+          <expression type="IntegerConstant">4</expression>
+        </expression>
+      </value>
+    </expression>
+    <expression type="TelemetryLogLine">      
+      <content>
+        <expression type="VariableUsageExpression">myVar</expression>
+      </content>
+    </expression>
+    <expression type="WaitStatement">
+      <expression type="IntegerConstant">5000</expression>
+    </expression>
+    <expression type="MotorSetStatement">
+      <number>0</number>
+      <value>
+        <expression type="FloatingPointConstant">50.0</expression>
+      </value>
+      
+    </expression>
+    <expression type="TelemetryClear"></expression>
+  </code>
+</roboscript>

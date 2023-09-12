@@ -1,0 +1,8 @@
+{
+  "short_name": "Web Installer",
+  "name": "Install APKs from the Web",
+  "start_url": "./",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

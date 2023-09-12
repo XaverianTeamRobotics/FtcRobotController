@@ -133,6 +133,12 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+// PROPRIETARY 19460 IMPORTS - READ LINE 362
+import org.firstinspires.ftc.robotcore.internal.opmode.ClassFilter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+// END OF IMPORTS
+
 @SuppressWarnings("WeakerAccess")
 public class FtcRobotControllerActivity extends Activity
   {
@@ -150,7 +156,7 @@ public class FtcRobotControllerActivity extends Activity
   protected ProgrammingModeManager programmingModeManager;
 
   protected UpdateUI.Callback callback;
-  protected Context context;
+  protected static Context context;
   protected Utility utility;
   protected StartResult prefRemoterStartResult = new StartResult();
   protected StartResult deviceNameStartResult = new StartResult();
@@ -353,6 +359,22 @@ public class FtcRobotControllerActivity extends Activity
     if (permissionsValidated) {
       ClassManager.getInstance().setOnBotJavaClassHelper(onBotJavaHelper);
       ClassManagerFactory.registerFilters();
+      // The code below is PROPRIETARY code specific to OUR (FTC 19460) codebase. DO NOT update this file with upstream
+      // unless you know what you're doing or you've talked to Michael/Thomas (I might be an alum by the time this
+      // matters, if I'm not on the team anymore I'll still be happy to give advice https://www.thomasricci.dev)
+      // Also, check this out: https://github.com/FIRST-Tech-Challenge/FtcRobotController/discussions/384
+      try {
+        // we remove all our previously dealt with opmodes (just in case), then add and run the filter to add opmodes
+        Class c = Class.forName("org.firstinspires.ftc.teamcode.internals.registration.OperationModeClassFilter");
+        Class d = Class.forName("org.firstinspires.ftc.teamcode.internals.registration.OperationModeRegistrarStore");
+        Method method = d.getMethod("purgeClasses", String.class);
+        method.invoke(null, "a7216e0b6a49850c6092991040467037d0fc899960bba2c08c4afafeb8b3bf1bfd748fe8050348f614c7e4421af2449a47db9d01de07b13a8c2fb060dac3e1ed5053643c4739479ff3fc665a9dba57e47d65803838d1617de4b1658a9e022e9bc0eaf71b");
+        ClassManager.getInstance().registerFilter((ClassFilter) c.newInstance());
+      } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException |
+               InvocationTargetException e) {
+        System.out.println("WHAT A TERRIBLE FAILURE: OperationModeClassFilter failed to be instantiated. OpModes using the Operation Mode paradigm will not exist in the app. All other OpModes will continue to be runnable. Continuing...");
+      }
+      // End of proprietary code
       ClassManagerFactory.processAllClasses();
     }
 
@@ -842,4 +864,8 @@ public class FtcRobotControllerActivity extends Activity
       wifiMuteStateMachine.consumeEvent(WifiMuteEvent.USER_ACTIVITY);
     }
   }
+
+    public static Context getAppContext() {
+      return context;
+    }
 }

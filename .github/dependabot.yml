@@ -1,0 +1,51 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-name: "*"
+        dependency-type: "all"
+    assignees: ["MatthewL246", "tom-ricci"]
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-name: "*"
+        dependency-type: "all"
+    assignees: ["tom-ricci"]
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "gradle"
+    directory: "/TeamCode/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-name: "*"
+        dependency-type: "all"
+    assignees: ["tom-ricci"]
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "gradle"
+    directory: "/FtcRobotController/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-name: "*"
+        dependency-type: "all"
+    assignees: ["tom-ricci"]
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    allow:
+      - dependency-name: "*"
+        dependency-type: "all"
+    assignees: ["tom-ricci"]
+    open-pull-requests-limit: 10

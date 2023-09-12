@@ -1,0 +1,21 @@
+body {
+    background-color: black;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    background-color: gray;
+    text-align: center;
+}
+
+.parent {
+    display: flex;
+    /*flex-direction: column;*/
+    justify-content: center;
+    align-items: center;
+}
