@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import android.annotation.SuppressLint;
+import com.acmerobotics.dashboard.DashboardCore;
+import com.acmerobotics.dashboard.FtcDashboard;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -20,9 +23,6 @@ public class ApriltagDetectionTest extends OperationMode implements TeleOperatio
     public void construct() {
         // Build AprilTag Detector
         aprilTag = new AprilTagProcessor.Builder()
-                .setDrawAxes(true)
-                .setDrawTagID(true)
-                .setDrawTagOutline(true)
                 .build();
 
         vision = new VisionPortal.Builder()
@@ -55,5 +55,6 @@ public class ApriltagDetectionTest extends OperationMode implements TeleOperatio
         log("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
         log("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         log("RBE = Range, Bearing & Elevation");
+        Logging.update();
     }
 }
