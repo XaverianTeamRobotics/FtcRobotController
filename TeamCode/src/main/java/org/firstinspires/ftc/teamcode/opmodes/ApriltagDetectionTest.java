@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
-import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
