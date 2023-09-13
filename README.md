@@ -2,6 +2,11 @@
 
 This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot for Hawks Robotics: The Ryken Force.
 
+## Requirements
+To use this Android Studio project, you will need Android Studio 2021.2 (codename Chipmunk) or later.
+
+To program your robot in Blocks or OnBot Java, you do not need Android Studio.
+
 ## Getting Started
 
 If you are new to robotics or new to the *FIRST* Tech Challenge, then you should consider reviewing the [FTC Blocks Tutorial](https://github.com/FIRST-Tech-Challenge/FtcRobotController/wiki/Blocks-Tutorial) to get familiar with how to use the control system, and from there migrate to the [OnBot Java Tool](https://github.com/FIRST-Tech-Challenge/FtcRobotController/wiki/OnBot-Java-Tutorial).

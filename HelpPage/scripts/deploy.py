@@ -15,16 +15,25 @@ def run():
     # Prep build output
     maybe_rmdir("../opt")
 
+    print("Building imgutil...")
+
+    # Build imgutil site
+    os.system("cd ../imgutil && npm i && npm run build")
+
+    print("Imgutil build complete.")
+
     print("Bundling...")
 
     # Copy docusaurus build to final output
     shutil.copytree("../doc/build", "../opt")
 
+    # Copy imgutil build to final output
+    maybe_rmdir("../opt/imgutil")
+    shutil.copytree("../imgutil/dist", "../opt/imgutil")
+
     # Copy static files to final output
     maybe_rmdir("../opt/apk")
     shutil.copytree("../apk", "../opt/apk")
-    maybe_rmdir("../opt/book")
-    shutil.copytree("../book", "../opt/book")
     maybe_rmdir("../opt/legacy-apk")
     shutil.copytree("../legacy-apk", "../opt/legacy-apk")
     maybe_rmdir("../opt/kdoc")

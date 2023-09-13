@@ -54,7 +54,13 @@ const config = {
           },
         },
         blog: false,
-        pages: false,
+        pages: {
+          path: "pages",
+          admonitions: {
+            tag: ":::",
+            keywords: [ "note", "tip", "caution", "danger" ],
+          },
+        },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
@@ -91,7 +97,7 @@ const config = {
               },
               {
                 type: "html",
-                value: `${ "" } <a class="dropdown__link" href="https://robotics.xbhs.net/v1.1.0">1.1.0</a>`,
+                value: `${ "" } <a class="dropdown__link" href="./v1.1.0">1.1.0</a>`,
               },
               {
                 type: "html",
@@ -112,6 +118,10 @@ const config = {
                 href: "https://robotics.xbhs.net/legacy-apk",
                 label: "Download APK"
               },
+              {
+                href: "https://robotics.xbhs.net/imgutil",
+                label: "Upload Image"
+              },
             ]
           },
           {
@@ -121,7 +131,7 @@ const config = {
           },
           {
             type: "html",
-            value: `${ "" } <a class="navbar__item navbar__link" href="https://robotics.xbhs.net/book">The Book</a>`,
+            value: `${ "" } <a class="navbar__item navbar__link" href="/book">The Book</a>`,
             position: "right",
           },
           {

@@ -11,8 +11,9 @@
 # Files for the ART/Dalvik VM
 *.dex
 
-# Java class files
+# Java/JDK files
 *.class
+*.hprof
 
 # Generated files
 bin/
@@ -98,3 +99,6 @@ lint/tmp/
 # node
 node_modules
 package-lock.json
+
+# imgutils
+/HelpPage/imgutil/src/DO_NOT_TRACK_MUST_DELETE
