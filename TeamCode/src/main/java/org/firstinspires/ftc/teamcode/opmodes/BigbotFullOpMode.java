@@ -15,7 +15,7 @@ public class BigbotFullOpMode extends OperationMode implements TeleOperation {
         registerFeature(new NativeMecanumDrivetrain(
             DrivetrainMapMode.FR_BR_FL_BL,
             false, true,
-            false, false));
+            false));
         registerFeature(new TwoMotorArm());
         registerFeature(new Hand());
     }
