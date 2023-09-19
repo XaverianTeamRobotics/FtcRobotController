@@ -6,11 +6,13 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 
 public class PixelGrabberTest extends OperationMode implements TeleOperation {
 
+    double homePos0 = 0, homePos1 = 75;
+    double closePos0 = 50, closePos1 = 66;
 
     @Override
     public void construct() {
-        Devices.servo1.setPosition(100);
-        Devices.servo0.setPosition(0);
+        Devices.servo1.setPosition(homePos1);
+        Devices.servo0.setPosition(homePos0);
     }
 
     @Override
@@ -26,12 +28,12 @@ public class PixelGrabberTest extends OperationMode implements TeleOperation {
     }
 
     private void manualOpen() {
-        Devices.servo1.setPosition(100);
-        Devices.servo0.setPosition(0);
+        Devices.servo1.setPosition(homePos1);
+        Devices.servo0.setPosition(homePos0);
     }
 
     private void manualClose() {
-        Devices.servo1.setPosition(0);
-        Devices.servo0.setPosition(100);
+        Devices.servo1.setPosition(closePos1);
+        Devices.servo0.setPosition(closePos0);
     }
 }
