@@ -19,10 +19,13 @@ public class DriveTowardsAprilTag extends OperationMode implements TeleOperation
         driver = new MecanumDriver();
         detector = new AprilTagDetector(Devices.camera0);
         registerFeature(detector);
+        Logging.log("Ensure that the AprilTag is ID 10 (Check the number below the tag itself)");
+        Logging.update();
     }
 
     @Override
     public void run() {
+        Logging.clear();
         if (!targetDetected) {
             for (AprilTagDetection detection : detector.getCurrentDetections()) {
                 if (detection.id == 10) {
