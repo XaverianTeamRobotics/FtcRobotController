@@ -11,14 +11,18 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.*;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.*;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
-import org.firstinspires.ftc.teamcode.internals.motion.odometry.OdometrySettings;
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.AutoBuilder;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceRunner;
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.LocalizationType;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.LynxModuleUtil;
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.OdometrySettingsDashboardConfiguration;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.PoseBucket;
 
 import java.util.ArrayList;
@@ -37,19 +41,26 @@ public class AutonomousDrivetrain extends MecanumDrive {
      */
 
 
-    public static PIDCoefficients TRANSLATIONAL_PID = OdometrySettings.TRANSLATIONAL_PID;
-    public static PIDCoefficients HEADING_PID = OdometrySettings.HEADING_PID;
-    public static double LATERAL_MULTIPLIER = OdometrySettings.LATERAL_MULTIPLIER;
-    public static double VX_WEIGHT = OdometrySettings.VX_WEIGHT;
-    public static double VY_WEIGHT = OdometrySettings.VY_WEIGHT;
-    public static double OMEGA_WEIGHT = OdometrySettings.OMEGA_WEIGHT;
-    private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(OdometrySettings.MAX_VEL, OdometrySettings.MAX_ANG_VEL, OdometrySettings.TRACK_WIDTH);
-    private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(OdometrySettings.MAX_ACCEL);
+    public static PIDCoefficients TRANSLATIONAL_PID = OdometrySettingsDashboardConfiguration.TRANSLATIONAL_PID;
+    public static PIDCoefficients HEADING_PID = OdometrySettingsDashboardConfiguration.HEADING_PID;
+    public static double LATERAL_MULTIPLIER = OdometrySettingsDashboardConfiguration.LATERAL_MULTIPLIER;
+    public static double VX_WEIGHT = OdometrySettingsDashboardConfiguration.VX_WEIGHT;
+    public static double VY_WEIGHT = OdometrySettingsDashboardConfiguration.VY_WEIGHT;
+    public static double OMEGA_WEIGHT = OdometrySettingsDashboardConfiguration.OMEGA_WEIGHT;
+    private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(OdometrySettingsDashboardConfiguration.MAX_VEL, OdometrySettingsDashboardConfiguration.MAX_ANG_VEL, OdometrySettingsDashboardConfiguration.TRACK_WIDTH);
+    private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(OdometrySettingsDashboardConfiguration.MAX_ACCEL);
+    private static final double SLOW_VEL_MULT = 1.5;
+    private static final double SLOW_ACCEL_MULT = 2;
+    public static final TrajectoryVelocityConstraint SLOW_VEL_CONSTRAINT = getVelocityConstraint(OdometrySettingsDashboardConfiguration.MAX_VEL / SLOW_VEL_MULT, OdometrySettingsDashboardConfiguration.MAX_ANG_VEL / SLOW_VEL_MULT, OdometrySettingsDashboardConfiguration.TRACK_WIDTH);
+    public static final TrajectoryAccelerationConstraint SLOW_ACCEL_CONSTRAINT = getAccelerationConstraint(OdometrySettingsDashboardConfiguration.MAX_ACCEL / SLOW_ACCEL_MULT);
     private TrajectorySequenceRunner trajectorySequenceRunner;
     private TrajectoryFollower follower;
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
     private VoltageSensor batteryVoltageSensor;
+    private IMU imu;
+    private boolean useIMU;
+    private final AutoBuilder pathing;
 
 
     /*
@@ -61,11 +72,20 @@ public class AutonomousDrivetrain extends MecanumDrive {
      */
 
     public AutonomousDrivetrain() {
-        this(HardwareGetter.getHardwareMap());
+        this(HardwareGetter.getHardwareMap(), null);
+    }
+
+    public AutonomousDrivetrain(AutoBuilder pathing) {
+        this(HardwareGetter.getHardwareMap(), pathing);
     }
 
     public AutonomousDrivetrain(HardwareMap hardwareMap) {
-        super(OdometrySettings.kV, OdometrySettings.kA, OdometrySettings.kStatic, OdometrySettings.TRACK_WIDTH, OdometrySettings.TRACK_WIDTH, LATERAL_MULTIPLIER);
+        this(hardwareMap, null);
+    }
+
+    public AutonomousDrivetrain(HardwareMap hardwareMap, AutoBuilder pathing) {
+        super(OdometrySettingsDashboardConfiguration.kV, OdometrySettingsDashboardConfiguration.kA, OdometrySettingsDashboardConfiguration.kStatic, OdometrySettingsDashboardConfiguration.TRACK_WIDTH, OdometrySettingsDashboardConfiguration.TRACK_WIDTH, LATERAL_MULTIPLIER);
+        this.pathing = pathing;
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
@@ -73,10 +93,10 @@ public class AutonomousDrivetrain extends MecanumDrive {
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
-        leftFront = hardwareMap.get(DcMotorEx.class, OdometrySettings.DRIVE_FRONT_LEFT.NAME);
-        leftRear = hardwareMap.get(DcMotorEx.class, OdometrySettings.DRIVE_BACK_LEFT.NAME);
-        rightRear = hardwareMap.get(DcMotorEx.class, OdometrySettings.DRIVE_BACK_RIGHT.NAME);
-        rightFront = hardwareMap.get(DcMotorEx.class, OdometrySettings.DRIVE_FRONT_RIGHT.NAME);
+        leftFront = hardwareMap.get(DcMotorEx.class, OdometrySettingsDashboardConfiguration.DRIVE_FRONT_LEFT.NAME);
+        leftRear = hardwareMap.get(DcMotorEx.class, OdometrySettingsDashboardConfiguration.DRIVE_BACK_LEFT.NAME);
+        rightRear = hardwareMap.get(DcMotorEx.class, OdometrySettingsDashboardConfiguration.DRIVE_BACK_RIGHT.NAME);
+        rightFront = hardwareMap.get(DcMotorEx.class, OdometrySettingsDashboardConfiguration.DRIVE_FRONT_RIGHT.NAME);
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -90,12 +110,23 @@ public class AutonomousDrivetrain extends MecanumDrive {
         if (ConstantUtils.RUN_USING_ENCODER && ConstantUtils.MOTOR_VELO_PID != null) {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ConstantUtils.MOTOR_VELO_PID);
         }
-        leftFront.setDirection(OdometrySettings.DRIVE_FRONT_LEFT.DIRECTION);
-        leftRear.setDirection(OdometrySettings.DRIVE_BACK_LEFT.DIRECTION);
-        rightRear.setDirection(OdometrySettings.DRIVE_BACK_RIGHT.DIRECTION);
-        rightFront.setDirection(OdometrySettings.DRIVE_FRONT_RIGHT.DIRECTION);
-        setLocalizer(new AutonomousLocalizer(hardwareMap));
+        leftFront.setDirection(OdometrySettingsDashboardConfiguration.DRIVE_FRONT_LEFT.DIRECTION);
+        leftRear.setDirection(OdometrySettingsDashboardConfiguration.DRIVE_BACK_LEFT.DIRECTION);
+        rightRear.setDirection(OdometrySettingsDashboardConfiguration.DRIVE_BACK_RIGHT.DIRECTION);
+        rightFront.setDirection(OdometrySettingsDashboardConfiguration.DRIVE_FRONT_RIGHT.DIRECTION);
+        useIMU = OdometrySettingsDashboardConfiguration.LOCALIZATION_TYPE == LocalizationType.IMU;
+        if(useIMU) {
+            imu = hardwareMap.get(IMU.class, OdometrySettingsDashboardConfiguration.IMU);
+            IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+            imu.initialize(parameters);
+            setLocalizer(new IMULocalizer(hardwareMap, this));
+        }else{
+            setLocalizer(new PodLocalizer(hardwareMap));
+        }
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
+        PoseBucket.forceSetPose(new Pose2d(0, 0, 0));
         setPoseEstimate(PoseBucket.getPose());
     }
 
@@ -154,11 +185,17 @@ public class AutonomousDrivetrain extends MecanumDrive {
 
     @Override
     public double getRawExternalHeading() {
+        if(useIMU) {
+            return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        }
         return 0;
     }
 
     @Override
     public Double getExternalHeadingVelocity() {
+        if(useIMU) {
+            return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).xRotationRate;
+        }
         return 0.0;
     }
 
@@ -166,7 +203,7 @@ public class AutonomousDrivetrain extends MecanumDrive {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
             trajectorySequenceBuilder(getPoseEstimate())
                 .turn(angle)
-                .build()
+                .completeTrajectory()
         );
     }
 
@@ -179,7 +216,7 @@ public class AutonomousDrivetrain extends MecanumDrive {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
             trajectorySequenceBuilder(trajectory.start())
                 .addTrajectory(trajectory)
-                .build()
+                .completeTrajectory()
         );
     }
 
@@ -220,11 +257,13 @@ public class AutonomousDrivetrain extends MecanumDrive {
     }
 
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
-        return new TrajectorySequenceBuilder(
+        TrajectorySequenceBuilder builder = new TrajectorySequenceBuilder(
             startPose,
             VEL_CONSTRAINT, ACCEL_CONSTRAINT,
-            OdometrySettings.MAX_ANG_VEL, OdometrySettings.MAX_ANG_ACCEL
+            OdometrySettingsDashboardConfiguration.MAX_ANG_VEL, OdometrySettingsDashboardConfiguration.MAX_ANG_ACCEL,
+            this, pathing
         );
+        return builder;
     }
 
 

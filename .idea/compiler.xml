@@ -15,6 +15,10 @@
       <entry name="!*.mpsr" />
       <entry name="!*.model" />
     </wildcardResourcePatterns>
-    <bytecodeTargetLevel target="1.8" />
+    <bytecodeTargetLevel target="11" />
+  </component>
+  <component name="TypeScriptCompiler">
+    <option name="typeScriptServiceDirectory" value="$PROJECT_DIR$/HelpPage/imgutil/node_modules/typescript" />
+    <option name="versionType" value="SERVICE_DIRECTORY" />
   </component>
 </project>

@@ -29,14 +29,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+      - name: Build Website
+        run: |
+          echo -e "Running build script with Python..."
+          python deploy.py
+          echo -e "Script complete."
+        shell: bash
+        working-directory: ./HelpPage/scripts/
       - name: Setup Pages
         uses: actions/configure-pages@v3
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          # Upload entire repository
-          path: './HelpPage'
+          # Upload final build
+          path: './HelpPage/opt'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@main

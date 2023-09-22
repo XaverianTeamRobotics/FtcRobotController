@@ -20,7 +20,7 @@ public class Menu {
     }
 
     /**
-     * Moves the selected item up by 1 or down by 1. If it's at either end of the list and you ask it to go beyond the list's bounds, nothing will happen. Whatever manages this menu is responsible for determining when this should occour.
+     * Moves the selected item up by 1 or down by 1. If it's at either end of the list and you ask it to go beyond the list's bounds, nothing will happen. Whatever manages this menu is responsible for determining when this should occur.
      * @param direction The direction, up or down. Up is positive, down is negative.
      */
     public void selectItem(boolean direction) {

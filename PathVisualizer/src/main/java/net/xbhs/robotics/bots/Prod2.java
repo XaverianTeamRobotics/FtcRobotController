@@ -15,13 +15,15 @@ public class Prod2 extends Bot {
         return new DefaultBotBuilder(Environment.MEEP)
             .setColorScheme(new ColorSchemeRedDark())
             .setConstraints(30, 30, 3, 3, 13.90)
+            .setDimensions(14, 18)
             .followTrajectorySequence(drive ->
-                drive.trajectorySequenceBuilder(new Pose2d(-58, 35, 0))
-                    .splineTo(new Vector2d(-46, 35), 0)
-                    .lineToSplineHeading(new Pose2d(-40, 35, Math.toRadians(90)))
-                    .splineToConstantHeading(new Vector2d(-34, 52), Math.toRadians(90))
-                    .lineToSplineHeading(new Pose2d(-34, 59, Math.toRadians(0)))
-                    .build());
+                drive.trajectorySequenceBuilder(new Pose2d(-35.84, 61.50, Math.toRadians(-90.00)))
+                .splineToConstantHeading(new Vector2d(-35.50, 43.93), Math.toRadians(270.65))
+                .splineToConstantHeading(new Vector2d(-35.00, 11.70), Math.toRadians(270.45))
+                .splineTo(new Vector2d(-38.01, 10.30), Math.toRadians(177.99)) // two
+                .lineTo(new Vector2d(-14.21, 8.28)) // one
+                .lineTo(new Vector2d(-59.33, 11.27)) // three
+                .build());
     }
 
 }

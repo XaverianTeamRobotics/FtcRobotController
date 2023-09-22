@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers;
 
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
-import org.firstinspires.ftc.teamcode.internals.motion.odometry.OdometrySettings;
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.OdometrySettingsDashboardConfiguration;
 
 public class ConstantUtils {
 
@@ -14,14 +14,14 @@ public class ConstantUtils {
      * from DriveVelocityPIDTuner.
      */
     public static final boolean RUN_USING_ENCODER = false;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0, getMotorVelocityF(OdometrySettings.MAX_RPM / 60 * OdometrySettings.TICKS_PER_REV));
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0, getMotorVelocityF(OdometrySettingsDashboardConfiguration.MAX_RPM / 60 * OdometrySettingsDashboardConfiguration.TICKS_PER_REV));
 
     public static double encoderTicksToInches(double ticks) {
-        return OdometrySettings.WHEEL_RADIUS * 2 * Math.PI * OdometrySettings.GEAR_RATIO * ticks / OdometrySettings.TICKS_PER_REV;
+        return OdometrySettingsDashboardConfiguration.WHEEL_RADIUS * 2 * Math.PI * OdometrySettingsDashboardConfiguration.GEAR_RATIO * ticks / OdometrySettingsDashboardConfiguration.TICKS_PER_REV;
     }
 
     public static double rpmToVelocity(double rpm) {
-        return rpm * OdometrySettings.GEAR_RATIO * 2 * Math.PI * OdometrySettings.WHEEL_RADIUS / 60.0;
+        return rpm * OdometrySettingsDashboardConfiguration.GEAR_RATIO * 2 * Math.PI * OdometrySettingsDashboardConfiguration.WHEEL_RADIUS / 60.0;
     }
 
     public static double getMotorVelocityF(double ticksPerSecond) {

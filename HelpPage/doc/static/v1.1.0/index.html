@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <title>FTC Help Menu</title>
+     <link rel="stylesheet" href="./src/styles/main.css">
+     <script src="./src/scripts/replace.js"></script>
+     <link rel="icon" href="./src/xbhs-hawk.png">
+</head>
+<body>
+<h1>
+     FTC Help Menu
+</h1>
+<p>
+     This website will generate all the code
+     snippets you will need to get off the
+     ground fast!
+     <br>
+     <br>
+     This help page has interactive snippets that you
+     can change on the fly and copy into your file for easy use,
+     as well as many explanations on how to use different features.
+     <br>
+     <br>
+</p>
+
+<div id="opmode">
+     <h2> Opmodes </h2>
+     <p>
+          Opmodes are the way that you can make code appear on the robot.
+          They are defined the same way as normal classes, but with a few extras.
+          They follow a simple template that goes like this:
+
+          <br>
+          <br>
+
+     <pre class="code" id="opModeDefinition">
+public class <a id="opModeName">OpModeName</a> extends OperationMode implements TeleOperation {
+	@Override
+	public void contruct() { 
+		
+	} 
+	
+	@Override
+	public void run() {
+	
+	}
+}	</pre>
+
+     Opmode Name: <input id="classNameID" name="className" type="text" value="OpModeName" placeholder="Op Mode Name">
+     <br>
+     <button onclick='changeField("classNameID", "opModeName")'>Apply</button>
+     <button onclick="navigator.clipboard.writeText(document.getElementById('opModeDefinition').innerText)">Copy</button>
+
+     <br>
+     <br>
+
+     There are two functions there: construct and run. construct is run once at the beginning before the opMode starts,
+     and run is run periodically after it starts. It is important that you don't keep any long loops in the run function
+     or you may cause an error to occur.
+     <br>
+     <br>
+     To make an autonomous routine, swap the TeleOperation at the top to AutonomousOperation.
+     <br>
+     <br>
+     OpModes has a special varieable, environment, that allows for you to run special functions, set special
+     variables, and add additional features.
+     </p>
+</div>
+
+<div id="hardware">
+     <h2> Hardware </h2>
+     <p>
+          Hardware is the way that you can interact with the robot's physical features.
+          Hardware is the term for things like motors, gamepads, servos, and sensors.
+          <br>
+          <br>
+          Hardware devices can be interacted with using the HardwareGetter class.
+          Note that some hardware must be initialized before it can be used.
+          <br>
+          <br>
+          Hardware uses a system which I call "Requests". Requests have a two-part system.
+          First, a request must actually be created, then you can call that request. Requests can
+          be used in any part of the script, and some advantages will be explained later.
+
+          <h3> Motors </h3>
+          Motors are automatically ready for you, you just need to know what port its attached to.
+          <br>
+          <br>
+          There are 2 main paramaters for a motor which can all be changed:
+          They are power and the operation type. See more about operation types below.
+
+     To change a motor's power, use the following command.
+     <pre class="code" id="motorUsage">
+Devices.motor<a id="motorPortPower">0</a>.setPower(<a id="motorPower">1.0</a>); // Set the power of the motor</pre>
+     <br>
+     Motor Port: <select id="motorPortPowerInput">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+     </select>
+     <br>
+     <button onclick='changeField("motorPortPowerInput", "motorPortPower")'>Apply</button>
+     <br>
+     <br>
+     Motor Power: <input id="motorPowerInput" name="motorPower" type="text" value="1.0" placeholder="Motor Power">
+     <br>
+     <button onclick='changeField("motorPowerInput", "motorPower")'>Apply</button>
+     <button onclick="navigator.clipboard.writeText(document.getElementById('motorUsage').innerText)">Copy</button>
+     <br>
+     <br>
+
+     To change a motor's operation type, use the following command.
+     <pre class="code" id="motorOperation">
+Devices.motor<a id="motorPortOperation">0</a>.setOperation(<a id="motorOperationType">OperationType</a>); // Set the operation type of the motor</pre>
+     <br>
+     Motor Port: <select id="motorPortOperationInput">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+     </select>
+     <br>
+     <button onclick='changeField("motorPortOperationInput", "motorPortOperation")'>Apply</button>
+     <br>
+     <br>
+     Operation Type: <select id="motorOperationTypeInput">
+          <option value="POWER">POWER</option>
+          <option value="ENCODER_POWER">ENCODER_POWER</option>
+          <option value="ENCODER_POSITION">ENCODER_POSITION</option>
+     </select>
+     <br>
+     <button onclick='changeField("motorOperationTypeInput", "motorOperationType")'>Apply</button>
+     <button onclick="navigator.clipboard.writeText(document.getElementById('motorOperation').innerText)">Copy</button>
+     <br>
+     <br>
+
+     <h4>Operation Types</h4>
+
+     There are three big operation types: POWER, ENCODER_POWER, and ENCODER_DISTANCE.
+
+     <br>
+     <br>
+     POWER accepts a value between -1 and 1, and will set the motor to that value. This is the most useful.
+     <br>
+     <br>
+     ENCODER_POWER accepts a value between -1 and 1, and will set the motor to that value, but will also adjust it to
+     keep the speed of the robot consistent. It does this by using a device called an "encoder".
+     <br>
+     <br>
+     ENCODER_DISTANCE accepts any value and will drive the motor to that many "counts", which are a small fraction of
+     one revolution.
+     To find out how what the input should be for this, use this sample formula:
+     <pre class="code">
+counts_per_inch = (counts_per_rev * gear_ratio) / (wheel_diameter * PI)</pre>
+     <br>
+     Counts per inch: The amount of counts that the encoder to do to get the robot to move 1 inch. If you multiply this value
+     by any distance (in inches), then you will get the number of encoder counts needed to move the robot that distance.
+     <br>
+     <br>
+     Counts per rev: The amount of counts that the encoder has per revolution of the motor internally. For most
+     motors this is 1440, but you can look this information up online for the motor if you need to.
+     <br>
+     <br>
+     Gear Ratio: The ratio of the gears in between the motor and the wheel. You can see this information on the
+     gearbox attatched to the motor, if there is no external gearbox, assume that this is 1.
+     <br>
+     <br>
+     Wheel Diameter: The diameter (in inches) of the wheel that the motor is attached to.
+
+     <br>
+     <br>
+     <h3>Gamepads</h3>
+
+     If you just scrolled past the long section about motors and thought "You know what.... this hurts my brain!", then
+     great, because it took me two hours to write.
+     <br>
+     <br>
+     But do not fear, because gamepads are pretty simple.
+     <br>
+     They work on the same request system as motors, but require fewer inputs, and are initialized for you!
+     <br>
+     <br>
+     To interact with a gamepad, you need to know a few things:
+     <br>
+     <br>
+     First, you need to know which gamepad you want to use. You can choose between two, which are called "gamepad1" and "gamepad2".
+     <br>
+     <br>
+     Second, you need to know which type of gamepad you want to use, which are either Xbox style, which have A B X Y
+     as the labels on the four buttons on the front of the controller, or PlayStation style, which have the weird shapes
+     as labels on the four buttons on the front of the controller.
+     <br>
+     <br>
+     Third, you need to know which button you want to use. There are quite a lot, so here is a list of them.
+
+     <pre class="code">
+GENERIC BUTTONS
+     dpadUp
+     dpadDown
+     dpadLeft
+     dpadRight
+     leftStickSutton
+     rightStickButton
+     leftBumper
+     rightBumper
+
+GENERIC AXES
+     leftTrigger
+     rightTrigger
+     leftStickX
+     leftStickY
+     rightStickX
+     rightStickY
+
+XBOX-ONLY BUTTONS
+     a
+     b
+     x
+     y
+     back
+     start
+     guide
+
+PLAYSTATION-ONLY BUTTONS
+     circle
+     cross
+     square
+     triangle
+     share
+     options
+     touchpad
+     touchpadFinger1
+     touchpadFinger2
+     ps
+
+PLAYSTATION-ONLY AXES
+     touchpadFinger1X
+     touchpadFinger1Y
+     touchpadFinger2X
+     touchpadFinger2Y
+     </pre>
+
+     Note that some of those buttons, are axes, rather than buttons. Axes will return a value between -1 and 1, with
+     the exception of the touchpad of the playstation controller, which we never use. Buttons will return a boolean
+     value. To use the gamepad, look at the code snippet
+     below:
+
+     <pre class="code" id="gamepadExample">
+Devices.controller<a id="gamepadNameSample">1</a>.get<a
+               id="gamepadButtonSample">DpadUp</a>();</pre>
+     <br>
+     Gamepad Name: <select id="gamepadNameInputID" name="gamepadNameInput">
+          <option value="1">controller1</option>
+          <option value="2">controller2</option>
+     </select>
+     <br>
+     <button onclick='changeField("gamepadNameInputID", "gamepadNameSample")'>Apply</button>
+
+     <br>
+     <br>
+
+     Gamepad button: <select id="gamepadButtonInputID" name="gamepadButtonInput">
+          <option value="DpadUp">DpadUp</option>
+          <option value="DpadDown">DpadDown</option>
+          <option value="DpadLeft">DpadLeft</option>
+          <option value="DpadRight">DpadRight</option>
+          <option value="LeftStickX">LeftStickX</option>
+          <option value="LeftStickY">LeftStickY</option>
+          <option value="RightStickX">RightStickX</option>
+          <option value="RightStickY">RightStickY</option>
+          <option value="LeftTrigger">LeftTrigger</option>
+          <option value="RightTrigger">RightTrigger</option>
+          <option value="LeftStickButton">LeftStickButton</option>
+          <option value="RightStickButton">RightStickButton</option>
+          <option value="LeftBumper">LeftBumper</option>
+          <option value="RightBumper">RightBumper</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="X">X</option>
+          <option value="Y">Y</option>
+          <option value="Back">Back</option>
+          <option value="Start">Start</option>
+          <option value="Guide">Guide</option>
+          <option value="Circle">Circle</option>
+          <option value="Cross">Cross</option>
+          <option value="Square">Square</option>
+          <option value="Triangle">Triangle</option>
+          <option value="Share">Share</option>
+          <option value="Options">Options</option>
+          <option value="Touchpad">Touchpad</option>
+          <option value="TouchpadFinger1">TouchpadFinger1</option>
+          <option value="TouchpadFinger2">TouchpadFinger2</option>
+          <option value="Ps">PS</option>
+          <option value="TouchpadFinger1X">TouchpadFinger1X</option>
+          <option value="TouchpadFinger1Y">TouchpadFinger1Y</option>
+          <option value="TouchpadFinger2X">TouchpadFinger2X</option>
+          <option value="TouchpadFinger2Y">TouchpadFinger2Y</option>
+     </select>
+     <br>
+     <button onclick='changeField("gamepadButtonInputID", "gamepadButtonSample")'>Apply</button>
+     <button onclick="navigator.clipboard.writeText(document.getElementById('gamepadExample').innerText)">Copy</button>
+
+     <h2>Emulator</h2>
+
+     The emulator can be used almost identically to opmodes, just a little bit differently.
+     First you need to use a different folder to put them in. The folders highlighted green in Android Studio contain
+     data for the emulator. To create them is exactly the same.
+
+     <br>
+     <br>
+
+     <pre class="code" id="emuOpModeDefinition">
+public class <a id="emuOpModeName">OpModeName</a> extends EmulatedOpMode implements TeleOperation {
+	@Override
+	public void contruct() {
+
+	}
+
+	@Override
+	public void run() {
+
+	}
+}	</pre>
+
+     Opmode Name: <input id="emuClassNameID" name="emuClassName" type="text" value="OpModeName"
+                         placeholder="Op Mode Name">
+     <br>
+     <button onclick='changeField("emuClassNameID", "emuOpModeName")'>Apply</button>
+     <button onclick="navigator.clipboard.writeText(document.getElementById('emuOpModeDefinition').innerText)">Copy</button>
+
+     <br>
+     <br>
+
+     When you have it open, there should be a little green play button next to the class name. Click it and it will
+     run the emulator.
+
+     <br>
+     <br>
+
+     There are no differences except for a few extra functions. <br> <br>
+     First are the setTimeUntilAbort and getTimeUntilAbort functions. They are used to set the time until the
+     emulator will stop running. <br> <br>
+     Second is the setGamepadValues function, which allows you to change the values of the emulated gamepad. This can
+     be used to test what different gamepad inputs will do. <br> <br>
+     </p>
+</div>
+<div id="Wireless Connection">
+     <h2>Wireless Communication</h2>
+     <p>
+          Sometimes, you might want to connect to the robot wirelessly to connect to ADB, view the Dashboard, push code to the bot, etc.<br>This is possible in 2 ways:
+          <ul>
+               <li>REV Hardware Client (windows only)</li>
+               <li>In-House Remote Debugger or in-house Pi-based bridge. (indev & undocumented as of now)</li>
+          </ul>
+     </p>
+     <h3>REV Hardware Client</h3>
+     <p>
+          The <a href="https://docs.revrobotics.com/rev-hardware-client/">REV Hardware Client</a> is useful for management of hardware. If you don't have it already&mdash;and you run Windows&mdash;you should install it even if you don't plan to use its wireless functions so you can still manage hardware. It is <strong>necessary</strong> for at least one computer to have this installed because the Control Hub's operating system and firmware <strong>must</strong> be updated every season.<br><br>With that out of the way, using the REV Hardware Client to connect to the robot wirelessly is simple.
+          <ol>
+               <li>
+                    Connect to the Control Hub's wifi network.
+               </li>
+               <li>
+                    Open the client. Wait a few seconds for the Control Hub to appear in the client. If it does not, reboot your computer. The client has connection issues sometimes.
+               </li>
+               <li>
+                    You are now connected! In Android Studio or IntelliJ IDEA Ultimate, you can use Logcat via the ADB connection to view robot logs, interact with the filesystem, and install code. You can also access the FTC Dashboard via <a href="192.168.43.1:8080/dash">192.168.43.1:8080/dash</a> and the robot management portal, blocks, etc. via <a href="192.168.43.1:8080">192.168.43.1:8080</a> or through the <i>Program and Manage</i> tab in the REV Hardware Client. 
+               </li>
+          </ol>
+     </p>
+     <h3>
+          Connecting to the Internet and the Robot
+     </h3>
+     <p>
+          You may have noticed that you can't access the internet using the REV Hardware Client to wirelessly communicate with the robot as you're on the robot's wifi network. There are two ways to solve this.
+          <ul>
+               <li>
+                    Using the in-house methods.
+               </li>
+               <li>
+                    Using 2 network adapters.
+               </li>
+          </ul>
+          If you're on Windows, you can use two network adapters to connect to the internet and the robot at the same time by following this method:
+          <ol>
+               <li>
+                    Connect a second network adapter to your computer. We have some in the robotics room in the hardware box near the whiteboard and the window outside. They're in a box labeled something similar to "Wifi Adapters".
+               </li>
+               <li>
+                    Open Settings.
+               </li>
+               <li>
+                    Go to your wifi settings and connect the second adapter to the robot's wifi network.
+               </li>
+               <li>
+                    View the adapter's properties to see its private IP address. Alternatively, you can open Command Prompt, execute <code>ipconfig</code>, and view the IP of the default gateway for the second adapter.
+               </li>
+               <li>
+                    Open PowerShell as an administrator.
+               </li>
+               <li>
+                    Paste the following command into PowerShell:<br><code>route -p ADD 192.168.43.0 MASK 255.255.255.0 192.168.1.X METRIC 1</code><br>Make sure to replace 192.168.1.X with the private IP address you just found.
+               </li>
+               <li>
+                    Reboot your computer.
+               </li>
+               <li>
+                    Now, as long as the network adapter's IP doesn't change, you will be able to access the internet while connected to the robot. Just make sure your main wifi adapter inside your computer is connected to a real wifi network that can access the internet and the second adapter is connected to the robot. If the adapter's IP changes, you can re-run the PowerShell command with the new IP address. You will still need to use the REV Hardware Client using this method.
+               </li>
+          </ol>
+     </p>
+</div>
+</body>
+</html>

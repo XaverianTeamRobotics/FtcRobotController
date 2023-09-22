@@ -44,7 +44,7 @@ public class PIDFController {
      * Our errorVal represents the return of e(t) and prevErrorVal is the previous error.
      *
      * @param sp The setpoint of the pid control loop.
-     * @param pv The measured value of he pid control loop. We want sp = pv, or to the degree
+     * @param pv The measured value of the pid control loop. We want sp = pv, or to the degree
      *           such that sp - pv, or e(t) < tolerance.
      */
     public PIDFController(double kp, double ki, double kd, double kf, double sp, double pv) {
@@ -121,6 +121,17 @@ public class PIDFController {
     public boolean atSetPoint() {
         return Math.abs(errorVal_p) < errorTolerance_p
             && Math.abs(errorVal_v) < errorTolerance_v;
+    }
+
+    /**
+     * Returns true if the error is within the percentage of the total input range, determined by
+     * {@link #setTolerance}.
+     *
+     * @return Whether the error is within the acceptable bounds.
+     */
+    public boolean atSetPointWithSpecificTolerance(double positionTolerance, double velocityTolerance) {
+        return Math.abs(errorVal_p) < positionTolerance
+            && Math.abs(errorVal_v) < velocityTolerance;
     }
 
     /**

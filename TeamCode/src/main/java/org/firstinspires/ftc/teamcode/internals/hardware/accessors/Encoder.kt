@@ -4,6 +4,7 @@ import com.michaell.looping.ScriptParameters
 import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter
 import org.firstinspires.ftc.teamcode.internals.hardware.data.EncoderInput
+import org.firstinspires.ftc.teamcode.internals.hardware.data.EncoderPositionStore
 
 /**
  * An encoder tracks the number of rotations of a hex rod and can be used to measure distance.
@@ -30,6 +31,13 @@ class Encoder(override var name: String): DeviceAccessor(name) {
         get() {
             return HardwareGetter.issueEncoderRequest(name, EncoderInput.GET)
         }
+
+    /**
+     * Saves the current position of this encoder to the [EncoderPositionStore]. If this encoder is reinitialized without a robot reboot (for example, if the user changes OpModes), it will be set to this position on initialization. This position will override itself if this method is called again. This encoder's position will only be set to the saved position on initialization even if the saved position changes at runtime. This position will be disregarded after calling [reset].
+     */
+    fun save() {
+        EncoderPositionStore.setPosition(name, position)
+    }
 
     /**
      * Resets the encoder to 0.

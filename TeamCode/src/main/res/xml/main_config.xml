@@ -21,6 +21,7 @@ If you want to, you can learn the config syntax by digging through the SDK. Expl
 
 -->
 <Robot type="FirstInspires-FTC" name="Production">
+    <Webcam name="camera0" serialNumber="54DE4F40" />
     <LynxUsbDevice name="Control Hub Portal" serialNumber="(embedded)" parentModuleAddress="173">
         <LynxModule name="Control Hub" port="173">
             <goBILDA5202SeriesMotor name="motor0" port="0" />
@@ -28,19 +29,17 @@ If you want to, you can learn the config syntax by digging through the SDK. Expl
             <goBILDA5202SeriesMotor name="motor2" port="2" />
             <goBILDA5202SeriesMotor name="motor3" port="3" />
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
-        </LynxModule>
-    </LynxUsbDevice>
-    <LynxUsbDevice name="Expansion Hub Portal 1" serialNumber="DQ4XDCN9" parentModuleAddress="2">
-        <LynxModule name="Expansion Hub 2" port="2">
-            <goBILDA5202SeriesMotor name="motor4" port="0" />
-            <goBILDA5202SeriesMotor name="motor5" port="1" />
-            <goBILDA5202SeriesMotor name="motor6" port="2" />
-            <goBILDA5202SeriesMotor name="motor7" port="3" />
-            <LynxEmbeddedIMU name="imu1" port="0" bus="0" />
-            <REV_VL53L0X_RANGE_SENSOR name="distanceSensor" port="0" bus="1" />
             <Servo name="servo0" port="0" />
             <Servo name="servo1" port="1" />
+            <Servo name="servo2" port="2" />
+<!--            <REV_VL53L0X_RANGE_SENSOR name="distanceSensor" port="0" bus="1" />-->
+        </LynxModule>
+        <LynxModule name="Expansion Hub 2" port="2">
+            <goBILDA5202SeriesMotor name="motor4" port="0" />
+            <goBILDA5202SeriesMotor name="motor5-encoder5" port="1" />
+            <goBILDA5202SeriesMotor name="motor6-encoder6" port="2" />
+            <goBILDA5202SeriesMotor name="motor7" port="3" />
+            <LynxEmbeddedIMU name="imu1" port="0" bus="0" />
         </LynxModule>
     </LynxUsbDevice>
-<!--    <Webcam name="camera" serialNumber="23790950" />-->
 </Robot>

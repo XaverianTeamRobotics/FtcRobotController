@@ -10,6 +10,8 @@ import com.acmerobotics.roadrunner.trajectory.*;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.acmerobotics.roadrunner.util.Angle;
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain;
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.AutoBuilder;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.sequencesegment.SequenceSegment;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.sequencesegment.TrajectorySegment;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.sequencesegment.TurnSegment;
@@ -55,14 +57,22 @@ public class TrajectorySequenceBuilder {
     private double lastDurationTraj;
     private double lastDisplacementTraj;
 
+    private final AutonomousDrivetrain drivetrain;
+    private final AutoBuilder pathing;
+
     public TrajectorySequenceBuilder(
             Pose2d startPose,
             Double startTangent,
             TrajectoryVelocityConstraint baseVelConstraint,
             TrajectoryAccelerationConstraint baseAccelConstraint,
             double baseTurnConstraintMaxAngVel,
-            double baseTurnConstraintMaxAngAccel
+            double baseTurnConstraintMaxAngAccel,
+            AutonomousDrivetrain drivetrain,
+            AutoBuilder pathing
     ) {
+        this.drivetrain = drivetrain;
+        this.pathing = pathing;
+
         this.baseVelConstraint = baseVelConstraint;
         this.baseAccelConstraint = baseAccelConstraint;
 
@@ -98,6 +108,39 @@ public class TrajectorySequenceBuilder {
     }
 
     public TrajectorySequenceBuilder(
+        Pose2d startPose,
+        Double startTangent,
+        TrajectoryVelocityConstraint baseVelConstraint,
+        TrajectoryAccelerationConstraint baseAccelConstraint,
+        double baseTurnConstraintMaxAngVel,
+        double baseTurnConstraintMaxAngAccel
+    ) {
+        this(
+            startPose, startTangent,
+            baseVelConstraint, baseAccelConstraint,
+            baseTurnConstraintMaxAngVel, baseTurnConstraintMaxAngAccel,
+            null, null
+        );
+    }
+
+    public TrajectorySequenceBuilder(
+        Pose2d startPose,
+        TrajectoryVelocityConstraint baseVelConstraint,
+        TrajectoryAccelerationConstraint baseAccelConstraint,
+        double baseTurnConstraintMaxAngVel,
+        double baseTurnConstraintMaxAngAccel,
+        AutonomousDrivetrain drivetrain,
+        AutoBuilder pathing
+    ) {
+        this(
+            startPose, null,
+            baseVelConstraint, baseAccelConstraint,
+            baseTurnConstraintMaxAngVel, baseTurnConstraintMaxAngAccel,
+            drivetrain, pathing
+        );
+    }
+
+    public TrajectorySequenceBuilder(
             Pose2d startPose,
             TrajectoryVelocityConstraint baseVelConstraint,
             TrajectoryAccelerationConstraint baseAccelConstraint,
@@ -107,7 +150,8 @@ public class TrajectorySequenceBuilder {
         this(
                 startPose, null,
                 baseVelConstraint, baseAccelConstraint,
-                baseTurnConstraintMaxAngVel, baseTurnConstraintMaxAngAccel
+                baseTurnConstraintMaxAngVel, baseTurnConstraintMaxAngAccel,
+                null, null
         );
     }
 
@@ -483,7 +527,7 @@ public class TrajectorySequenceBuilder {
         currentTrajectoryBuilder = new TrajectoryBuilder(lastPose, tangent, currentVelConstraint, currentAccelConstraint, resolution);
     }
 
-    public TrajectorySequence build() {
+    public TrajectorySequence completeTrajectory() {
         pushPath();
 
         List<TrajectoryMarker> globalMarkers = convertMarkersToGlobal(
@@ -491,7 +535,7 @@ public class TrajectorySequenceBuilder {
                 temporalMarkers, displacementMarkers, spatialMarkers
         );
 
-        return new TrajectorySequence(projectGlobalMarkersToLocalSegments(globalMarkers, sequenceSegments));
+        return new TrajectorySequence(projectGlobalMarkersToLocalSegments(globalMarkers, sequenceSegments), drivetrain, pathing);
     }
 
     private List<TrajectoryMarker> convertMarkersToGlobal(

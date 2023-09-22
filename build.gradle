@@ -5,13 +5,13 @@
  */
 
 buildscript {
-    ext.kotlin_version = '1.8.0'
+    ext.kotlin_version = '1.9.10'
     repositories {
         mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.android.tools.build:gradle:7.4.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -34,8 +34,4 @@ allprojects {
 
 repositories {
     mavenCentral()
-
-    flatDir {
-        dirs '../libs'
-    }
 }

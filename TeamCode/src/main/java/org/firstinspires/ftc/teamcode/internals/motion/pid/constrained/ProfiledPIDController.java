@@ -151,6 +151,15 @@ public class ProfiledPIDController {
     }
 
     /**
+     * Returns true if the error is within the tolerance of the error.
+     *
+     * <p>This will return false until at least one input value has been computed.
+     */
+    public boolean atGoalWithSpecificTolerance(double positionTolerance, double velocityTolerance) {
+        return atSetpointWithSpecificTolerance(positionTolerance, velocityTolerance) && m_goal.equals(m_setpoint);
+    }
+
+    /**
      * Set velocity and acceleration constraints for goal.
      *
      * @param constraints Velocity and acceleration constraints for goal.
@@ -175,6 +184,15 @@ public class ProfiledPIDController {
      */
     public boolean atSetpoint() {
         return m_controller.atSetPoint();
+    }
+
+    /**
+     * Returns true if the error is within the tolerance of the error.
+     *
+     * <p>This will return false until at least one input value has been computed.
+     */
+    public boolean atSetpointWithSpecificTolerance(double positionTolerance, double velocityTolerance) {
+        return m_controller.atSetPointWithSpecificTolerance(positionTolerance, velocityTolerance);
     }
 
     /**

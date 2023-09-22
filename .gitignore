@@ -11,8 +11,9 @@
 # Files for the ART/Dalvik VM
 *.dex
 
-# Java class files
+# Java/JDK files
 *.class
+*.hprof
 
 # Generated files
 bin/
@@ -48,7 +49,7 @@ captures/
 .idea/assetWizardSettings.xml
 .idea/dictionaries
 .idea/libraries
-!.idea\runConfigurations
+!.idea/runConfigurations
 # Android Studio 3 in .gitignore file.
 .idea/caches
 .idea/modules.xml
@@ -92,3 +93,12 @@ lint/tmp/
 # big profiling
 *.hprof
 *hprof*/
+!.idea/scopes
+.idea/deploymentTargetDropDown.xml
+
+# node
+node_modules
+package-lock.json
+
+# imgutils
+/HelpPage/imgutil/src/DO_NOT_TRACK_MUST_DELETE

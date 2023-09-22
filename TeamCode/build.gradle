@@ -11,7 +11,7 @@
 
 // Custom definitions may go here
 plugins {
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.8.0'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.10'
 
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
@@ -33,14 +33,14 @@ dependencies {
     implementation project(':FtcRobotController')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'org.tensorflow:tensorflow-lite-task-vision:0.4.3'
-    implementation "androidx.core:core-ktx:1.9.0"
+    implementation 'org.tensorflow:tensorflow-lite-task-vision:0.4.4'
+    implementation "androidx.core:core-ktx:1.10.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly 'com.google.android.wearable:wearable:2.9.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    implementation 'org.openftc:easyopencv:1.5.3'
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+    implementation 'org.openftc:easyopencv:1.7.0'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.9.10"
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'com.acmerobotics.roadrunner:core:0.5.5'
 }

@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.internals.features;
 
 /**
- * Represents a buildable feature. When this is implemented in a feature, the feature will run this method on its first execution instead of its loop method. It will then run its loop method every execution thereafter.
+ * Represents a buildable feature.<br>
+ * When this is implemented in a feature, the {@link #build()} method will run on registration of the feature.
  */
 public interface Buildable {
     /**
