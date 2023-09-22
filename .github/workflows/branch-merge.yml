@@ -23,7 +23,7 @@ jobs:
         git config --local user.name "github-actions[bot]"
 
     - name: Merge master to dev branches
-      run:
+      run: |
         git switch ${{ matrix.branch }}
         git merge master
         git status
