@@ -28,33 +28,34 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: apk
-        path: TeamCode/build/outputs/apk/debug/TeamCode-debug.apk 
-  release:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
+        path: TeamCode/build/outputs/apk/debug/TeamCode-debug.apk
 
-      - uses: actions/download-artifact@v3
-        name: Create local changes
-        with:
-          name: apk
-          path: HelpPage/apk/bin
+  # release:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with:
+  #         ref: ${{ github.head_ref }}
+  #         fetch-depth: 0
+
+  #     - uses: actions/download-artifact@v3
+  #       name: Create local changes
+  #       with:
+  #         name: apk
+  #         path: HelpPage/apk/bin
     
-      - name: Display structure of downloaded files
-        run: ls -laR HelpPage/apk/bin
+  #     - name: Display structure of downloaded files
+  #       run: ls -laR HelpPage/apk/bin
         
-      - name: Commit files
-        run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add -f ./HelpPage/apk/bin/*
-          git commit -m "Update the help page APK binary" ./HelpPage/apk/bin/*
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+  #     - name: Commit files
+  #       run: |
+  #         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  #         git config --local user.name "github-actions[bot]"
+  #         git add -f ./HelpPage/apk/bin/*
+  #         git commit -m "Update the help page APK binary" ./HelpPage/apk/bin/*
+  #     - name: Push changes
+  #       uses: ad-m/github-push-action@master
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #         branch: ${{ github.ref }}
