@@ -17,7 +17,7 @@ Welcome to our documentation hub! This website contains all the information you'
 
 ## New to this?
 
-We code in a variety of languages. **Java**, **Kotlin**, **C** and **C++** are used on the robot, **HTML**, **CSS**, **Javascript**, **Typescript** and **Markdown** are used in our documentation and website, **Python** is used in our physics simulations&mdash;there's a whole lot of stuff going on in this codebase. 
+We code in a variety of languages. **Java** and **Kotlin** are used on the robot, **HTML**, **CSS**, **Javascript**, **Typescript** and **Markdown** are used in our documentation and website, **Python** is used in our physics simulations&mdash;there's a whole lot of stuff going on in this codebase. 
 
 With that being said, as a beginner you'll mostly be writing in **Java** and maybe the occasional **Kotlin** file as you become more experienced. You may need to write some documentation in **Markdown** as well, although it's [trivally easy](https://www.markdownguide.org/basic-syntax/) to learn&mdash;it's like writing a Google Doc, so I wouldn't worry about it.
 

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.internals.misc
 
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DSLogging
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.max
@@ -17,38 +18,11 @@ class MecanumDriver(val drivetrainMapMode: DrivetrainMapMode, val useExpansionHu
         var backRightPower: Double     = 0.0
         var frontRightPower: Double    = 0.0
 
-        when (fieldCentric) {
-            false -> {
-                // Denominator is the largest motor power (absolute value) or 1
-                // This ensures all the powers maintain the same ratio, but only when
-                // at least one is out of the range [-1, 1]
-                val denominator = max(abs(rot) + abs(x) + abs(y), 1.0)
-                frontLeftPower = (y + x + rot) / denominator
-                backLeftPower = (y - x + rot) / denominator
-                frontRightPower = -(y - x - rot) / denominator
-                backRightPower = -(y + x - rot) / denominator
-            }
-            true -> {
-                // Read inverse IMU heading, as the IMU heading is CW positive
-                val botHeading: Double = -Devices.imu.orientation.x
-
-                val rotX = x * cos(botHeading) - y * sin(botHeading)
-                val rotY = x * sin(botHeading) + y * cos(botHeading)
-
-                // Denominator is the largest motor power (absolute value) or 1
-                // This ensures all the powers maintain the same ratio, but only when
-                // at least one is out of the range [-1, 1]
-
-                // Denominator is the largest motor power (absolute value) or 1
-                // This ensures all the powers maintain the same ratio, but only when
-                // at least one is out of the range [-1, 1]
-                val denominator = max(abs(y) + abs(x) + abs(rot), 1.0)
-                frontLeftPower = (rotY + rotX + rot) / denominator
-                backLeftPower = (rotY - rotX + rot) / denominator
-                frontRightPower = -(rotY - rotX - rot) / denominator
-                backRightPower = -(rotY + rotX - rot) / denominator
-            }
-        }
+        var output = getMecanumFormulaOutput(x, y, rot)
+        backLeftPower = output.backLeftPower
+        backRightPower = output.backRightPower
+        frontLeftPower = output.frontLeftPower
+        frontRightPower = output.frontRightPower
 
         when (useExpansionHub) {
             false -> {
@@ -100,7 +74,7 @@ class MecanumDriver(val drivetrainMapMode: DrivetrainMapMode, val useExpansionHu
                 // Denominator is the largest motor power (absolute value) or 1
                 // This ensures all the powers maintain the same ratio, but only when
                 // at least one is out of the range [-1, 1]
-                val denominator = max(abs(rot) + abs(x) + abs(y), 1.0)
+                val denominator = max(abs(rot) + abs(x) + abs(y), 100.0)
                 frontLeftPower = (y + x + rot) / denominator
                 backLeftPower = (y - x + rot) / denominator
                 frontRightPower = -(y - x - rot) / denominator
@@ -110,12 +84,6 @@ class MecanumDriver(val drivetrainMapMode: DrivetrainMapMode, val useExpansionHu
             true -> {
                 // Read inverse IMU heading, as the IMU heading is CW positive
                 val botHeading: Double = -Devices.imu.orientation.x
-
-                DSLogging.log("Bot Heading", botHeading)
-                DSLogging.log("   X", Devices.imu.orientation.x)
-                DSLogging.log("   Y", Devices.imu.orientation.y)
-                DSLogging.log("   Z", Devices.imu.orientation.z)
-                DSLogging.update()
 
                 val rotX = x * cos(botHeading) - y * sin(botHeading)
                 val rotY = x * sin(botHeading) + y * cos(botHeading)
@@ -127,7 +95,7 @@ class MecanumDriver(val drivetrainMapMode: DrivetrainMapMode, val useExpansionHu
                 // Denominator is the largest motor power (absolute value) or 1
                 // This ensures all the powers maintain the same ratio, but only when
                 // at least one is out of the range [-1, 1]
-                val denominator = max(abs(y) + abs(x) + abs(rot), 1.0)
+                val denominator = max(abs(y) + abs(x) + abs(rot), 100.0)
                 frontLeftPower = (rotY + rotX + rot) / denominator
                 backLeftPower = (rotY - rotX + rot) / denominator
                 frontRightPower = -(rotY - rotX - rot) / denominator
