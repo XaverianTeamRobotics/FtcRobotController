@@ -4,6 +4,11 @@ on:
   push:
     branches: [ "master" ]
 
+# Allow only one concurrent merge
+concurrency:
+  group: "merge"
+  cancel-in-progress: true
+
 jobs:
   merge:
     strategy:
