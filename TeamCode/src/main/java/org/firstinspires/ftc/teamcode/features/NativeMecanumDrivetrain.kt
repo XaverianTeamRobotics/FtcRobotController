@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.contr
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.controller2
 import org.firstinspires.ftc.teamcode.internals.misc.DrivetrainMapMode
 import org.firstinspires.ftc.teamcode.internals.misc.MecanumDriver
-import kotlin.math.abs
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
 
 /**
 * A mecanum drivetrain&mdash;this doesn't require odometry, hence it being "native" by not relying on external libraries. If you have odometry, use MecanumDrivetrain
@@ -25,19 +25,20 @@ class NativeMecanumDrivetrain(
 
     private var mecanumDriver: MecanumDriver? = null
 
-    private var speedMultiplier = 0.5
+    private var speedMultiplier = 1.0
 
     /*
     The following constants dictate the power each controller sends
     for both coordinate and rotational motion. These should be used
     to optimise the driver expereince.
      */
-    var CONTROL1_COORDINATE_MOTION = 0.65
+    var CONTROL1_COORDINATE_MOTION = 1.00
     var CONTROL2_COORDINATE_MOTION = 0.23
     var CONTROL1_ROTATIONAL_MOTION = 0.65
     var CONTROL2_ROTATIONAL_MOTION = 0.26
 
     constructor() : this(DrivetrainMapMode.FR_BR_FL_BL, false, false, false)
+    constructor(isRotInverted: Boolean) : this(DrivetrainMapMode.FR_BR_FL_BL, false, false, isRotInverted)
     constructor(drivetrainMapMode: DrivetrainMapMode) : this(drivetrainMapMode, false, false, false)
     constructor(drivetrainMapMode: DrivetrainMapMode, useExpansionHub: Boolean) : this(
         drivetrainMapMode,
