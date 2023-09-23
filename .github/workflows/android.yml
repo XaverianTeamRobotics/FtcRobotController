@@ -9,9 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
           
-    - name: set up JDK
+    - name: Set up JDK
       uses: actions/setup-java@v3
       with:
         java-version: '11'
@@ -32,10 +33,23 @@ jobs:
     needs: [ "build" ]
 
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
     - name: Download the APK artifact
       uses: actions/download-artifact@v2
       with:
         name: TeamCode-Debug.apk
 
-    - name: Update the release 
-      run: gh release upload latest-ci-build TeamCode-Debug.apk --clobber
+    - name: Update the release tag
+      run: |
+        git tag -d latest-ci-build
+        git tag latest-ci-build
+        git push origin latest-ci-build
+
+    - name: Update the release
+      run: |
+        gh release upload latest-ci-build TeamCode-Debug.apk --clobber
+        gh release edit latest-ci-build --prerelease --notes "This build was made from commit ${{ github.sha }}."
+      env:
+        GH_TOKEN: ${{ github.token }}
