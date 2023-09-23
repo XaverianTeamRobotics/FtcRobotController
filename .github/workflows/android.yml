@@ -25,7 +25,7 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v1
       with:
-        name: TeamCode-Debug.apk
+        name: TeamCode-debug.apk
         path: TeamCode/build/outputs/apk/debug/TeamCode-debug.apk
 
   release:
@@ -41,7 +41,7 @@ jobs:
     - name: Download the APK artifact
       uses: actions/download-artifact@v2
       with:
-        name: TeamCode-Debug.apk
+        name: TeamCode-debug.apk
 
     - name: Update the release tag
       run: |
@@ -51,8 +51,7 @@ jobs:
 
     - name: Update the release
       run: |
-        ls -R
-        gh release upload latest-ci-build TeamCode-Debug.apk --clobber
+        gh release upload latest-ci-build TeamCode-debug.apk --clobber
         gh release edit latest-ci-build --prerelease --notes "This build was made from commit ${{ github.sha }}."
       env:
         GH_TOKEN: ${{ github.token }}
