@@ -35,6 +35,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-tags: true
 
     - name: Download the APK artifact
       uses: actions/download-artifact@v2
