@@ -47,7 +47,7 @@ jobs:
       run: |
         git tag -d latest-ci-build
         git tag latest-ci-build
-        git push origin latest-ci-build
+        git push origin latest-ci-build --force
 
     - name: Update the release
       run: |
