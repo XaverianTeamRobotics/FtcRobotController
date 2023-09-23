@@ -51,6 +51,7 @@ jobs:
 
     - name: Update the release
       run: |
+        ls -R
         gh release upload latest-ci-build TeamCode-Debug.apk --clobber
         gh release edit latest-ci-build --prerelease --notes "This build was made from commit ${{ github.sha }}."
       env:
