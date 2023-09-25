@@ -1,0 +1,37 @@
+name: Merge master to dev branches
+
+on:
+  push:
+    branches: [ "master" ]
+
+# Allow only one concurrent merge
+concurrency:
+  group: "merge"
+  cancel-in-progress: true
+
+jobs:
+  merge:
+    strategy:
+      matrix:
+        branch: [ "dev/muke", "dev/colin", "dev/liam", "dev/docs" ]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up git
+      run: |
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+
+    - name: Merge master to dev branches
+      run: |
+        git switch ${{ matrix.branch }}
+        git merge master
+        git status
+
+    - name: Push changes
+      run: git push
