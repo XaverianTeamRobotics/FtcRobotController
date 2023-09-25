@@ -11,3 +11,5 @@ You can also use the run configurations in Android Studio/IDEA to run the develo
 :::
 
 To deploy the site, run the `HelpPage/scripts/deploy.py` file in the terminal.
+
+You can check out the documentation for building sites on Docusaurus at [https://docusaurus.io/docs/category/guides](https://docusaurus.io/docs/category/guides).
