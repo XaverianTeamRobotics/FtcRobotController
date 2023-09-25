@@ -2,10 +2,11 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["master"]
-
+  # Run automatically after the Android CI release finishes
+  workflow_run:
+    workflows: [ "Android CI" ]
+    branches: [ "master" ]
+    types: [ "completed" ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -37,6 +38,11 @@ jobs:
           echo -e "Script complete."
         shell: bash
         working-directory: ./HelpPage/scripts/
+      - name: Download the latest APK
+        run: |
+          mkdir -p ./HelpPage/opt/apk/bin
+          cd ./HelpPage/opt/apk/bin
+          curl -LO https://github.com/XaverianTeamRobotics/FtcRobotController/releases/download/latest-ci-build/TeamCode-debug.apk
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload Artifact
