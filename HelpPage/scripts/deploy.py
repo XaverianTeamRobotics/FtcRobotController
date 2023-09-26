@@ -36,8 +36,6 @@ def run():
     shutil.copytree("../apk", "../opt/apk")
     maybe_rmdir("../opt/legacy-apk")
     shutil.copytree("../legacy-apk", "../opt/legacy-apk")
-    maybe_rmdir("../opt/kdoc")
-    shutil.copytree("../kdoc", "../opt/kdoc")
 
     print("Cleaning up artifacts...")
 
