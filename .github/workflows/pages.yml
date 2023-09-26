@@ -46,8 +46,8 @@ jobs:
           cache: gradle
       - name: Build JavaDoc using Dokka
         run: |
-          ./gradlew :TeamCode:dokkaJavadoc --no-daemon
-          cp -r ./TeamCode/build/dokka/javadoc/ ./HelpPage/opt/
+          ./gradlew :TeamCode:dokkaHtml --no-daemon
+          mv ./TeamCode/build/dokka/html ./HelpPage/opt/javadoc
       - name: Download the latest APK
         run: |
           mkdir -p ./HelpPage/opt/apk/bin
