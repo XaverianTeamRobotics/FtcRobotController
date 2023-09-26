@@ -2,12 +2,7 @@ name: Android CI
 
 on:
   push:
-    branches: [ "master" ]
-
-concurrency:
-  group: "android"
-  cancel-in-progress: true
-  
+  pull_request:
 
 jobs:
   build:
@@ -39,6 +34,7 @@ jobs:
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     concurrency:
       group: 'release'
+      cancel-in-progress: true
 
     steps:
     - name: Checkout repository
