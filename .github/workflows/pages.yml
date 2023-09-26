@@ -38,6 +38,17 @@ jobs:
           echo -e "Script complete."
         shell: bash
         working-directory: ./HelpPage/scripts/
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
+      - name: Build JavaDoc using Dokka
+        run: |
+          ./gradlew :TeamCode:dokkaJavadoc --no-daemon
+          mkdir ./HelpPage/opt/javadoc
+          cp -r ./TeamCode/build/dokka/javadoc/ ./HelpPage/opt/javadoc
       - name: Download the latest APK
         run: |
           mkdir -p ./HelpPage/opt/apk/bin
