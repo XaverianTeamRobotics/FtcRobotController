@@ -42,8 +42,8 @@ To get help, check out the following support resources:
 * [FTC Fourm](https://ftc-community.firstinspires.org/)
 
 ### Javadocs
+* [XBHS Javadoc](https://robotics.xbhs.net/javadoc)
 * [FTC SDK Javadoc](https://javadoc.io/doc/org.firstinspires.ftc)
-* ~~[XBLib Master KDoc](https://robotics.xbhs.net/kdoc)~~ *Coming Soon*
 
 ### Advanced Information
 * [CTRL + ALT + FTC](https://www.ctrlaltftc.com/)
