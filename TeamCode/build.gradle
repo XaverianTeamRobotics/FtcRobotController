@@ -16,6 +16,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 
     id 'org.jetbrains.dokka' version '1.9.0'
+
 }
 
 // Include common definitions from above.
@@ -45,6 +46,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.9.10"
     implementation 'org.apache.commons:commons-math3:3.6.1'
     implementation 'com.acmerobotics.roadrunner:core:0.5.5'
+    dokkaPlugin "org.jetbrains.dokka:kotlin-as-java-plugin:1.9.0"
 }
 repositories {
     mavenCentral()
