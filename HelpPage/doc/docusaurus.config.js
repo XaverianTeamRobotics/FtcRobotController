@@ -126,12 +126,7 @@ const config = {
           },
           {
             type: "html",
-            value: `${ "" } <a class="navbar__item navbar__link" href="https://robotics.xbhs.net/kdoc">KDoc</a>`,
-            position: "right",
-          },
-          {
-            type: "html",
-            value: `${ "" } <a class="navbar__item navbar__link" href="/book">The Book</a>`,
+            value: `${ "" } <a class="navbar__item navbar__link" href="https://robotics.xbhs.net/javadoc">Javadoc</a>`,
             position: "right",
           },
           {
