@@ -47,7 +47,6 @@ jobs:
       - name: Build JavaDoc using Dokka
         run: |
           ./gradlew :TeamCode:dokkaJavadoc --no-daemon
-          mkdir ./HelpPage/opt/javadoc
           cp -r ./TeamCode/build/dokka/javadoc/ ./HelpPage/opt/
       - name: Download the latest APK
         run: |
