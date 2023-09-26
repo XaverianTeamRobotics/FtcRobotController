@@ -125,8 +125,8 @@ const config = {
             ]
           },
           {
-            href: "https://robotics.xbhs.net/javadocs",
-            label: "Javadocs",
+            href: "https://robotics.xbhs.net/javadoc",
+            label: "Javadoc",
             position: "right",
           },
           {
