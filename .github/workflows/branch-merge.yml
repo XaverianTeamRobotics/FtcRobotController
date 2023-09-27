@@ -13,7 +13,7 @@ jobs:
   merge:
     strategy:
       matrix:
-        branch: [ "dev/muke", "dev/colin", "dev/liam", "dev/docs", "dev/marco" ]
+        branch: [ "dev/muke", "dev/colin", "dev/liam", "dev/docs", "dev/Marco" ]
     runs-on: ubuntu-latest
 
     steps:
