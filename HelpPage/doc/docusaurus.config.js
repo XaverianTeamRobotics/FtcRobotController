@@ -125,9 +125,23 @@ const config = {
             ]
           },
           {
-            href: "https://robotics.xbhs.net/javadoc",
+            type: "dropdown",
             label: "Javadoc",
             position: "right",
+            items: [
+              {
+                href: "https://robotics.xbhs.net/javadoc",
+                label: "Javadoc (all)"
+              },
+              {
+                href: "https://robotics.xbhs.net/javadoc/-team-code/org.firstinspires.ftc.teamcode.features/index.html",
+                label: "Javadoc (features)"
+              },
+              {
+                href: "https://robotics.xbhs.net/javadoc/-team-code/org.firstinspires.ftc.teamcode.opmodes/index.html",
+                label: "Javadoc (opmodes)"
+              },
+            ]
           },
           {
             href: "https://github.com/XaverianTeamRobotics/",
