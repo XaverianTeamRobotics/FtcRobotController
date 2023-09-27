@@ -107,20 +107,20 @@ const config = {
           },
           {
             type: "dropdown",
-            label: "Debugging Tools",
+            label: "Web Utilities",
             position: "right",
             items: [
               {
                 href: "https://robotics.xbhs.net/apk",
-                label: "Flash APK"
+                label: "Flash Robot Controller APK"
               },
               {
                 href: "https://robotics.xbhs.net/legacy-apk",
-                label: "Download APK"
+                label: "Download Driver Station APK"
               },
               {
                 href: "https://robotics.xbhs.net/imgutil",
-                label: "Upload Image"
+                label: "Upload Images to robotics.xbhs.com"
               },
             ]
           },
