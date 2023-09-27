@@ -2,6 +2,10 @@
 pagination_prev: null
 sidebar_position: 0
 ---
+
+:::tip
+Our Getting Started guide is designed for people who have some experience with programming. It will not cover Java basics.
+:::
 # Installing Android Studio
 
 **Android Studio** is the official IDE for Android development, and includes everything you need to build Android apps.

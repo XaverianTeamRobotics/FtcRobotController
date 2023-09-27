@@ -81,6 +81,8 @@ class FourMotorArmNoManualLevel: Feature(), Buildable {
         if (!autonomousOverride) {
             // Motor config: 4 - TL, 5 - BL, 6 - TR, 7 - BR
             val power = controller1.rightTrigger - (controller1.leftTrigger * 0.5)
+            powerL = power
+            powerR = power
             //powerL = if (controller2.leftStickY > 25) - 75.0 else if (controller2.leftStickY < -25) + 75.0 else power
             //powerR = if (controller2.rightStickY > 25) - 75.0 else if (controller2.rightStickY < -25) + 75.0 else power
         }
