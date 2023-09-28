@@ -4,6 +4,10 @@ import org.firstinspires.ftc.teamcode.internals.features.Buildable;
 import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 
+/**
+ * Right servo = port 0
+ * Left servo = port 1
+ */
 public class PixelGrabber extends Feature implements Buildable {
 
     double homePos0 = 70, homePos1 = 33.3;
@@ -17,10 +21,10 @@ public class PixelGrabber extends Feature implements Buildable {
 
     @Override
     public void loop() {
-        if (Devices.controller1.getLeftBumper()) {
+        if (Devices.controller1.getRightBumper()) {
             manualClose();
         }
-        if (Devices.controller1.getRightBumper()) {
+        if (Devices.controller1.getLeftBumper()) {
             manualOpen();
         }
 
