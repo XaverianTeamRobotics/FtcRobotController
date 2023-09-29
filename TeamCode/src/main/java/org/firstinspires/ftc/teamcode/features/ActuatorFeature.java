@@ -14,14 +14,23 @@ import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
  */
 public class ActuatorFeature extends Feature implements Buildable {
 
+    private double total;
+    private boolean squareP, crossP;
+
     @Override
     public void build() {
+        total = 0;
         Devices.servo2.setPosition(0);
+        squareP = false;
+        crossP = false;
     }
 
     @Override
     public void loop() {
-        if (Devices.controller1.getSquare()) Devices.servo2.setPosition(100);
-        else if (Devices.controller1.getCross()) Devices.servo2.setPosition(0);
+        if (!squareP) total -= Devices.controller1.getSquare() ? 10 : 0;
+        if (!crossP) total += Devices.controller1.getCross() ? 10 : 0;
+        squareP = Devices.controller1.getSquare();
+        crossP = Devices.controller1.getCross();
+        Devices.servo2.setPosition(total);
     }
 }
