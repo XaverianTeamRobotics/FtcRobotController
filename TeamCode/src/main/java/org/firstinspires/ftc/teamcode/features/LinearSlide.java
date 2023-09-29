@@ -12,5 +12,6 @@ public class LinearSlide extends Feature {
     @Override
     public void loop() {
         Devices.motor4.setPower(-0.25 * (Devices.controller1.getRightTrigger() - Devices.controller1.getLeftTrigger()));
+        Devices.motor5.setPower(Devices.controller1.getRightStickY());
     }
 }
