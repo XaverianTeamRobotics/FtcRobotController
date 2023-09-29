@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
  * <p>
  * Dpad up - Launch plane
  * <p>
- * Dpad left/right - tilt arm
+ * Right Stick Y - tilt arm
  */
 public class Waterbot extends OperationMode implements TeleOperation {
     @Override
