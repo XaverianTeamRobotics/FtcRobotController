@@ -22,6 +22,6 @@ public class ActuatorFeature extends Feature implements Buildable {
     @Override
     public void loop() {
         if (Devices.controller1.getSquare()) Devices.servo2.setPosition(100);
-        else if (Devices.controller2.getCross()) Devices.servo2.setPosition(0);
+        else if (Devices.controller1.getCross()) Devices.servo2.setPosition(0);
     }
 }
