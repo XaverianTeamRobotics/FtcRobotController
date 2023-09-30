@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
  */
 public class PixelGrabber extends Feature implements Buildable {
 
-    double homePos0 = 70, homePos1 = 33.3;
+    double homePos0 = 70, homePos1 = 37.3;
     double closePos0 = 60, closePos1 = 40;
 
     @Override
