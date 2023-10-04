@@ -11,12 +11,12 @@ import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
  */
 public class AirplaneLauncher extends Feature implements Buildable {
     @Override
-    public void loop() {
-        Devices.servo4.setPosition(0);
+    public void build() {
+        Devices.servo4.setPosition(0.0);
     }
 
     @Override
-    public void build() {
-        if (Devices.controller1.getDpadUp()) Devices.servo4.setPosition(100);
+    public void loop() {
+        if (Devices.controller1.getDpadUp()) Devices.servo4.setPosition(100.0);
     }
 }
