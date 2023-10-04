@@ -96,6 +96,6 @@ public class CameraTranslation {
      * @return The input to servoX.setPosition() to keep the target in the center of the camera's FOV.
      */
     public double centerCameraInServo(double servoAngle, double bearing) {
-        return convertAngleToServoAngle(convertServoAngleToCameraAngle(servoAngle) - bearing);
+        return convertAngleToServoAngle(convertServoAngleToCameraAngle(servoAngle) + bearing);
     }
 }

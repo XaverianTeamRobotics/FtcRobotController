@@ -19,6 +19,7 @@ public class SwivelableCameraTest extends OperationMode implements TeleOperation
         translator = new CameraTranslation(7, 6.75, true);
         detector = new AprilTagDetector(Devices.camera0);
         registerFeature(detector);
+        Devices.servo3.setPosition(50);
     }
 
     @Override
@@ -29,13 +30,15 @@ public class SwivelableCameraTest extends OperationMode implements TeleOperation
         for (AprilTagDetection detection: detector.getCurrentDetections()) {
             Logging.log("Tag ID", detection.id);
             Logging.log("---Camera Relative---");
-            Logging.log("     Angle", detection.ftcPose.bearing);
+            Logging.log("     Angle", -detection.ftcPose.bearing);
             Logging.log("     Distance", detection.ftcPose.range);
             Logging.log("\n");
             Logging.log("---Robot Relative---");
-            Logging.log("     Angle", translator.convertCameraBearingAndRangeToRobotCentric(servoPos, detection.ftcPose.bearing, detection.ftcPose.range)[0]);
-            Logging.log("     Distance", translator.convertCameraBearingAndRangeToRobotCentric(servoPos, detection.ftcPose.bearing, detection.ftcPose.range)[1]);
+            Logging.log("     Angle", translator.convertCameraBearingAndRangeToRobotCentric(servoPos, -detection.ftcPose.bearing, detection.ftcPose.range)[0]);
+            Logging.log("     Distance", translator.convertCameraBearingAndRangeToRobotCentric(servoPos, -detection.ftcPose.bearing, detection.ftcPose.range)[1]);
             Logging.log("\n");
+
+            if (detection.id == 3) Devices.servo3.setPosition(translator.centerCameraInServo(servoPos, -detection.ftcPose.bearing));
         }
         Logging.update();
     }
