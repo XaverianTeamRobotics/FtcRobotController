@@ -15,8 +15,7 @@ public class PixelGrabber extends Feature implements Buildable {
 
     @Override
     public void build() {
-        Devices.servo1.setPosition(homePos1);
-        Devices.servo0.setPosition(homePos0);
+        manualClose();
     }
 
     @Override
