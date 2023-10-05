@@ -14,12 +14,14 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 public class SwivelableCameraTest extends OperationMode implements TeleOperation {
     CameraTranslation translator;
     AprilTagDetector detector;
+    boolean servoInMotion = false;
+    double desiredServoPos = 50;
     @Override
     public void construct() {
         translator = new CameraTranslation(7, 6.75, true);
         detector = new AprilTagDetector(Devices.camera0);
         registerFeature(detector);
-        Devices.servo3.setPosition(50);
+        Devices.servo3.setPosition(desiredServoPos);
     }
 
     @Override
@@ -38,7 +40,15 @@ public class SwivelableCameraTest extends OperationMode implements TeleOperation
             Logging.log("     Distance", translator.convertCameraBearingAndRangeToRobotCentric(servoPos, -detection.ftcPose.bearing, detection.ftcPose.range)[1]);
             Logging.log("\n");
 
-            if (detection.id == 3) Devices.servo3.setPosition(translator.centerCameraInServo(servoPos, -detection.ftcPose.bearing));
+            servoPos = Devices.servo3.getPosition();
+            if ((int) servoPos == (int) desiredServoPos) {
+                servoInMotion = false;
+            }
+            if (detection.id == 3 && !servoInMotion) {
+                desiredServoPos = translator.centerCameraInServo(servoPos, -detection.ftcPose.bearing);
+                Devices.servo3.setPosition(desiredServoPos);
+                servoInMotion = true;
+            }
         }
         Logging.update();
     }

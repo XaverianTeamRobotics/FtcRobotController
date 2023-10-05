@@ -50,7 +50,6 @@ public class CameraTranslation {
      * @return A value between -100 and 100. Input to servoX.setPosition()
      */
     public double convertAngleToServoAngle(double angle) {
-        angle = Math.min(Math.max(angle, cameraMinAngle), cameraMaxAngle);
         return ((10*angle)/27) + 50;
     }
 
