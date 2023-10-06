@@ -15,7 +15,7 @@ public class SwivelableCameraTest extends OperationMode implements TeleOperation
     CameraTranslation translator;
     AprilTagDetector detector;
     boolean servoInMotion = false;
-    double desiredServoPos = 50;
+    int desiredServoPos = 50;
     @Override
     public void construct() {
         translator = new CameraTranslation(7, 6.75, true);
@@ -29,26 +29,28 @@ public class SwivelableCameraTest extends OperationMode implements TeleOperation
         double servoPos = Devices.servo3.getPosition();
         Logging.log("Servo Position", servoPos);
         Logging.log("\n");
-        for (AprilTagDetection detection: detector.getCurrentDetections()) {
-            Logging.log("Tag ID", detection.id);
-            Logging.log("---Camera Relative---");
-            Logging.log("     Angle", -detection.ftcPose.bearing);
-            Logging.log("     Distance", detection.ftcPose.range);
-            Logging.log("\n");
-            Logging.log("---Robot Relative---");
-            Logging.log("     Angle", translator.convertCameraBearingAndRangeToRobotCentric(servoPos, -detection.ftcPose.bearing, detection.ftcPose.range)[0]);
-            Logging.log("     Distance", translator.convertCameraBearingAndRangeToRobotCentric(servoPos, -detection.ftcPose.bearing, detection.ftcPose.range)[1]);
-            Logging.log("\n");
+        if (!servoInMotion) {
+            for (AprilTagDetection detection : detector.getCurrentDetections()) {
+                Logging.log("Tag ID", detection.id);
+                Logging.log("---Camera Relative---");
+                Logging.log("     Angle", -detection.ftcPose.bearing);
+                Logging.log("     Distance", detection.ftcPose.range);
+                Logging.log("\n");
+                Logging.log("---Robot Relative---");
+                Logging.log("     Angle", translator.convertCameraBearingAndRangeToRobotCentric(servoPos, -detection.ftcPose.bearing, detection.ftcPose.range)[0]);
+                Logging.log("     Distance", translator.convertCameraBearingAndRangeToRobotCentric(servoPos, -detection.ftcPose.bearing, detection.ftcPose.range)[1]);
+                Logging.log("\n");
 
-            servoPos = Devices.servo3.getPosition();
-            if ((int) servoPos == (int) desiredServoPos) {
-                servoInMotion = false;
+                servoPos = Devices.servo3.getPosition();
+                if (detection.id == 3) {
+                    desiredServoPos = (int) translator.centerCameraInServo(servoPos, -detection.ftcPose.bearing);
+                    Devices.servo3.setPosition(desiredServoPos);
+                    servoInMotion = true;
+                    break;
+                }
             }
-            if (detection.id == 3 && !servoInMotion) {
-                desiredServoPos = translator.centerCameraInServo(servoPos, -detection.ftcPose.bearing);
-                Devices.servo3.setPosition(desiredServoPos);
-                servoInMotion = true;
-            }
+        } else if ((int) servoPos == desiredServoPos) {
+            servoInMotion = false;
         }
         Logging.update();
     }
