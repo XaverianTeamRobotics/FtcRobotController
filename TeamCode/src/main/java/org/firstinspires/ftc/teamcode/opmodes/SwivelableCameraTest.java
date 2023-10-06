@@ -51,6 +51,7 @@ public class SwivelableCameraTest extends OperationMode implements TeleOperation
             }
         } else if ((int) servoPos == desiredServoPos) {
             servoInMotion = false;
+            Logging.log("Servo currently in motion.\nDetection Disabled");
         }
         Logging.update();
     }
