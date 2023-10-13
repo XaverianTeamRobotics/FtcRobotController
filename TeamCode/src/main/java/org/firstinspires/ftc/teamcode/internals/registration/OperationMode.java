@@ -138,8 +138,25 @@ public abstract class OperationMode extends LinearOpMode {
         boolean isDone();
     }
 
+    /**
+     * Waits until a certain condition is met.
+     * @param condition The condition to wait for.
+     */
     public void waitUntil(ConditionalWait condition) {
         while(!condition.isDone()) {
+            if (HardwareGetter.getJloopingRunner() != null) {
+                HardwareGetter.getJloopingRunner().scriptParametersGlobal.doOneLoop();
+            }
+        }
+    }
+
+    /**
+     * Waits for a certain amount of time.
+     * @param time Time to wait (seconds)
+     */
+    public void waitFor(double time) {
+        double startTime = getRuntime();
+        while(getRuntime() - startTime < time) {
             if (HardwareGetter.getJloopingRunner() != null) {
                 HardwareGetter.getJloopingRunner().scriptParametersGlobal.doOneLoop();
             }

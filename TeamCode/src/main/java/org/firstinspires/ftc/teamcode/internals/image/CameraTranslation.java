@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.internals.image;
 
+import kotlin.math.MathKt;
+
 import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
 
@@ -96,6 +98,6 @@ public class CameraTranslation {
      * @return The input to servoX.setPosition() to keep the target in the center of the camera's FOV.
      */
     public double centerCameraInServo(double servoAngle, double bearing) {
-        return convertAngleToServoAngle(convertCameraAngleToRobotCentric(servoAngle, bearing));
+        return Math.min(Math.max(convertAngleToServoAngle(convertCameraAngleToRobotCentric(servoAngle, bearing)), 0), 100);
     }
 }
