@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Loggers;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 
 /**
+ * Test basic servo actuator functions.
  * Uses servo port 2.
  * Square = Down
  * Cross = Up

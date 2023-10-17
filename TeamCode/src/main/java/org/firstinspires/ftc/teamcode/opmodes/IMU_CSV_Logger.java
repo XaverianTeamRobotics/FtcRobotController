@@ -9,6 +9,9 @@ import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 import java.io.File;
 import java.util.ArrayList;
 
+/**
+ * Log acceleration and gyro data from the IMU and write it to imu_data.csv.
+ */
 public class IMU_CSV_Logger extends OperationMode implements TeleOperation {
     public ArrayList<ArrayList<Double>> history = new ArrayList<>();
     @Override
