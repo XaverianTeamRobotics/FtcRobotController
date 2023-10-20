@@ -6,12 +6,26 @@ import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 
-public class MotorTest extends OperationMode implements TeleOperation {
+public class ServoTest extends OperationMode implements TeleOperation {
 
-    private int servoNum;
+    private int servoNum, lastServo;
     private boolean squareP, crossP, rbP, lbP;
 
+    public Servo getServo() {
+        Servo temp = getServo(servoNum);
+        if (lastServo != servoNum) temp.setPosition(0);
+        lastServo = servoNum;
+        return temp;
+    }
+
     public Servo getServo(int num) {
+        if (num > 5) {
+            servoNum = 5;
+            return null;
+        }
+        if (num < 0) {
+            servoNum = 0;
+        }
         if (num == 0) {
             return Devices.getServo0();
         }
@@ -27,29 +41,28 @@ public class MotorTest extends OperationMode implements TeleOperation {
         if (num == 4) {
             return Devices.getServo4();
         }
-        if (num > 4) {
-            servoNum = 4;
-            return null;
+        if (num == 5) {
+            return Devices.getServo5();
         }
-        servoNum = 0;
         return null;
     }
 
     @Override
     public void construct() {
         servoNum = 0;
-        Devices.servo0.setPosition(0);
         squareP = false;
         crossP = false;
+        rbP = false;
+        lbP = false;
     }
 
     @Override
     public void run() {
-        double temp = getServo(0).getPosition();
+        double temp = getServo().getPosition();
         if (!squareP) temp -= Devices.controller1.getSquare() ? 10 : 0;
         if (!crossP) temp += Devices.controller1.getCross() ? 10 : 0;
         if (!rbP) servoNum += Devices.controller1.getRightBumper() ? 1 : 0;
-        if (!lbP) servoNum -= Devices.controller1.getLeftBumper() ? 0 : 1;
+        if (!lbP) servoNum -= Devices.controller1.getLeftBumper() ? 1 : 0;
         if (temp > 100) {
             temp = 100.0;
         }
@@ -61,9 +74,11 @@ public class MotorTest extends OperationMode implements TeleOperation {
         rbP = Devices.controller1.getRightBumper();
         lbP = Devices.controller1.getLeftBumper();
 
+        if (getServo() != null) {
+            getServo().setPosition(temp);
+        }
         Logging.log("Servo", servoNum);
         Logging.log("Total", temp);
         Logging.update();
-        getServo(servoNum).setPosition(temp);
     }
 }
