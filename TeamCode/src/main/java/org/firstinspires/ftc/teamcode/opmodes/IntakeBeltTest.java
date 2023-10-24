@@ -8,8 +8,8 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 
 public class IntakeBeltTest extends OperationMode implements TeleOperation {
 
-    int intakeSpeed = 0;
-    double intakeSensitivity = .01;
+    double intakeSpeed = 0;
+    double intakeSensitivity = .0002;
     @Override
     public void construct() {
 
