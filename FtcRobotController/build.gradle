@@ -21,10 +21,10 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
     namespace = 'com.qualcomm.ftcrobotcontroller'
-
-    lintOptions {
+    lint {
         abortOnError false
     }
+
 }
 
 apply from: '../build.dependencies.gradle'

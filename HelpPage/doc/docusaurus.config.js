@@ -107,37 +107,51 @@ const config = {
           },
           {
             type: "dropdown",
-            label: "Debugging Tools",
+            label: "Web Utilities",
             position: "right",
             items: [
               {
                 href: "https://robotics.xbhs.net/apk",
-                label: "Flash APK"
+                label: "Flash Robot Controller APK"
               },
               {
                 href: "https://robotics.xbhs.net/legacy-apk",
-                label: "Download APK"
+                label: "Download Driver Station APK"
               },
               {
                 href: "https://robotics.xbhs.net/imgutil",
-                label: "Upload Image"
+                label: "Upload Images to robotics.xbhs.com"
               },
             ]
           },
           {
-            type: "html",
-            value: `${ "" } <a class="navbar__item navbar__link" href="https://robotics.xbhs.net/kdoc">KDoc</a>`,
+            type: "dropdown",
+            label: "Javadoc",
             position: "right",
-          },
-          {
-            type: "html",
-            value: `${ "" } <a class="navbar__item navbar__link" href="/book">The Book</a>`,
-            position: "right",
+            items: [
+              {
+                href: "https://robotics.xbhs.net/javadoc",
+                label: "Javadoc (all)"
+              },
+              {
+                href: "https://robotics.xbhs.net/javadoc/-team-code/org.firstinspires.ftc.teamcode.features/index.html",
+                label: "Javadoc (features)"
+              },
+              {
+                href: "https://robotics.xbhs.net/javadoc/-team-code/org.firstinspires.ftc.teamcode.opmodes/index.html",
+                label: "Javadoc (opmodes)"
+              },
+            ]
           },
           {
             href: "https://github.com/XaverianTeamRobotics/",
             label: "GitHub",
             position: "right",
+          },
+          {
+            position: "right",
+            type: "html",
+            value: `${ "" } <a class="navbar__link" href="/theBook.pdf">How to Robot: The Book</a>`,
           }
         ]
       },

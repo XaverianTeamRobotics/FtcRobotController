@@ -7,10 +7,6 @@ pagination_prev: null
 pagination_next: null
 ---
 
-:::danger
-This website is in heavy development. Anything you read here may be subject to change.
-:::
-
 # Hawks Robotics Documentation
 
 Welcome to our documentation hub! This website contains all the information you'll need to write code for our team.
@@ -42,8 +38,8 @@ To get help, check out the following support resources:
 * [FTC Fourm](https://ftc-community.firstinspires.org/)
 
 ### Javadocs
+* [XBHS Javadoc](https://robotics.xbhs.net/javadoc)
 * [FTC SDK Javadoc](https://javadoc.io/doc/org.firstinspires.ftc)
-* ~~[XBLib Master KDoc](https://robotics.xbhs.net/kdoc)~~ *Coming Soon*
 
 ### Advanced Information
 * [CTRL + ALT + FTC](https://www.ctrlaltftc.com/)
