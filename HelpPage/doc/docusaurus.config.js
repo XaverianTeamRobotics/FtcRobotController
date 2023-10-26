@@ -147,6 +147,11 @@ const config = {
             href: "https://github.com/XaverianTeamRobotics/",
             label: "GitHub",
             position: "right",
+          },
+          {
+            position: "right",
+            type: "html",
+            value: `${ "" } <a class="navbar__link" href="/theBook.pdf">How to Robot: The Book</a>`,
           }
         ]
       },
