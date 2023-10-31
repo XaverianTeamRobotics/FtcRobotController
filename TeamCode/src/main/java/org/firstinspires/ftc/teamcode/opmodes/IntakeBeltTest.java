@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 
 public class IntakeBeltTest extends OperationMode implements TeleOperation {
 
@@ -23,5 +24,7 @@ public class IntakeBeltTest extends OperationMode implements TeleOperation {
         intakeSpeed = Math.min(100, intakeSpeed);
         intakeSpeed = Math.max(-100, intakeSpeed);
         Devices.getMotor0().setPower(intakeSpeed);
+        Logging.log("Intake Speed", intakeSpeed);
+        Logging.update();
     }
 }
