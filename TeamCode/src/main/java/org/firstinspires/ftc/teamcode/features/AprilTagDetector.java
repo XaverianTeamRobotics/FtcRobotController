@@ -45,10 +45,12 @@ public class AprilTagDetector extends Feature implements Buildable {
 
     public void stop() {
         vision.setProcessorEnabled(aprilTag, false);
+        currentDetections.clear();
     }
 
     public void start() {
         vision.setProcessorEnabled(aprilTag, true);
+        currentDetections.clear();
     }
 
     public void resumeStreaming() {
