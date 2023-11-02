@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 public class SimpleMecanumBot extends OperationMode implements TeleOperation {
     @Override
     public void construct() {
-        registerFeature(new NativeMecanumDrivetrain(true));
+        registerFeature(new NativeMecanumDrivetrain(false));
     }
 
     @Override
