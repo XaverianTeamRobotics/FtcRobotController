@@ -9,10 +9,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.internals.features.Feature;
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetterKt;
 import org.firstinspires.ftc.teamcode.internals.misc.RobotRebootException;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Loggers;
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -142,5 +144,12 @@ public abstract class OperationMode extends LinearOpMode {
                 HardwareGetter.getJloopingRunner().scriptParametersGlobal.doOneLoop();
             }
         }
+    }
+
+    public static void emergencyStop(String reason) {
+        Logging.log("Emergency Stop", reason);
+        Logging.log("Restart Robot to Continue");
+        Logging.update();
+        while (true);
     }
 }

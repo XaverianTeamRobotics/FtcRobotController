@@ -7,6 +7,10 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 public class RemoteDebuggerOpMode extends OperationMode implements TeleOperation {
     @Override
     public void construct() {
+        RDWebSocketServer.enableMotorStatic(0);
+        RDWebSocketServer.enableMotorStatic(1);
+        RDWebSocketServer.enableMotorStatic(2);
+        RDWebSocketServer.enableMotorStatic(3);
         registerFeature(new Debugger());
     }
 
