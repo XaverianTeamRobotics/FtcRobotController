@@ -21,7 +21,7 @@ You can either run it from source code using [`npm`](#running-from-source), [bui
 While the application can be run on any platform, we currently only host pre-built binaries for Windows.
 :::
 
-### Running from source
+### Running from Source
 To run the source code, run the command `npm i` to install dependencies, then `npm start` to start the application.
 
 ### Building from Source
