@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.internals.image;
 
+import kotlin.math.MathKt;
+
 import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
 
@@ -50,17 +52,17 @@ public class CameraTranslation {
      * @return A value between -100 and 100. Input to servoX.setPosition()
      */
     public double convertAngleToServoAngle(double angle) {
-        angle = Math.min(Math.max(angle, cameraMinAngle), cameraMaxAngle);
         return ((10*angle)/27) + 50;
     }
 
     /**
      * Convert the angle of the servo and the angle from camera to target to the angle from the robot to the target.
+     * (NOTE: PRIVATE TO PREVENT CONFUSION WITH convertCameraBearingAndRangeToRobotCentric)
      * @param servoAngle A value between -100 and 100. Output of servoX.getPosition()
      * @param angleToTarget The angle from the camera to the target. (In degrees)
      * @return The angle from the robot to the target. (In degrees)
      */
-    public double convertCameraAngleToRobotCentric(double servoAngle, double angleToTarget) {
+    private double convertCameraAngleToRobotCentric(double servoAngle, double angleToTarget) {
         return convertServoAngleToCameraAngle(servoAngle) + angleToTarget;
     }
 
@@ -96,6 +98,6 @@ public class CameraTranslation {
      * @return The input to servoX.setPosition() to keep the target in the center of the camera's FOV.
      */
     public double centerCameraInServo(double servoAngle, double bearing) {
-        return convertAngleToServoAngle(convertServoAngleToCameraAngle(servoAngle) + bearing);
+        return Math.min(Math.max(convertAngleToServoAngle(convertCameraAngleToRobotCentric(servoAngle, bearing)), 0), 100);
     }
 }
