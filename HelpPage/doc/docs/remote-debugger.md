@@ -21,6 +21,16 @@ You can either run it from source code using [`npm`](#running-from-source), [bui
 While the application can be run on any platform, we currently only host pre-built binaries for Windows.
 :::
 
+:::danger
+Currently, the builds cannot and will never pass the Windows Defender SmartScreen test. This limitation
+is out of our control. If you get a prompt saying that SmartScreen has blocked the file from running, 
+you have to click the "More Info" then "Run Anyway" buttons.
+
+You can also right click on the executable file, go to properties, then check the "Unblock" box.
+
+We apologize for the inconvenience.
+:::
+
 ### Running from Source
 To run the source code, run the command `npm i` to install dependencies, then `npm start` to start the application.
 
