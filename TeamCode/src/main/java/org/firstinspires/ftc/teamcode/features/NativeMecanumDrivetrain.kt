@@ -9,7 +9,12 @@ import org.firstinspires.ftc.teamcode.internals.misc.MecanumDriver
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
 
 /**
-* A mecanum drivetrain&mdash;this doesn't require odometry, hence it being "native" by not relying on external libraries. If you have odometry, use MecanumDrivetrain
+* A mecanum drivetrain&mdash;this doesn't require odometry, hence it being "native" by not relying
+ * on external libraries. If you have odometry, use MecanumDrivetrain.
+ * <p>
+ * Controls: Right joystick controlls rotation. Left joystick controlls forward/backward/left/right
+ * movement. Controller 1 has full power. Controller 2 has reduced power (for finer control)
+ * <p>
  * @param drivetrainMapMode The motor layout of the drivetrain.
  * @param useExpansionHub Whether or not to use the expansion hub to get the motors. Requires that the expansion hub motors be initialized before use
  * @param fieldCentric Whether or not to use field centric controls. The imu must be initialized prior to use.
@@ -53,14 +58,6 @@ class NativeMecanumDrivetrain(
     }
 
     override fun loop() {
-        /*
-        Right joystick controlls rotation
-        Left joystick controlls forward/backward/left/right movement
-
-        Controller 1 has full power
-        Controller 2 has reduced power (for finer control)
-         */
-
         var rot: Double = if (!isRotInverted) {
             CONTROL1_ROTATIONAL_MOTION * controller1.rightStickX + CONTROL2_ROTATIONAL_MOTION * controller2.rightStickX
         } else {
