@@ -5,6 +5,14 @@ import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 
+/**
+ * This tests the intake system.
+ * <p>
+ * Connections: A motor in port 0 and a controller.
+ * <p>
+ * Controls: Hold the right trigger to increase the intake speed, left trigger to decrese it, or
+ * left bumper to stop it.
+ */
 public class IntakeBeltTest extends OperationMode implements TeleOperation {
 
     double intakeSpeed = 0;

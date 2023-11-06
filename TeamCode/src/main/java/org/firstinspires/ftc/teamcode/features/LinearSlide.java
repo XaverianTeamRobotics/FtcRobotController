@@ -4,9 +4,13 @@ import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 
 /**
- * Uses motor 4
- * Right trigger - raise
- * Left trigger - lower
+ * This controls a linear slide and an extra motor.
+ * <p>
+ * Connections: A motor connected to the linear slide in port 4 and a controller. Also uses motor in
+ * port 5.
+ * <p>
+ * Controls: Use the right trigger to raise the slide and the left trigger to lower it. Move the
+ * right stick up or down to control the motor in port 5.
  */
 public class LinearSlide extends Feature {
     @Override

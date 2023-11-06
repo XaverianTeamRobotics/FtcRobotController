@@ -8,6 +8,11 @@ import org.firstinspires.ftc.teamcode.internals.time.Clock
 import org.firstinspires.ftc.teamcode.internals.time.Timer
 import java.util.*
 
+/**
+ * This controls the cone grabber hand.
+ * Connections: Left servo in port 1, right servo in port 0, and a controller.
+ * Controls: Press the y button to close the hand or the a button to open it.
+ */
 class Hand() : Feature(), Buildable {
 
     private var auto = false

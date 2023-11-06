@@ -6,6 +6,15 @@ import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 
+/**
+ * This runs the intake system.
+ * <p>
+ * Connections: A motor in port 0 and a controller.
+ * <p>
+ * Controls: Press dpad up to turn on the intake.
+ * <p>
+ * @param <motorPower>
+ */
 public class Intake<motorPower> extends OperationMode implements TeleOperation {
     @Override
     public void construct() {

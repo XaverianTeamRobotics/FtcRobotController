@@ -8,6 +8,11 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
+/**
+ * This drives towards an AprilTag target.
+ * <p>
+ * Features: {@link org.firstinspires.ftc.teamcode.features.AprilTagDetector}
+ */
 public class DriveTowardsAprilTag extends OperationMode implements TeleOperation {
     MecanumDriver driver;
     AprilTagDetector detector;

@@ -8,7 +8,27 @@ import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.contr
 import org.firstinspires.ftc.teamcode.internals.motion.pid.basic.BasicPositionInputFilter
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DSLogging
 
-class FourMotorArm: Feature(), Buildable {
+/**
+ * This controls the motors for the double reverse four-bar linkage system. Used for both the
+ * autonomous and TeleOp modes.
+ * <p>
+ * Connections: Motors in ports 4 (top) and 5 (bottom) for the left side and 6 (top) and 7 (bottom)
+ * for the right side. Also needs 2 connected controllers.
+ * <p>
+ * Controls:
+ * Controller 2: Hold the right trigger to move up or the left trigger to move down. If the right
+ * and left sides become misaligned, push the right stick up to move the right side up or down to
+ * move it down (same for the left side using the left stick).
+ * <p>
+ * You can also use gamepad buttons to automatically move the arm to the correct position. Use
+ * triangle for a high junction, circle for a medium junction, square for a low junction, cross for
+ * a ground junction, dpad left for a single cone, dpad right for a stack of 3 cones, dpad up for a
+ * stack of 5 cones, or dpad down to move to ground level. Press share to attempt to automatically
+ * level the arm.
+ * <p>
+ * Both controllers: Press any bumper to immediately cancel the auto-move.
+ */
+class FourMotorArm : Feature(), Buildable {
 
     override fun build() {
         Devices.encoder5.reset()
