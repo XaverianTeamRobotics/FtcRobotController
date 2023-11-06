@@ -48,11 +48,28 @@ class Gamepad(override var name: String): DeviceAccessor(name) {
         registerButton(ButtonRegister(input, use))
     }
 
-    fun checkCollision(input: GamepadRequestInput) {
-        Logging.log("Button", input.name)
-        Logging.log("ButtonReg", buttonsReg)
-        Logging.update()
+    /**
+     * Searches through all of the registered buttons and returns
+     * the button that matches the string.
+     * @param act The useage to search for.
+     * @return The button that matches the useage.
+     */
+    fun buttonSearch(act: String): GamepadRequestInput {
 
+        Logging.log("Button", "Searching for: $act inn array of length ${buttonReg.size}")
+        for (i in buttonReg) {
+            Logging.log("Button", i.use)
+            if (i.use.uppercase() == act.uppercase()) {
+                return i.button
+            }
+        }
+        Logging.update()
+        org.firstinspires.ftc.teamcode.internals.time.Clock.sleep(3000);
+        OperationMode.emergencyStop("Button: $act not registered!")
+        return GamepadRequestInput.A // will never be called, is only to satisfy compiler
+    }
+
+    fun checkCollision(input: GamepadRequestInput) {
         for (j in buttonReg) {
             if (j.button == input) {
                 var msg: String = "Button: " + input.name + " already registered!"
