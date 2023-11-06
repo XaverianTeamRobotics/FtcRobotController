@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 /**
  * This tests the linear slide.
  * <p>
- * Features: @see LinearSlide
+ * Features: {@link org.firstinspires.ftc.teamcode.features.LinearSlide}
  */
 public class LinearSlideTest extends OperationMode implements TeleOperation {
     @Override

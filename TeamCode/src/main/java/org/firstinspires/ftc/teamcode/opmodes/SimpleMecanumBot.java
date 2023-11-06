@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 /**
  * This tests the native mecanum drivetrain.
  * <p>
- * Features: @see NativeMecanumDrivetrain
+ * Features: {@link org.firstinspires.ftc.teamcode.features.NativeMecanumDrivetrain}
  */
 public class SimpleMecanumBot extends OperationMode implements TeleOperation {
     @Override

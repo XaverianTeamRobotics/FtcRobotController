@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 /**
  * This tests the double reverse four-bar linkage system.
  * <p>
- * Features: @see FourMotorArm
+ * Features: {@link org.firstinspires.ftc.teamcode.features.FourMotorArm}
  */
 public class FourArmTest extends OperationMode implements TeleOperation {
 

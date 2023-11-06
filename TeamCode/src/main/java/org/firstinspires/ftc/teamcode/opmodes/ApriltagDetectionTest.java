@@ -17,7 +17,7 @@ import static org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
 /**
  * This tests the AprilTag detector and logs detection info.
  * <p>
- * Features: @see AprilTagDetector
+ * Features: {@link org.firstinspires.ftc.teamcode.features.AprilTagDetector}
  */
 public class ApriltagDetectionTest extends OperationMode implements TeleOperation {
     AprilTagDetector detector;

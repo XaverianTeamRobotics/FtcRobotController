@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 /**
  * This tests the manual pixel grabber.
  * <p>
- * Features: @see PixelGrabber
+ * Features: {@link org.firstinspires.ftc.teamcode.features.PixelGrabber}
  */
 public class PixelGrabberTest extends OperationMode implements TeleOperation {
     @Override

@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 /**
  * This tests the robot screw lifter.
  * <p>
- * Features: @see Lifter
+ * Features: {@link org.firstinspires.ftc.teamcode.features.Lifter}
  */
 public class LifterTest extends OperationMode implements TeleOperation {
     @Override

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 /**
  * This drives towards an AprilTag target.
  * <p>
- * Features: @see AprilTagDetector
+ * Features: {@link org.firstinspires.ftc.teamcode.features.AprilTagDetector}
  */
 public class DriveTowardsAprilTag extends OperationMode implements TeleOperation {
     MecanumDriver driver;

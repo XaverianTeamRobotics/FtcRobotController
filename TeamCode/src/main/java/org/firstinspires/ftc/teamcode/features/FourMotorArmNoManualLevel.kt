@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.internals.motion.pid.basic.BasicPositionIn
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DSLogging
 
 /**
- * Same as @see FourMotorArm but controller 1 can manually move the arm with the trigger buttons,
+ * Same as {@link org.firstinspires.ftc.features.FourMotorArm} but controller 1 can manually move the arm with the trigger buttons,
  * while 2 can only set the automatic positions. Controller 1 can also manually level the arm by
  * moving down the left side with the square button or the right side with the circle button.
  */
