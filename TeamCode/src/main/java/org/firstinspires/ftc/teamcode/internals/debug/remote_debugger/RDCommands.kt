@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.motor
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.motor6
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.motor7
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.AdvancedLogging
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
 import java.text.DateFormat.getDateTimeInstance
 import java.util.*
 
@@ -76,6 +77,9 @@ fun motorPowerMessage(motor: Int, power: Double): String {
  * A callback for a motor's power.
  */
 fun motorPowerCallback(motor: Int, power: Double) {
+    Logging.log("Motor#", motor)
+    Logging.log("MotorPow", power)
+    Logging.update()
     when (motor) {
         0 -> motor0             .power = power
         1 -> motor1             .power = power

@@ -6,6 +6,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.firstinspires.ftc.robotcore.internal.webserver.websockets.CloseCode
 import org.firstinspires.ftc.robotcore.internal.webserver.websockets.WebSocketManager
 import org.firstinspires.ftc.robotserver.internal.webserver.websockets.FtcWebSocketImpl.RawWebSocket
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
 import org.java_websocket.WebSocket
 import org.java_websocket.exceptions.WebsocketNotConnectedException
 import java.net.InetAddress
@@ -42,21 +43,21 @@ class RDWebSocket(
     }
 
     override fun onMessage(message: String?) {
-        super.onMessage(message)
         val messageSerialized = Json.parseToJsonElement(message!!)
+        Logging.log(message)
+        Logging.update()
         logger.fine("Received message: $messageSerialized")
 
         val type: String = messageSerialized.jsonObject["type"]!!.jsonPrimitive.content
 
-        if (type == "ping") send("pong")
-
-        else if (type == "set-motor-power")
-            motorPowerCallback(
+        when (type) {
+            "ping" -> send("pong")
+            "set-motor-power" -> motorPowerCallback(
                 messageSerialized.jsonObject["motor"]!!.jsonPrimitive.content.toInt(),
                 messageSerialized.jsonObject["power"]!!.jsonPrimitive.content.toDouble()
             )
-        else if (type == "telemetry-print")
-            logCallback(messageSerialized.jsonObject["content"]!!.jsonPrimitive.content)
+            "telemetry-print" -> logCallback(messageSerialized.jsonObject["content"]!!.jsonPrimitive.content)
+        }
     }
 
     override fun onOpen() {

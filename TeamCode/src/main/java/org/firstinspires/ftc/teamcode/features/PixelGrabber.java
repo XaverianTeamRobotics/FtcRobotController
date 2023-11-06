@@ -5,8 +5,11 @@ import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 
 /**
- * Right servo = port 0
- * Left servo = port 1
+ * This controls the pixel grabber.
+ * <p>
+ * Connections: Uses the right servo in port 0, the left servo in port 1, and a controller.
+ * <p>
+ * Controls: Use the right bumper to close the grabber or the left bumper to open it.
  */
 public class PixelGrabber extends Feature implements Buildable {
 

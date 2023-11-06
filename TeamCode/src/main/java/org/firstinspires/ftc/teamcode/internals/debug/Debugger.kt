@@ -20,7 +20,7 @@ class Debugger: Feature(), Buildable {
             try {
                 webServer.stop(5000)
             } catch (e: InterruptedException) {
-                throw RuntimeException(e)
+                return
             }
         }
     }

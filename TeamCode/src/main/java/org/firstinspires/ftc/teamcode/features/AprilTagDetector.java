@@ -12,10 +12,17 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
+/**
+ * This detects AprilTags and shows them on the FTC dashboard.
+ * <p>
+ * Connections: A camera and a computer connected to the dashboard.
+ * <p>
+ * Controls: Uses the dashboard.
+ */
 public class AprilTagDetector extends Feature implements Buildable {
+    public List<AprilTagDetection> currentDetections;
     AprilTagProcessor aprilTag;
     VisionPortal vision;
-    public List<AprilTagDetection> currentDetections;
     CameraName cameraName;
 
     public AprilTagDetector(CameraName cameraName) {
@@ -41,14 +48,18 @@ public class AprilTagDetector extends Feature implements Buildable {
         currentDetections = aprilTag.getDetections();
     }
 
-    public List<AprilTagDetection> getCurrentDetections() { return currentDetections; }
+    public List<AprilTagDetection> getCurrentDetections() {
+        return currentDetections;
+    }
 
     public void stop() {
         vision.setProcessorEnabled(aprilTag, false);
+        currentDetections.clear();
     }
 
     public void start() {
         vision.setProcessorEnabled(aprilTag, true);
+        currentDetections.clear();
     }
 
     public void resumeStreaming() {

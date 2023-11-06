@@ -14,6 +14,11 @@ import static java.lang.String.format;
 import static org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging.log;
 import static org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging.logData;
 
+/**
+ * This tests the AprilTag detector and logs detection info.
+ * <p>
+ * Features: {@link org.firstinspires.ftc.teamcode.features.AprilTagDetector}
+ */
 public class ApriltagDetectionTest extends OperationMode implements TeleOperation {
     AprilTagDetector detector;
     @Override
