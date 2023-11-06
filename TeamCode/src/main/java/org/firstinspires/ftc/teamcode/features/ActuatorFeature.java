@@ -1,18 +1,16 @@
 package org.firstinspires.ftc.teamcode.features;
 
-import org.firstinspires.ftc.teamcode.internals.features.Buildable;
 import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
-import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
-import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 
 /**
- * Uses servo port 2.
- * Square = Down
- * Cross = Up
+ * This is a simple test for the servo controls.
+ * <p>
+ * Connections: A servo in port 2 and a controller.
+ * <p>
+ * Controls: Hold the square button to move down or the cross button to move up.
  */
-public class ActuatorFeature extends Feature{
+public class ActuatorFeature extends Feature {
 
     @Override
     public void loop() {

@@ -6,8 +6,11 @@ import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 
 /**
- * Uses servo 4
- * Dpad up - launch
+ * This sets up the airplane launcher servo and uses it to launch the plane.
+ * <p>
+ * Connections: A servo in port 4 and a controller.
+ * <p>
+ * Controls: Press up on the dpad to launch the plane.
  */
 public class AirplaneLauncher extends Feature implements Buildable {
     @Override

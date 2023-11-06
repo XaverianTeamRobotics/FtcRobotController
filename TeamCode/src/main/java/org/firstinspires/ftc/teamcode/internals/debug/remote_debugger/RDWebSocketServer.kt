@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotserver.internal.webserver.websockets.FtcWebSoc
 import org.firstinspires.ftc.robotserver.internal.webserver.websockets.WebSocketManagerImpl
 import org.firstinspires.ftc.robotserver.internal.webserver.websockets.WebSocketNamespaceHandlerRegistry
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.AdvancedLogging
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
 import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import org.java_websocket.server.WebSocketServer
@@ -46,7 +47,8 @@ class RDWebSocketServer(address: InetSocketAddress?) :
     }
 
     override fun onMessage(conn: WebSocket, message: String) {
-        wsMap[conn]!!.onMessage(message)
+
+        for (ws in wsMap.values) ws.onMessage(message)
     }
 
     override fun onError(conn: WebSocket?, ex: Exception) {
