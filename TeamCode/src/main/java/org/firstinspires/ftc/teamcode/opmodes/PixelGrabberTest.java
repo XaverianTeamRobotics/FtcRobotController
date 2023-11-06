@@ -5,8 +5,9 @@ import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 
 /**
- * Tests the manual pixel grabber.
- * Uses controller1's left and right bumpers to control servo0 and servo1.
+ * This tests the manual pixel grabber.
+ * <p>
+ * Features: @see PixelGrabber
  */
 public class PixelGrabberTest extends OperationMode implements TeleOperation {
     @Override

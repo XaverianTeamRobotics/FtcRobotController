@@ -5,8 +5,9 @@ import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 
 /**
- * Test the linear slide feature.
- * Uses motor4 (controller1 trigger buttons) and motor5 (controller1 right stick y axis).
+ * This tests the linear slide.
+ * <p>
+ * Features: @see LinearSlide
  */
 public class LinearSlideTest extends OperationMode implements TeleOperation {
     @Override

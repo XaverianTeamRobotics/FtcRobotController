@@ -9,8 +9,9 @@ import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 /**
- * Drive towards an AprilTag target.
- * Requires a camera.
+ * This drives towards an AprilTag target.
+ * <p>
+ * Features: @see AprilTagDetector
  */
 public class DriveTowardsAprilTag extends OperationMode implements TeleOperation {
     MecanumDriver driver;
