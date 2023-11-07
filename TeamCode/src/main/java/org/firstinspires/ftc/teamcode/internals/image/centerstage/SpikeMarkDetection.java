@@ -108,8 +108,7 @@ public class SpikeMarkDetection extends OpenCvPipeline {
     }
 
     public void setTeamColor(TeamColor teamColor) {
-        if (teamColor == TeamColor.BLUE) isBlueTeam = true;
-        else isBlueTeam = false;
+        isBlueTeam = teamColor == TeamColor.BLUE;
     }
 
     public boolean isDebugEnabled() {
