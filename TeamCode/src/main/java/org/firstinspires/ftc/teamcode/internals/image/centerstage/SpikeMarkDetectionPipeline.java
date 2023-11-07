@@ -1,23 +1,19 @@
 package org.firstinspires.ftc.teamcode.internals.image.centerstage;
 
 import com.acmerobotics.dashboard.config.Config;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.internals.image.powerplay.ImageProcessingConstants.*;
 import static org.opencv.core.Core.*;
-import static org.opencv.core.Core.FILLED;
 import static org.opencv.features2d.Features2d.drawKeypoints;
 import static org.opencv.imgproc.Imgproc.*;
 
 @Config
-public class SpikeMarkDetection extends OpenCvPipeline {
+public class SpikeMarkDetectionPipeline extends OpenCvPipeline {
     public static int ZONE1_X = 50;
     public static int ZONE1_Y = 240;
     public static int ZONE1_WIDTH = 100;
