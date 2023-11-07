@@ -21,8 +21,6 @@ public class SpikeMarkDetection extends OpenCvPipeline {
     private volatile int position = 0;
     private volatile boolean debugEnabled = false;
     private static boolean isBlueTeam = true;
-    public static boolean showYCrCb = false;
-    public static int YCrCbPreviewChannel = 0;
     public static int BLUE_THRESH = 150;
     public static int RED_THRESH = 150;
 

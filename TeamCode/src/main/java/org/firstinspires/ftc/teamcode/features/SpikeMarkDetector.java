@@ -105,6 +105,10 @@ public class SpikeMarkDetector extends Feature implements Buildable {
         return init;
     }
 
+    public void setTeamColor(SpikeMarkDetection.TeamColor color) {
+        detector.setTeamColor(color);
+    }
+
     public void setDebugEnabled(boolean enabled) {
         detector.setDebugEnabled(enabled);
     }
