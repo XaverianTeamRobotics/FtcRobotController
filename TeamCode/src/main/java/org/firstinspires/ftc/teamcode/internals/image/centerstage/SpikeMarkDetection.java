@@ -18,6 +18,14 @@ import static org.opencv.imgproc.Imgproc.*;
 
 @Config
 public class SpikeMarkDetection extends OpenCvPipeline {
+    public static int ZONE1_X = 50;
+    public static int ZONE1_Y = 240;
+    public static int ZONE1_WIDTH = 100;
+    public static int ZONE1_HEIGHT = 130;
+    public static int ZONE2_X = 400;
+    public static int ZONE2_Y = 230;
+    public static int ZONE2_WIDTH = 160;
+    public static int ZONE2_HEIGHT = 200;
     private volatile int position = 0;
     private volatile boolean debugEnabled = false;
     public static boolean isBlueTeam = true;
@@ -50,11 +58,11 @@ public class SpikeMarkDetection extends OpenCvPipeline {
         Mat channel = YCrCbChannels.get(channelOfInterest);
 
         // Zone 1
-        Rect zone1Rect = new Rect(50, 240, 100, 130);
+        Rect zone1Rect = new Rect(ZONE1_X, ZONE1_Y, ZONE1_WIDTH, ZONE1_HEIGHT);
         Mat zone1 = new Mat(channel, zone1Rect);
 
         // Zone 2
-        Rect zone2Rect = new Rect(400, 230, 160, 200);
+        Rect zone2Rect = new Rect(ZONE2_X, ZONE2_Y, ZONE2_WIDTH, ZONE2_HEIGHT);
         Mat zone2 = new Mat(channel, zone2Rect);
 
         // Draw the rectangles
