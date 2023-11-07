@@ -9,13 +9,14 @@ import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 
 public class Buttoner extends OperationMode implements TeleOperation {
     public void construct() {
+        Devices.enableButtonRegistration();
         Devices.controller1.registerButton(GamepadRequestInput.A, "Testing");
     }
 
     public void run() {
-        //Devices.controller1.getRightTrigger();
         Logging.log(Devices.controller1.buttonSearch("Testing").name() + "");
-        //Devices.controller1.registerButton(GamepadRequestInput.A, "Testing");
+        Devices.controller1.registerButton(GamepadRequestInput.A, "Testing"); // will fail
+        Devices.controller1.getRightTrigger(); // will fail the test
         Logging.update();
     }
 }

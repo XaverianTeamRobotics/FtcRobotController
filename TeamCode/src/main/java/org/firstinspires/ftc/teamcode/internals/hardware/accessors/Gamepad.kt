@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.internals.hardware.accessors
 
 import android.util.Log
 import com.michaell.looping.ScriptParameters
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter
 import org.firstinspires.ftc.teamcode.internals.hardware.data.GamepadRequestInput
 import org.firstinspires.ftc.teamcode.internals.misc.RobotRebootException
@@ -20,7 +21,6 @@ class Gamepad(override var name: String): DeviceAccessor(name) {
      */
     val request: ScriptParameters.Request = HardwareGetter.jloopingRunner!!.scriptParametersGlobal.getRequest(name) as ScriptParameters.Request
 
-    private var buttonsReg: String = ""
     private var buttonReg: ArrayList<ButtonRegister> = ArrayList()
 
     private class ButtonRegister {
@@ -34,7 +34,7 @@ class Gamepad(override var name: String): DeviceAccessor(name) {
 
     private fun registerButton(input: ButtonRegister) {
         checkCollision(input.button)
-        buttonsReg += input.button.name + ";"
+        buttonReg.add(input)
     }
 
 
@@ -69,7 +69,8 @@ class Gamepad(override var name: String): DeviceAccessor(name) {
         return GamepadRequestInput.A // will never be called, is only to satisfy compiler
     }
 
-    fun checkCollision(input: GamepadRequestInput) {
+    private fun checkCollision(input: GamepadRequestInput) {
+        if (!Devices.isButtonRegEnabled()) return
         for (j in buttonReg) {
             if (j.button == input) {
                 var msg: String = "Button: " + input.name + " already registered!"
