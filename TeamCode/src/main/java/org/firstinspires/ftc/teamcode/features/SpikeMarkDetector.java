@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
 import org.firstinspires.ftc.teamcode.internals.image.MultipleCameraManager;
-import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkAndColorDetection;
+import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetection;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.AdvancedLogging;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class SpikeMarkDetector extends Feature implements Buildable {
 
-    private SpikeMarkAndColorDetection detector;
+    private SpikeMarkDetection detector;
 
     private int spot = 0;
     private final ArrayList<Integer> previousSpots = new ArrayList<>();
@@ -58,7 +58,7 @@ public class SpikeMarkDetector extends Feature implements Buildable {
             camera = OpenCvCameraFactory.getInstance().createWebcam(Devices.camera0, cameraMonitorViewId);
         }
 
-        detector = new SpikeMarkAndColorDetection();
+        detector = new SpikeMarkDetection();
 
         detector.setDebugEnabled(true);
 
