@@ -70,7 +70,7 @@ public class SpikeMarkDetector extends Feature implements Buildable {
             @Override
             public void onOpened() {
                 init = true;
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
             }
             @Override
             public void onError(int errorCode)

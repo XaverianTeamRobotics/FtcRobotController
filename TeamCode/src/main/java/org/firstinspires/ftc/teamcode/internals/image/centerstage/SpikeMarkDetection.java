@@ -26,7 +26,7 @@ public class SpikeMarkDetection extends OpenCvPipeline {
     public static int BLUE_THRESH = 150;
     public static int RED_THRESH = 150;
 
-    public static int MIN_AVG_AREA = 10;
+    public static int MIN_AVG_AREA = 45;
 
     @Override
     public void init(Mat mat) {}
@@ -52,7 +52,7 @@ public class SpikeMarkDetection extends OpenCvPipeline {
         Mat channel = YCrCbChannels.get(channelOfInterest);
 
         // Zone 1
-        Rect zone1Rect = new Rect(100, 240, 100, 130);
+        Rect zone1Rect = new Rect(50, 240, 100, 130);
         Mat zone1 = new Mat(channel, zone1Rect);
 
         // Zone 2
@@ -71,7 +71,6 @@ public class SpikeMarkDetection extends OpenCvPipeline {
         inRange(zone1, new Scalar(thresh), new Scalar(255), zone1);
         inRange(zone2, new Scalar(thresh), new Scalar(255), zone2);
 
-
         // Get the average value of each zone
         Scalar zone1Avg = mean(zone1);
         Scalar zone2Avg = mean(zone2);
@@ -81,7 +80,7 @@ public class SpikeMarkDetection extends OpenCvPipeline {
         Logging.update();
 
         // Determine the position based on the average value of each zone
-        if (zone1Avg.val[0] > MIN_AVG_AREA && zone2Avg.val[0] > MIN_AVG_AREA) {
+        if (zone1Avg.val[0] < MIN_AVG_AREA && zone2Avg.val[0] < MIN_AVG_AREA) {
             position = 1;
         } else if (zone1Avg.val[0] > MIN_AVG_AREA) {
             position = 2;
