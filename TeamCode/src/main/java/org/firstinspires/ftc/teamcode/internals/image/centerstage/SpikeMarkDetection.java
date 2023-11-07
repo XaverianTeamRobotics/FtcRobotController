@@ -20,7 +20,7 @@ import static org.opencv.imgproc.Imgproc.*;
 public class SpikeMarkDetection extends OpenCvPipeline {
     private volatile int position = 0;
     private volatile boolean debugEnabled = false;
-    private static boolean isBlueTeam = true;
+    public static boolean isBlueTeam = true;
     public static int BLUE_THRESH = 150;
     public static int RED_THRESH = 150;
 
