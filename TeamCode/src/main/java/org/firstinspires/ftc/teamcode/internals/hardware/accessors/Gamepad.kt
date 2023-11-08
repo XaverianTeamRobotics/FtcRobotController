@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.internals.hardware.accessors
 
 import android.util.Log
 import com.michaell.looping.ScriptParameters
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter
 import org.firstinspires.ftc.teamcode.internals.hardware.data.GamepadRequestInput
 import org.firstinspires.ftc.teamcode.internals.misc.RobotRebootException
@@ -20,7 +21,6 @@ class Gamepad(override var name: String): DeviceAccessor(name) {
      */
     val request: ScriptParameters.Request = HardwareGetter.jloopingRunner!!.scriptParametersGlobal.getRequest(name) as ScriptParameters.Request
 
-    private var buttonsReg: String = ""
     private var buttonReg: ArrayList<ButtonRegister> = ArrayList()
 
     private class ButtonRegister {
@@ -34,7 +34,7 @@ class Gamepad(override var name: String): DeviceAccessor(name) {
 
     private fun registerButton(input: ButtonRegister) {
         checkCollision(input.button)
-        buttonsReg += input.button.name + ";"
+        buttonReg.add(input)
     }
 
 
@@ -48,11 +48,29 @@ class Gamepad(override var name: String): DeviceAccessor(name) {
         registerButton(ButtonRegister(input, use))
     }
 
-    fun checkCollision(input: GamepadRequestInput) {
-        Logging.log("Button", input.name)
-        Logging.log("ButtonReg", buttonsReg)
-        Logging.update()
+    /**
+     * Searches through all of the registered buttons and returns
+     * the button that matches the string.
+     * @param act The useage to search for.
+     * @return The button that matches the useage.
+     */
+    fun buttonSearch(act: String): GamepadRequestInput {
 
+        Logging.log("Button", "Searching for: $act inn array of length ${buttonReg.size}")
+        for (i in buttonReg) {
+            Logging.log("Button", i.use)
+            if (i.use.uppercase() == act.uppercase()) {
+                return i.button
+            }
+        }
+        Logging.update()
+        org.firstinspires.ftc.teamcode.internals.time.Clock.sleep(3000);
+        OperationMode.emergencyStop("Button: $act not registered!")
+        return GamepadRequestInput.A // will never be called, is only to satisfy compiler
+    }
+
+    private fun checkCollision(input: GamepadRequestInput) {
+        if (!Devices.isButtonRegEnabled()) return
         for (j in buttonReg) {
             if (j.button == input) {
                 var msg: String = "Button: " + input.name + " already registered!"
