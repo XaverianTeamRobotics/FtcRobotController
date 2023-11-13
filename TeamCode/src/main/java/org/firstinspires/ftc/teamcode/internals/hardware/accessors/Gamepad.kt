@@ -63,7 +63,7 @@ class Gamepad(override var name: String): DeviceAccessor(name) {
                 return i.button
             }
         }
-        Logging.update()
+        //Logging.update()
         org.firstinspires.ftc.teamcode.internals.time.Clock.sleep(3000);
         OperationMode.emergencyStop("Button: $act not registered!")
         return GamepadRequestInput.A // will never be called, is only to satisfy compiler
@@ -83,7 +83,7 @@ class Gamepad(override var name: String): DeviceAccessor(name) {
                         }
                     }
                 }
-                Logging.update()
+                //Logging.update()
                 OperationMode.emergencyStop(msg)
             }
         }
