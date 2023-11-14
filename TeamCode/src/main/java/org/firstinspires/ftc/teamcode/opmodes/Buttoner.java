@@ -14,9 +14,15 @@ public class Buttoner extends OperationMode implements TeleOperation {
     }
 
     public void run() {
-        Logging.log(Devices.controller1.buttonSearch("Testing").name() + "");
-        Devices.controller1.registerButton(GamepadRequestInput.A, "Testing"); // will fail
-        Devices.controller1.getRightTrigger(); // will fail the test
+        Object val = Devices.controller1.buttonSearch("Testing");
+        Double val2 = (Double) val;
+        Logging.log(val + "");
+        //Devices.controller1.registerButton(GamepadRequestInput.A, "Testing"); // will fail
+        Logging.log("Hi");
+        Logging.update();
+
+        //Devices.controller1.buttonSearch("Testing");
+        //Devices.controller1.getRightTrigger(); // will fail the test
         Logging.update();
     }
 }
