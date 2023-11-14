@@ -1,15 +1,10 @@
 package org.firstinspires.ftc.teamcode.internals.hardware.accessors
 
-import android.util.Log
 import com.michaell.looping.ScriptParameters
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter
 import org.firstinspires.ftc.teamcode.internals.hardware.data.GamepadRequestInput
-import org.firstinspires.ftc.teamcode.internals.misc.RobotRebootException
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode
-import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
-import java.lang.RuntimeException
-import kotlin.jvm.Throws
 
 /**
  * A gamepad is simply a controller that a human uses to control the robot.
@@ -54,15 +49,25 @@ class Gamepad(override var name: String): DeviceAccessor(name) {
      * @param act The useage to search for.
      * @return The button's value that matches the useage.
      */
-    fun buttonSearch(act: String): Object {
+    fun buttonSearch(act: String): Double {
         for (i in buttonReg) {
             if (i.use.uppercase() == act.uppercase()) {
-                return HardwareGetter.getGamepadValue(name, i.button) as Object
+                return HardwareGetter.getGamepadValue(name, i.button)
             }
         }
         org.firstinspires.ftc.teamcode.internals.time.Clock.sleep(3000);
         OperationMode.emergencyStop("Button: $act not registered!")
-        return "" as Object // will never be called, is only to satisfy compiler
+        return 0.0// will never be called, is only to satisfy compiler
+    }
+
+    fun genList(): Array<String?> {
+        var temp: Array<String?> = arrayOfNulls<String>(buttonReg.size)
+        var pos: Int = 0
+        for (i in buttonReg) {
+            pos++
+            temp[pos] = buttonReg.get(pos).button.toString() + ", " + buttonReg.get(pos).use
+        }
+        return temp
     }
 
     private fun checkCollision(input: GamepadRequestInput) {
