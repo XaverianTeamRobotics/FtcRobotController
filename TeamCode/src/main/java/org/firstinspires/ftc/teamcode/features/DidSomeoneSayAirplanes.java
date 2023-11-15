@@ -1,17 +1,11 @@
 package org.firstinspires.ftc.teamcode.features;
 
+import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
-import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 
-public class DidSomeoneSayAirplanes extends OperationMode implements TeleOperation {
+public class DidSomeoneSayAirplanes extends Feature {
     @Override
-    public void construct() {
-
-    }
-
-    @Override
-    public void run() {
+    public void loop() {
         double hold;
         hold = 0;
         double release;
