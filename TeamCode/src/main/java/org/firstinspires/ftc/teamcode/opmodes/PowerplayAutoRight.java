@@ -25,7 +25,7 @@ import java.util.UUID;
 import static org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain.SLOW_ACCEL_CONSTRAINT;
 import static org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain.SLOW_VEL_CONSTRAINT;
 
-public class GhostAutoLeft extends OperationMode implements AutonomousOperation {
+public class PowerplayAutoRight extends OperationMode implements AutonomousOperation {
 
     Timer time;
     int spot = 0;
@@ -63,9 +63,9 @@ public class GhostAutoLeft extends OperationMode implements AutonomousOperation 
                 JCam.toggle();
             })
             // drive to the junction
-            .splineToConstantHeading(new Vector2d(35.14, 44.05), Math.toRadians(-90.00))
-            .splineToConstantHeading(new Vector2d(35.14, 30.00), Math.toRadians(-90.00))
-            .splineTo(new Vector2d(34.58, 7.00), Math.toRadians(221.32))
+            .splineToConstantHeading(new Vector2d(36.54, 44.05), Math.toRadians(-90.00))
+            .splineToConstantHeading(new Vector2d(36.54, 30.00), Math.toRadians(-90.00))
+            .splineTo(new Vector2d(37.01, 10.00), Math.toRadians(318.68))
             .completeTrajectory()
             // center ourselves on the pole
             .appendWait(FourMotorArm::autoComplete)
@@ -87,8 +87,8 @@ public class GhostAutoLeft extends OperationMode implements AutonomousOperation 
             .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.CONE_HIGH))
             .appendTrajectory()
             // drive to the cone stack
-            .lineToSplineHeading(new Pose2d(38.92, 11.11, Math.toRadians(0.11)))
-            .splineToConstantHeading(new Vector2d(59.00, 12.00), Math.toRadians(0))
+            .lineToSplineHeading(new Pose2d(32.76, 11.11, Math.toRadians(179.89)))
+            .splineToConstantHeading(new Vector2d(12.68, 12.00), Math.toRadians(0))
             .completeTrajectory()
             // once the arm is at the right position, close in on the top cone and begin raising the arm. we also wait a fraction of a second so the arm has enough time to raise above the stack so when we drive backwards, the cone we've picked up doesnt knock over the whole stack
             .appendWait(FourMotorArm::autoComplete)
@@ -102,14 +102,23 @@ public class GhostAutoLeft extends OperationMode implements AutonomousOperation 
             // SECOND JNCT
 
             // drive back to the junction
-            .lineToSplineHeading(new Pose2d(37.38, 13.95, Math.toRadians(232.36)))
-            .splineToConstantHeading(new Vector2d(34.58, 11.00), Math.toRadians(221.32))
+            .lineToSplineHeading(new Pose2d(34.30, 13.95, Math.toRadians(307.64)))
+            .splineToConstantHeading(new Vector2d(37.10, 14.00), Math.toRadians(318.68))
             .completeTrajectory()
             // center ourselves on the pole
             .appendWait(FourMotorArm::autoComplete)
             .appendWait(JCam::complete)
+            .appendWait(3000)
+            .appendAction(() -> this.driveToPole(poleLocalizer))
             .appendAction(JCam::toggle)
-            .appendWait(JCam::complete)
+            // when the arm reaches the correct height, we open the hand again and then lower the arm back down to cone_high for another cycle
+            .appendAction(() -> Clock.sleep(300))
+            .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.JNCT_HIGH_LOWER))
+            .appendWait(FourMotorArm::autoComplete)
+            .appendAction(Hand::autoOpen)
+            .appendWait(Hand::complete)
+            .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.JNCT_HIGH))
+            .appendWait(FourMotorArm::autoComplete)
             .appendAction(FourMotorArm::autoLevelArm)
             .appendAction(FourMotorArm::autoComplete)
 
@@ -118,7 +127,7 @@ public class GhostAutoLeft extends OperationMode implements AutonomousOperation 
             .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.RESET))
             .appendTrajectory()
             // we drive close to the second parking position
-            .lineToSplineHeading(new Pose2d(34.28, 11.20, Math.toRadians(267.34)))
+            .lineToSplineHeading(new Pose2d(37.40, 11.20, Math.toRadians(272.66)))
             .completeTrajectory()
             .complete();
 
@@ -128,7 +137,7 @@ public class GhostAutoLeft extends OperationMode implements AutonomousOperation 
 
         Auto one = new Auto(auto.end())
             .begin()
-            .lineToConstantHeading(new Vector2d(57.77, 12.17))
+            .lineToConstantHeading(new Vector2d(13.91, 12.17))
             .completeTrajectory()
             .appendWait(FourMotorArm::autoComplete)
             .appendAction(Devices.encoder5::save)
@@ -136,7 +145,7 @@ public class GhostAutoLeft extends OperationMode implements AutonomousOperation 
             .complete();
         Auto two = new Auto(auto.end())
             .begin()
-            .lineToConstantHeading(new Vector2d(34.28, 14.20))
+            .lineToConstantHeading(new Vector2d(37.40, 14.20))
             .completeTrajectory()
             .appendWait(FourMotorArm::autoComplete)
             .appendAction(Devices.encoder5::save)
@@ -145,7 +154,7 @@ public class GhostAutoLeft extends OperationMode implements AutonomousOperation 
         Auto three = new Auto(auto.end())
             .begin()
             .turn(Math.toRadians(90.00))
-            .lineToConstantHeading(new Vector2d(8.00, 12.00))
+            .lineToConstantHeading(new Vector2d(56.68, 12.00))
             .completeTrajectory()
             .appendWait(FourMotorArm::autoComplete)
             .appendAction(Devices.encoder5::save)
@@ -183,7 +192,7 @@ public class GhostAutoLeft extends OperationMode implements AutonomousOperation 
             d = poleLocalizer.getData();
             Clock.sleep(10);
         }
-        vec = new double[] { d[1], -d[0] };
+        vec = new double[] { -d[1], -d[0] };
         return vec;
     }
 

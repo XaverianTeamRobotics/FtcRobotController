@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.internals.motion.odometry.tuning.rrqs;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.kinematics.Kinematics;
@@ -36,10 +37,10 @@ import java.util.Objects;
  * Pressing B/O (Xbox/PS4) will cede control back to the tuning process.
  */
 
-@Disabled
 @Autonomous(group = "drive")
+@Config
 public class ManualFeedforwardTuner extends LinearOpMode {
-    public static double DISTANCE = 72; // in
+    public static double DISTANCE = 50; // in
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 

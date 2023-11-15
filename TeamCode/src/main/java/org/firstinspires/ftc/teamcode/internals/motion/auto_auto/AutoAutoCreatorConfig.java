@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals.motion.auto_auto_builder;
+package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
 
 import org.firstinspires.ftc.teamcode.internals.telemetry.Questions;
 import org.firstinspires.ftc.teamcode.internals.telemetry.graphics.MenuManager;
@@ -55,7 +55,7 @@ public class AutoAutoCreatorConfig {
         MenuManager startingPositionMenu = Questions.askAsyncC1("Where is your bot starting?", "Left", "Right");
         String purpleAnswer = "Purple (spike mark)"; // Declare these two to prevent spelling errors later
         String yellowAnswer = "Yellow (backdrop)";
-        MenuManager pixelPlaceLocationsMenu = Questions.askAsyncC1("What pixels are loaded onto the bot?", purpleAnswer, yellowAnswer, "Both");
+        MenuManager pixelPlaceLocationsMenu = Questions.askAsyncC1("What pixels are loaded onto the bot?", "Neither", purpleAnswer, yellowAnswer, "Both");
         MenuManager backdropPixelPositionMenu = Questions.askAsyncC1("Where would you like to place the backdrop pixel within the place designated by the team prop?", "Left", "Right");
         String leftAnswer = "Left of Backdrop";
         String middleAnswer = "Middle of Backdrop";
