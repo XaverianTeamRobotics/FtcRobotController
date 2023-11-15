@@ -798,6 +798,23 @@ class Devices {
         @JvmStatic lateinit var armDistanceSensor: LaserDistanceSensor
         @JvmStatic lateinit var encoder5: Encoder
         @JvmStatic lateinit var encoder6: Encoder
+
+        private var enableReg: Boolean = false
+
+        /**
+         * Must be called to enable button registration
+         * otherwise button search won't work and button collisons won't
+         * be caught
+         */
+        @JvmStatic
+        fun enableButtonRegistration() {
+            enableReg = true
+        }
+
+        @JvmStatic
+        fun isButtonRegEnabled(): Boolean {
+            return enableReg
+        }
     }
 }
 
