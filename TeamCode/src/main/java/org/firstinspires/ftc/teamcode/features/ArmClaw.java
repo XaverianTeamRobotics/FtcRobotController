@@ -10,6 +10,13 @@ import org.firstinspires.ftc.teamcode.internals.features.Buildable;
 import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;//our two devices our the motors for the arm
 
+/**
+ * this runs the grabber, intake, and claw pivot mechanism.  Dpad left is to close the left grabber,
+ * Dpad right closes the right grabber, Dpad up opens both grabbers, Dpad down starts/stops the
+ * intake, the bumpers rotate the claw mechanism, and the triggers move the arms.
+ * <p>
+ * All controls are in controller 2
+ */
 public class ArmClaw extends Feature implements Buildable {
     public void build(){
         servo0.setPosition(20);
@@ -19,7 +26,7 @@ public class ArmClaw extends Feature implements Buildable {
     public int intakeCount() {
         motor6.setPower(0);
         double counter = 0;
-        if (Devices.controller1.getDpadDown()) {
+        if (Devices.controller2.getDpadDown()) {
             counter += 1;
         }
         if (counter % 2 != 0) {
@@ -32,29 +39,29 @@ public class ArmClaw extends Feature implements Buildable {
         }
     }
     public void loop() {
-        double motorPower = (Devices.controller1.getRightTrigger() - Devices.controller1.getLeftTrigger());
+        double motorPower = (Devices.controller2.getRightTrigger() - Devices.controller2.getLeftTrigger());
         Devices.motor4.setPower(motorPower);
         Devices.motor5.setPower(-motorPower);
 
         //the motors must move in opposite directions
-        if (Devices.controller1.getDpadLeft()) {
+        if (Devices.controller2.getDpadLeft()) {
             servo0.setPosition(5);
             //closes the left grabber
         }
-        if (Devices.controller1.getDpadRight()) {
+        if (Devices.controller2.getDpadRight()) {
             servo1.setPosition(100);
             //closes the right grabber
         }
-        if (Devices.controller1.getDpadUp()) {
+        if (Devices.controller2.getDpadUp()) {
             servo0.setPosition(20);
             servo1.setPosition(80);
             //opens both grabbers
         }
-        if (Devices.controller1.getLeftBumper()) {
+        if (Devices.controller2.getLeftBumper()) {
             servo2.setPosition(33);
             //this will rotate the entire claw mechanism so that it is in line with the backboard
         }
-        if (Devices.controller1.getRightBumper()) {
+        if (Devices.controller2.getRightBumper()) {
             servo2.setPosition(0);
             //this will return the claw mechanism back to the initial position
         }
