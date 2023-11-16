@@ -35,7 +35,7 @@ public class Waterbot extends OperationMode implements TeleOperation {
         registerFeature(new NativeMecanumDrivetrain(true));
         registerFeature(new PixelGrabber());
         registerFeature(new ActuatorFeature());
-        registerFeature(new LinearSlide());
+        registerFeature(new TiltableLinearSlide());
         registerFeature(new AirplaneLauncher());
 
     }

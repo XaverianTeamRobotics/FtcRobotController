@@ -5,14 +5,24 @@ import org.firstinspires.ftc.teamcode.internals.hardware.accessors.Gamepad;
 import org.firstinspires.ftc.teamcode.internals.hardware.data.GamepadRequestInput;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 
 public class Buttoner extends OperationMode implements TeleOperation {
     public void construct() {
+        Devices.enableButtonRegistration();
         Devices.controller1.registerButton(GamepadRequestInput.A, "Testing");
     }
 
     public void run() {
-        Devices.controller1.getRightTrigger();
-        Devices.controller1.registerButton(GamepadRequestInput.A, "Testing");
+        Object val = Devices.controller1.buttonSearch("Testing");
+        Double val2 = (Double) val;
+        Logging.log(val + "");
+        //Devices.controller1.registerButton(GamepadRequestInput.A, "Testing"); // will fail
+        Logging.log("Hi");
+        Logging.update();
+
+        //Devices.controller1.buttonSearch("Testing");
+        //Devices.controller1.getRightTrigger(); // will fail the test
+        Logging.update();
     }
 }
