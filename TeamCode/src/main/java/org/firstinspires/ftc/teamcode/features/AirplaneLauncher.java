@@ -21,5 +21,6 @@ public class AirplaneLauncher extends Feature implements Buildable {
     @Override
     public void loop() {
         if (Devices.controller1.getTriangle()) Devices.servo4.setPosition(100.0);
+        if (Devices.controller1.getSquare()) Devices.servo4.setPosition(100.0);
     }
 }
