@@ -5,10 +5,16 @@ import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.servo0;/
 import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.servo1;//this is the right grabber
 import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.servo2;//this is the servo for the claw mechanism
 
+import org.firstinspires.ftc.teamcode.internals.features.Buildable;
 import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;//our two devices our the motors for the arm
 
-public class ArmClaw extends Feature {
+public class ArmClaw extends Feature implements Buildable {
+    public void build(){
+        servo0.setPosition(20);
+        servo1.setPosition(80);
+        servo2.setPosition(0);
+    }
     public int intakeCount() {
         motor2.setPower(0);
         double counter = 0;
@@ -25,10 +31,6 @@ public class ArmClaw extends Feature {
         }
     }
     public void loop() {
-        servo0.setPosition(20);
-        servo1.setPosition(80);
-        servo2.setPosition(0);
-
         double motorPower = (Devices.controller1.getRightTrigger() - Devices.controller1.getLeftTrigger());
         Devices.motor0.setPower(motorPower);
         Devices.motor1.setPower(-motorPower);
