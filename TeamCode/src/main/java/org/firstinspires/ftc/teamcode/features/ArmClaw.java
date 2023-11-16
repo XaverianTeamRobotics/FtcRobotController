@@ -50,7 +50,7 @@ public class ArmClaw extends Feature implements Buildable {
             //opens both grabbers
         }
         if (Devices.controller1.getLeftBumper()) {
-            servo2.setPosition(30);
+            servo2.setPosition(33);
             //this will rotate the entire claw mechanism so that it is in line with the backboard
         }
         if (Devices.controller1.getRightBumper()) {
