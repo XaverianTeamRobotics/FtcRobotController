@@ -40,7 +40,7 @@ public class AutoParkOnlyBlueLeft extends OperationMode implements AutonomousOpe
 
     @Override
     public Class<? extends OperationMode> getNext() {
-        return SmallbotProduction.class;
+        return ScrimmageBotCenterstage1.class;
     }
 
 }
