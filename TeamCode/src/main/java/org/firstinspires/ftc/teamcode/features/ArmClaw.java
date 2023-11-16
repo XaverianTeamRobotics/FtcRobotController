@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.features;
 
 import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.motor2;
+import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.motor6;
 import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.servo0;//this is the left grabber
 import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.servo1;//this is the right grabber
 import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.servo2;//this is the servo for the claw mechanism
@@ -16,7 +17,7 @@ public class ArmClaw extends Feature implements Buildable {
         servo2.setPosition(0);
     }
     public int intakeCount() {
-        motor2.setPower(0);
+        motor6.setPower(0);
         double counter = 0;
         if (Devices.controller1.getDpadDown()) {
             counter += 1;
@@ -32,8 +33,8 @@ public class ArmClaw extends Feature implements Buildable {
     }
     public void loop() {
         double motorPower = (Devices.controller1.getRightTrigger() - Devices.controller1.getLeftTrigger());
-        Devices.motor0.setPower(motorPower);
-        Devices.motor1.setPower(-motorPower);
+        Devices.motor4.setPower(motorPower);
+        Devices.motor5.setPower(-motorPower);
 
         //the motors must move in opposite directions
         if (Devices.controller1.getDpadLeft()) {
@@ -57,10 +58,7 @@ public class ArmClaw extends Feature implements Buildable {
             servo2.setPosition(0);
             //this will return the claw mechanism back to the initial position
         }
-        if (Devices.controller1.getRightBumper()) {
-            Devices.motor2.setPower(50);
-        }
-        Devices.motor2.setPower(intakeCount());
+        Devices.motor6.setPower(intakeCount());
     }
 
 }
