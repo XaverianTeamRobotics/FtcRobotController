@@ -24,7 +24,7 @@ public class ArmClaw extends Feature implements Buildable {
         servo2.setPosition(0);
     }
     public int intakeCount() {
-        motor6.setPower(0);
+        motor2.setPower(0);
         double counter = 0;
         if (Devices.controller2.getDpadDown()) {
             counter += 1;
@@ -40,8 +40,8 @@ public class ArmClaw extends Feature implements Buildable {
     }
     public void loop() {
         double motorPower = (Devices.controller2.getRightTrigger() - Devices.controller2.getLeftTrigger());
-        Devices.motor4.setPower(motorPower);
-        Devices.motor5.setPower(-motorPower);
+        Devices.motor0.setPower(motorPower);
+        Devices.motor1.setPower(-motorPower);
 
         //the motors must move in opposite directions
         if (Devices.controller2.getDpadLeft()) {
@@ -65,7 +65,7 @@ public class ArmClaw extends Feature implements Buildable {
             servo2.setPosition(0);
             //this will return the claw mechanism back to the initial position
         }
-        Devices.motor6.setPower(intakeCount());
+        Devices.motor2.setPower(intakeCount());
     }
 
 }
