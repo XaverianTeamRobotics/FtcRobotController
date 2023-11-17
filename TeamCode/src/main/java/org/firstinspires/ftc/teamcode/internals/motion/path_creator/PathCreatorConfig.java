@@ -6,4 +6,5 @@ import com.acmerobotics.dashboard.config.Config;
 public class PathCreatorConfig {
     public static boolean startOnLeft = true;
     public static String saveDirectory = "path_creator";
+    public static boolean isBlueTeam = false;
 }

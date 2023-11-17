@@ -25,7 +25,7 @@ import java.util.UUID;
 import static org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain.SLOW_ACCEL_CONSTRAINT;
 import static org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain.SLOW_VEL_CONSTRAINT;
 
-public class AutoLeft extends OperationMode implements AutonomousOperation {
+public class PowerplayGhostAutoLeft extends OperationMode implements AutonomousOperation {
 
     Timer time;
     int spot = 0;
@@ -65,7 +65,7 @@ public class AutoLeft extends OperationMode implements AutonomousOperation {
             // drive to the junction
             .splineToConstantHeading(new Vector2d(35.14, 44.05), Math.toRadians(-90.00))
             .splineToConstantHeading(new Vector2d(35.14, 30.00), Math.toRadians(-90.00))
-            .splineTo(new Vector2d(34.58, 10.00), Math.toRadians(221.32))
+            .splineTo(new Vector2d(34.58, 7.00), Math.toRadians(221.32))
             .completeTrajectory()
             // center ourselves on the pole
             .appendWait(FourMotorArm::autoComplete)
@@ -103,22 +103,13 @@ public class AutoLeft extends OperationMode implements AutonomousOperation {
 
             // drive back to the junction
             .lineToSplineHeading(new Pose2d(37.38, 13.95, Math.toRadians(232.36)))
-            .splineToConstantHeading(new Vector2d(34.58, 14.00), Math.toRadians(221.32))
+            .splineToConstantHeading(new Vector2d(34.58, 11.00), Math.toRadians(221.32))
             .completeTrajectory()
             // center ourselves on the pole
             .appendWait(FourMotorArm::autoComplete)
             .appendWait(JCam::complete)
-            .appendWait(3000)
-            .appendAction(() -> this.driveToPole(poleLocalizer))
             .appendAction(JCam::toggle)
-            // when the arm reaches the correct height, we open the hand again and then lower the arm back down to cone_high for another cycle
-            .appendAction(() -> Clock.sleep(300))
-            .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.JNCT_HIGH_LOWER))
-            .appendWait(FourMotorArm::autoComplete)
-            .appendAction(Hand::autoOpen)
-            .appendWait(Hand::complete)
-            .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.JNCT_HIGH))
-            .appendWait(FourMotorArm::autoComplete)
+            .appendWait(JCam::complete)
             .appendAction(FourMotorArm::autoLevelArm)
             .appendAction(FourMotorArm::autoComplete)
 

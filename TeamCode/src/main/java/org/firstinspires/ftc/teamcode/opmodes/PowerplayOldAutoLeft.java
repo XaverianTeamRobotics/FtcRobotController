@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.internals.time.Timer;
 
 import java.util.UUID;
 
-public class OldAutoLeft extends OperationMode implements AutonomousOperation {
+public class PowerplayOldAutoLeft extends OperationMode implements AutonomousOperation {
 
     Timer time;
     int spot = 0;
