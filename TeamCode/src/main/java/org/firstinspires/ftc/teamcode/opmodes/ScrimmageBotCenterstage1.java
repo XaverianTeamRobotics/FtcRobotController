@@ -13,7 +13,6 @@ public class ScrimmageBotCenterstage1 extends OperationMode implements TeleOpera
     public void construct() {
         registerFeature(new NativeMecanumDrivetrain(DrivetrainMapMode.FR_BR_FL_BL, true, false, true));
         registerFeature(new ArmClaw());
-        registerFeature(new AirplaneLauncher());
     }
 
     @Override

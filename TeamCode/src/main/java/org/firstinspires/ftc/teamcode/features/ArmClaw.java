@@ -18,22 +18,20 @@ import org.firstinspires.ftc.teamcode.internals.hardware.Devices;//our two devic
  * All controls are in controller 2
  */
 public class ArmClaw extends Feature implements Buildable {
+    private double counter = 0;
+    private boolean dpadPressed = false;
     public void build(){
         servo0.setPosition(20);
         servo1.setPosition(80);
         servo2.setPosition(0);
     }
     public int intakeCount() {
-        motor2.setPower(0);
-        double counter = 0;
-        if (Devices.controller2.getDpadDown()) {
+        if (Devices.controller2.getDpadDown() && !dpadPressed) {
             counter += 1;
-        }
+            dpadPressed = true;
+        } else if (!Devices.controller2.getDpadDown()) dpadPressed = false;
         if (counter % 2 != 0) {
             return 100;
-        }
-        if (counter % 2 == 0) {
-            return 0;
         } else {
             return 0;
         }
@@ -65,7 +63,7 @@ public class ArmClaw extends Feature implements Buildable {
             servo2.setPosition(0);
             //this will return the claw mechanism back to the initial position
         }
-        Devices.motor2.setPower(intakeCount());
+        Devices.motor2.setPower(-intakeCount());
     }
 
 }
