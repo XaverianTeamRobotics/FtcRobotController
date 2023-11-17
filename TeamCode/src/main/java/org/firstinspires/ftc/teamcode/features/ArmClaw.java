@@ -30,7 +30,7 @@ public class ArmClaw extends Feature implements Buildable {
             counter += 1;
         }
         if (counter % 2 != 0) {
-            return 100;
+            return -100;
         }
         if (counter % 2 == 0) {
             return 0;
