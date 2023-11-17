@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.internals.motion.path_creator
 import android.os.Environment
 import android.util.Xml
 import com.acmerobotics.roadrunner.geometry.Pose2d
-import org.firstinspires.ftc.teamcode.features.FourMotorArm
-import org.firstinspires.ftc.teamcode.features.Hand
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.PodLocalizer
+import org.firstinspires.ftc.teamcode.internals.motion.path_creator.PathCreatorConfig.isBlueTeam
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DSLogging
@@ -23,28 +23,31 @@ import java.util.*
  * Exports data in XML format to the sdcard.
  */
 class PushbotAutoPathCreator : OperationMode(), TeleOperation {
-    private lateinit var localizer: PodLocalizer
     private val poses = ArrayList<Pose2d>()
     private var aPushed = false
-    override fun construct() {
-        registerFeature(Hand())
-        registerFeature(FourMotorArm())
-        // Initialize localizer
-        localizer = PodLocalizer(hardwareMap)
-        // Set the initial pose of the robot to start on the side of the field specified in the config
-        localizer.poseEstimate =    if (PathCreatorConfig.startOnLeft)  Pose2d( 35.84375, 61.50, Math.toRadians(-90.00))
-                                    else                                Pose2d(-35.84375, 61.50, Math.toRadians(-90.00))
+    private lateinit var drive: AutonomousDrivetrain
 
-        poses.add(localizer.poseEstimate)
+    override fun construct() {
+        // Initialize localizer
+        var angle: Double = -90.0
+        if (isBlueTeam) angle *= -1
+        drive = AutonomousDrivetrain(hardwareMap)
+        drive.poseEstimate =
+                            if (PathCreatorConfig.startOnLeft)  Pose2d(35.84375,   61.50,   Math.toRadians(angle))
+                            else                                Pose2d(-35.84375,  61.50,   Math.toRadians(angle))
+
+        drive.update()
+
+        poses.add(drive.localizer.poseEstimate)
     }
 
     override fun run() {
         // Update the robot's position
-        localizer.update()
+        drive.update()
         // If the user presses the A button, save the current position to a list
         if(Devices.controller1.rightBumper && !aPushed) {
             aPushed = true
-            poses.add(localizer.poseEstimate)
+            poses.add(drive.localizer.poseEstimate)
         }else if(!Devices.controller1.rightBumper) {
             aPushed = false
         }

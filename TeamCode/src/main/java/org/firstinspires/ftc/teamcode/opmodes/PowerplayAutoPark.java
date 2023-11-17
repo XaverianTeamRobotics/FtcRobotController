@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.internals.time.Timer;
 
 import java.util.UUID;
 
-public class AutoPark extends OperationMode implements AutonomousOperation {
+public class PowerplayAutoPark extends OperationMode implements AutonomousOperation {
 
     Timer time;
     int spot = 0;
