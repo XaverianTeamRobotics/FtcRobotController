@@ -103,4 +103,8 @@ public class AutoAutoCreatorConfig {
     public int getParkPlace() {
         return parkPlace;
     }
+
+    public boolean isValid() {
+        return teamColor != -1 && startingPosition != -1 && parkPlace != -1 && (!placeBackdrop || backdropPixelPosition != -1);
+    }
 }
