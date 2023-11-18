@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
 import org.firstinspires.ftc.teamcode.internals.image.MultipleCameraManager;
-import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkAndColorDetection;
+import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.AdvancedLogging;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class SpikeMarkDetector extends Feature implements Buildable {
 
-    private SpikeMarkAndColorDetection detector;
+    private SpikeMarkDetectionPipeline detector;
 
     private int spot = 0;
     private final ArrayList<Integer> previousSpots = new ArrayList<>();
@@ -58,7 +58,7 @@ public class SpikeMarkDetector extends Feature implements Buildable {
             camera = OpenCvCameraFactory.getInstance().createWebcam(Devices.camera0, cameraMonitorViewId);
         }
 
-        detector = new SpikeMarkAndColorDetection();
+        detector = new SpikeMarkDetectionPipeline();
 
         detector.setDebugEnabled(true);
 
@@ -70,7 +70,7 @@ public class SpikeMarkDetector extends Feature implements Buildable {
             @Override
             public void onOpened() {
                 init = true;
-                camera.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
             }
             @Override
             public void onError(int errorCode)
@@ -103,6 +103,10 @@ public class SpikeMarkDetector extends Feature implements Buildable {
 
     public boolean isReady() {
         return init;
+    }
+
+    public void setTeamColor(SpikeMarkDetectionPipeline.TeamColor color) {
+        detector.setTeamColor(color);
     }
 
     public void setDebugEnabled(boolean enabled) {

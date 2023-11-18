@@ -79,6 +79,7 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
         telemetry.addLine("Prior to beginning the routine, please read the directions "
                 + "located in the comments of the opmode file.");
         telemetry.addLine("Press play to begin the tuning routine.");
+        telemetry.addLine("Number of turns required: " + NUM_TURNS);
         telemetry.addLine("");
         telemetry.addLine("Press Y/△ to stop the routine.");
         telemetry.update();
@@ -110,6 +111,7 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
             telemetry.clearAll();
             telemetry.addLine("Total Heading (deg): " + Math.toDegrees(headingAccumulator));
             telemetry.addLine("Raw Heading (deg): " + Math.toDegrees(heading));
+            telemetry.addLine("Number of total turns required: " + NUM_TURNS);
             telemetry.addLine();
             telemetry.addLine("Press Y/△ to conclude routine");
             telemetry.update();

@@ -56,6 +56,11 @@ public class PodLocalizer extends ThreeTrackingWheelLocalizer {
         leftEncoder.setDirection(OdometrySettingsDashboardConfiguration.ENCODER_LEFT.DIRECTION);
         rightEncoder.setDirection(OdometrySettingsDashboardConfiguration.ENCODER_RIGHT.DIRECTION);
         frontEncoder.setDirection(OdometrySettingsDashboardConfiguration.ENCODER_MIDDLE.DIRECTION);
+        TICKS_PER_REV = OdometrySettingsDashboardConfiguration.ENCODER_TICKS_PER_REV;
+        WHEEL_RADIUS = OdometrySettingsDashboardConfiguration.ENCODER_WHEEL_RADIUS;
+        GEAR_RATIO = OdometrySettingsDashboardConfiguration.ENCODER_GEAR_RATIO;
+        LATERAL_DISTANCE = OdometrySettingsDashboardConfiguration.ENCODER_TRACK_WIDTH;
+        FORWARD_OFFSET = OdometrySettingsDashboardConfiguration.ENCODER_FORWARD_OFFSET;
     }
 
     public static double encoderTicksToInches(double ticks) {
