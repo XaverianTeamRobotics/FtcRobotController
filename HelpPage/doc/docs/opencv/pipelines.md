@@ -26,6 +26,11 @@ public class BlankVisionPipeline extends VisionPipeline {
 ```
 :::danger
 You **_MUST_** return `input` in the `processFrame` method.
+
+The `input` parameter is the image passed into the pipeline. The reason why we must return it is that images in
+OpenCV are stored in permanent memory. The variables we deal with are simply pointers to the image, kind of like
+pointers in C++. If we don't return the original image we received, OpenCV will not be able to access it and the 
+pipeline will crash.
 :::
 
 The `init` method is optional, but `processFrame` is not.

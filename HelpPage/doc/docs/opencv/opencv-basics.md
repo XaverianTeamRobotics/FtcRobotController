@@ -21,6 +21,7 @@ the process a lot.
 
 OpenCV works by using components called "pipelines". Each pipeline gets an image, and must return that same image. We can
 modify the original image and create additional images along the way, but in the end we are responsible for "returning it
-as we found it". Whenever we create an additional image, if we don't clean it up, it stays in memory. Computers only
-have so much memory, so forgetting to destroy an image can fill up memory really quickly. With our images, we can convert
-color schemes, extract color channels, run blob detection, edge detection, color analysis, etc.
+as we found it". Images are stored in the Mat type (short for "matrix"). Whenever we create an additional image, if we 
+don't clean it up, it stays in memory. This is because OpenCV is written in C++, so Java's garbage collector cannot clean up 
+images. Computers only have so much memory, so forgetting to destroy an image can fill up memory really quickly. 
+With our images, we can convert color schemes, extract color channels, run blob detection, edge detection, color analysis, etc.
