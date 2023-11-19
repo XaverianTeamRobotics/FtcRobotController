@@ -2,7 +2,6 @@
 sidebar_position: 1
 title: Creating Pipelines
 sidebar_label: Creating Pipelines
-pagination_prev: null
 ---
 
 # Creating Pipelines
