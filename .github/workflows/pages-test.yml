@@ -29,8 +29,11 @@ jobs:
           ./gradlew :TeamCode:dokkaHtml --no-daemon
           mv ./TeamCode/build/dokka/html ./HelpPage/opt/javadoc
       # No need to download the apk since this is just a test build
+      # The artifact upload is very slow with uploading many individual files
+      - name: Zip the build
+        run: zip -r pages-build.zip ./HelpPage/opt
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
           name: GitHub Pages Build
-          path: './HelpPage/opt'
+          path: pages-build.zip
