@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.internals.hardware.Devices;//our two devic
  * All controls are in controller 2
  */
 public class ArmClaw extends Feature implements Buildable {
+    private double counter = 0;
     public void build(){
         servo0.setPosition(20);
         servo1.setPosition(80);
@@ -25,7 +26,6 @@ public class ArmClaw extends Feature implements Buildable {
     }
     public int intakeCount() {
         motor2.setPower(0);
-        double counter = 0;
         if (Devices.controller2.getDpadDown()) {
             counter += 1;
         }
