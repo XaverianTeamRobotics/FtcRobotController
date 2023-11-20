@@ -13,8 +13,7 @@ There are three:
 
 ## Usage
 Servos have a `setPosition(double position)` method that accepts values between 0 and 100. A value of 0 corresponds to -135 degrees 
-and a value of 100 corresponds to 135 degrees.  
-![Alert](/img/alert-triangle.svg) The code will accept an int but will not work properly. Make sure to use a double.  
+and a value of 100 corresponds to 135 degrees.
   
 They also have a `getPosition()` method that returns the intended position (not the actual position).
 

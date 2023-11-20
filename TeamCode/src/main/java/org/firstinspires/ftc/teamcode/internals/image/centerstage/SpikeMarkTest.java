@@ -3,12 +3,13 @@ package org.firstinspires.ftc.teamcode.internals.image.centerstage;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.features.SleeveDetector;
 import org.firstinspires.ftc.teamcode.features.SpikeMarkDetector;
+import org.firstinspires.ftc.teamcode.features.VisionProcessingFeature;
 import org.firstinspires.ftc.teamcode.internals.registration.AutonomousOperation;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 
 public class SpikeMarkTest extends OperationMode implements AutonomousOperation {
 
-    SpikeMarkDetector detector;
+    VisionProcessingFeature detector;
 
 
     @Override
@@ -18,12 +19,12 @@ public class SpikeMarkTest extends OperationMode implements AutonomousOperation 
 
     @Override
     public void construct() {
-        detector = new SpikeMarkDetector();
+        detector = new VisionProcessingFeature(new SpikeMarkDetectionPipeline());
         registerFeature(detector);
     }
 
     @Override
     public void run() {
-        detector.setDebugEnabled(true);
+
     }
 }
