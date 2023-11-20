@@ -1,0 +1,36 @@
+name: Pages test build
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    # Only run on pull requests from branches starting with docs/
+    if: startsWith(github.head_ref, 'docs/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Website
+        run: |
+          echo -e "Running build script with Python..."
+          python deploy.py
+          echo -e "Script complete."
+        shell: bash
+        working-directory: ./HelpPage/scripts/
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
+      - name: Build JavaDoc using Dokka
+        run: |
+          ./gradlew :TeamCode:dokkaHtml --no-daemon
+          mv ./TeamCode/build/dokka/html ./HelpPage/opt/javadoc
+      # No need to download the apk since this is just a test build
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: GitHub Pages Build
+          path: './HelpPage/opt'
