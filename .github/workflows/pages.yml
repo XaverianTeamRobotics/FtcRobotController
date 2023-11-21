@@ -9,29 +9,17 @@ on:
     types: [ "completed" ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow one concurrent deployment
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  # Run on pull requests to master (note that this specifies the base branch, not the branch that the PR is from)
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Build Website
         run: |
           echo -e "Running build script with Python..."
@@ -39,28 +27,71 @@ jobs:
           echo -e "Script complete."
         shell: bash
         working-directory: ./HelpPage/scripts/
+
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
           cache: gradle
+
       - name: Build JavaDoc using Dokka
         run: |
           ./gradlew :TeamCode:dokkaHtml --no-daemon
           mv ./TeamCode/build/dokka/html ./HelpPage/opt/javadoc
-      - name: Download the latest APK
-        run: |
-          mkdir -p ./HelpPage/opt/apk/bin
-          cd ./HelpPage/opt/apk/bin
-          curl -LO https://github.com/XaverianTeamRobotics/FtcRobotController/releases/download/latest-ci-build/TeamCode-debug.apk
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-      - name: Upload Artifact
+
+      - name: Upload Pages build artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          # Upload final build
+          name: github-pages-build
           path: './HelpPage/opt'
+          retention-days: 90
+
+  deploy:
+    # Run if the Android CI build was successful or if this is a manual workflow run
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    needs: [ "build" ]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    # Only allow one concurrent deployment
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    steps:
+      - name: Configure Pages
+        uses: actions/configure-pages@v3
+
+      - name: Download Pages build artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: github-pages-build
+          path: .
+
+      - name: Extract Pages build artifact
+        run: tar -xvf artifact.tar
+
+      - name: Download the latest APK
+        run: |
+          mkdir -p ./artifact/apk/bin
+          cd ./artifact/apk/bin
+          curl -LO https://github.com/XaverianTeamRobotics/FtcRobotController/releases/download/latest-ci-build/TeamCode-debug.apk
+
+      - name: Upload final Pages artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          name: github-pages-deploy
+          path: ./artifact
+          retention-days: 90
+
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@main
+        uses: actions/deploy-pages@v2
+        with:
+          artifact-name: github-pages-deploy
