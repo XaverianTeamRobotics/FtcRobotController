@@ -4,14 +4,15 @@ name: Deploy static content to Pages
 on:
   # Run automatically after the Android CI release finishes
   workflow_run:
-    workflows: [ "Android CI" ]
-    branches: [ "master" ]
-    types: [ "completed" ]
+    workflows: ["Android CI"]
+    branches: ["master"]
+    types: ["completed"]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  # Run on pull requests to master (note that this specifies the base branch, not the branch that the PR is from)
+  # Run on pull requests to master
   pull_request:
-    branches: [ "master" ]
+    # Note that this specifies the target branch, not the branch that the PR is from
+    branches: ["master"]
 
 jobs:
   build:
@@ -20,20 +21,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Website
+      - name: Build website
         run: |
           echo -e "Running build script with Python..."
           python deploy.py
           echo -e "Script complete."
-        shell: bash
+        shell: "bash"
         working-directory: ./HelpPage/scripts/
 
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: gradle
+          java-version: "11"
+          distribution: "temurin"
+          cache: "gradle"
 
       - name: Build JavaDoc using Dokka
         run: |
@@ -43,14 +44,14 @@ jobs:
       - name: Upload Pages build artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          name: github-pages-build
-          path: './HelpPage/opt'
+          name: "github-pages-build"
+          path: "./HelpPage/opt"
           retention-days: 90
 
   deploy:
     # Run if the Android CI build was successful or if this is a manual workflow run
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-    needs: [ "build" ]
+    needs: ["build"]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -71,8 +72,7 @@ jobs:
       - name: Download Pages build artifact
         uses: actions/download-artifact@v2
         with:
-          name: github-pages-build
-          path: .
+          name: "github-pages-build"
 
       - name: Extract Pages build artifact
         run: |
@@ -88,12 +88,12 @@ jobs:
       - name: Upload final Pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          name: github-pages-deploy
-          path: ./pages-build
+          name: "github-pages-deploy"
+          path: "./pages-build"
           retention-days: 90
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
         with:
-          artifact-name: github-pages-deploy
+          artifact_name: "github-pages-deploy"
