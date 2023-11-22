@@ -68,7 +68,7 @@ jobs:
         uses: actions/configure-pages@v3
 
       - name: Download Pages build artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: "github-pages-build"
 
