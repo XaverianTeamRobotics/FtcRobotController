@@ -75,19 +75,21 @@ jobs:
           path: .
 
       - name: Extract Pages build artifact
-        run: tar -xvf artifact.tar
+        run: |
+          mkdir pages-build
+          tar -xvf artifact.tar -C pages-build
 
       - name: Download the latest APK
         run: |
-          mkdir -p ./artifact/apk/bin
-          cd ./artifact/apk/bin
+          mkdir -p ./pages-build/apk/bin
+          cd ./pages-build/apk/bin
           curl -LO https://github.com/XaverianTeamRobotics/FtcRobotController/releases/download/latest-ci-build/TeamCode-debug.apk
 
       - name: Upload final Pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
           name: github-pages-deploy
-          path: ./artifact
+          path: ./pages-build
           retention-days: 90
 
       - name: Deploy to GitHub Pages
