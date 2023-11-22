@@ -1,24 +1,30 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
+# Before changing any of these workflow triggers, make sure you understand the if statements for each of the jobs
 on:
   # Run automatically after the Android CI release finishes
   workflow_run:
-    workflows: ["Android CI"]
-    branches: ["master"]
-    types: ["completed"]
+    workflows:
+      - Android CI
+    branches:
+      - master
+    types:
+      - completed
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
   # Run on pull requests to master
   pull_request:
     # Note that this specifies the target branch, not the branch that the PR is from
-    branches: ["master"]
+    branches:
+      - master
 
 jobs:
   build:
     # Run if the Android CI build was successful, on PRs from docs/ branches, or if this is a manual workflow run
     if: ${{ github.event.workflow_run.conclusion == 'success' || startsWith(github.head_ref, 'docs/') || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,9 +36,9 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: "11"
-          distribution: "temurin"
-          cache: "gradle"
+          java-version: 11
+          distribution: temurin
+          cache: gradle
 
       - name: Build JavaDoc using Dokka
         run: |
@@ -42,14 +48,15 @@ jobs:
       - name: Upload Pages build artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          name: "github-pages-build"
-          path: "./HelpPage/build"
+          name: github-pages-build
+          path: ./HelpPage/build
           retention-days: 90
 
   deploy:
     # Only run deployment from the master branch and not on pull requests
     if: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
-    needs: ["build"]
+    needs:
+      - build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -61,8 +68,9 @@ jobs:
       id-token: write
     # Only allow one concurrent deployment
     concurrency:
-      group: "pages"
+      group: pages
       cancel-in-progress: false
+
     steps:
       - name: Configure Pages
         uses: actions/configure-pages@v3
@@ -70,7 +78,7 @@ jobs:
       - name: Download Pages build artifact
         uses: actions/download-artifact@v2
         with:
-          name: "github-pages-build"
+          name: github-pages-build
 
       - name: Extract Pages build artifact
         run: |
@@ -86,24 +94,26 @@ jobs:
       - name: Upload final Pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          name: "github-pages-deploy"
-          path: "./pages-build"
+          name: github-pages-deploy
+          path: ./pages-build
           retention-days: 90
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
         with:
-          artifact_name: "github-pages-deploy"
+          artifact_name: github-pages-deploy
 
   test-deploy:
-    needs: ["build"]
+    needs:
+      - build
     runs-on: ubuntu-latest
+
     steps:
       - name: Download Pages build artifact
         uses: actions/download-artifact@v2
         with:
-          name: "github-pages-build"
+          name: github-pages-build
 
       - name: Extract Pages build artifact
         run: |
@@ -116,8 +126,8 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: "xbhs-robotics-docs"
-          directory: "pages-build"
+          projectName: xbhs-robotics-docs
+          directory: pages-build
 
       - name: Add comment with test deployment URL
         if: ${{ github.event_name == 'pull_request' }}

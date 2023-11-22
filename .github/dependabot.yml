@@ -1,21 +1,25 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "daily"
+      interval: daily
     allow:
-      - dependency-name: "*"
-        dependency-type: "all"
-    assignees: ["MatthewL246", "michaell4438"]
-    open-pull-requests-limit: 10
+      - dependency-name: '*'
+        dependency-type: all
+    assignees:
+      - MatthewL246
+      - michaell4438
 
-  - package-ecosystem: "gradle"
-    directory: "/"
+    open-pull-requests-limit: 10
+  - package-ecosystem: gradle
+    directory: /
     schedule:
-      interval: "daily"
+      interval: daily
     allow:
-      - dependency-name: "*"
-        dependency-type: "all"
-    assignees: ["MatthewL246", "michaell4438"]
+      - dependency-name: '*'
+        dependency-type: all
+    assignees:
+      - MatthewL246
+      - michaell4438
     open-pull-requests-limit: 10

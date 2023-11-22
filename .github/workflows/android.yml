@@ -15,9 +15,9 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: "11"
-          distribution: "temurin"
-          cache: "gradle"
+          java-version: 11
+          distribution: temurin
+          cache: gradle
 
       - name: Build with Gradle
         run: ./gradlew assembleDebug --scan --stacktrace --info --no-daemon -x test
@@ -25,16 +25,17 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: "TeamCode-debug.apk"
-          path: "TeamCode/build/outputs/apk/debug/TeamCode-debug.apk"
+          name: TeamCode-debug.apk
+          path: TeamCode/build/outputs/apk/debug/TeamCode-debug.apk
 
   release:
     runs-on: ubuntu-latest
-    needs: ["build"]
+    needs:
+      - build
     if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     concurrency:
-      group: "release"
-      cancel-in-progress: true
+      group: release
+      cancel-in-progress: false
 
     steps:
       - name: Checkout repository
@@ -45,7 +46,7 @@ jobs:
       - name: Download the APK artifact
         uses: actions/download-artifact@v3
         with:
-          name: "TeamCode-debug.apk"
+          name: TeamCode-debug.apk
 
       - name: Update the release tag
         run: |
