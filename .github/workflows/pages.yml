@@ -22,11 +22,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build website
-        run: |
-          echo -e "Running build script with Python..."
-          python deploy.py
-          echo -e "Script complete."
-        shell: "bash"
+        run: build.sh
         working-directory: ./HelpPage/scripts/
 
       - name: Set up JDK
@@ -39,13 +35,13 @@ jobs:
       - name: Build JavaDoc using Dokka
         run: |
           ./gradlew :TeamCode:dokkaHtml --no-daemon
-          mv ./TeamCode/build/dokka/html ./HelpPage/opt/javadoc
+          mv ./TeamCode/build/dokka/html ./HelpPage/build/javadoc
 
       - name: Upload Pages build artifact
         uses: actions/upload-pages-artifact@v2
         with:
           name: "github-pages-build"
-          path: "./HelpPage/opt"
+          path: "./HelpPage/build"
           retention-days: 90
 
   deploy:
