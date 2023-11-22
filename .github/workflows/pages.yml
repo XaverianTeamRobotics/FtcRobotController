@@ -61,7 +61,7 @@ jobs:
       id-token: write
     # Only allow one concurrent deployment
     concurrency:
-      group: "pages"
+      group: "pages-${{ github.job }}"
       cancel-in-progress: false
     steps:
       - name: Configure Pages
@@ -99,6 +99,10 @@ jobs:
   test-deploy:
     needs: ["build"]
     runs-on: ubuntu-latest
+    # Only allow one concurrent deployment
+    concurrency:
+      group: "pages-${{ github.job }}"
+      cancel-in-progress: false
     steps:
       - name: Download Pages build artifact
         uses: actions/download-artifact@v2
