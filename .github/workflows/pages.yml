@@ -110,12 +110,21 @@ jobs:
         run: |
           mkdir pages-build
           tar -xvf artifact.tar -C pages-build
-            - name: Cloudflare Pages GitHub Action
 
       - name: Upload build to Cloudflare Pages
+        id: test-deployment
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: "xbhs-robotics-docs"
           directory: "pages-build"
+
+      - name: Add comment with test deployment URL
+        run: >
+          gh pr comment ${{ github.event.number }}
+          --repo ${{ github.repository }}
+          --body "Your docs changes were built successfully!
+          View a preview of them at ${{ steps.test-deployment.outputs.url }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
