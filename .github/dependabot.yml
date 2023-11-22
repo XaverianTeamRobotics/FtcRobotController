@@ -10,8 +10,8 @@ updates:
     assignees:
       - MatthewL246
       - michaell4438
-
     open-pull-requests-limit: 10
+
   - package-ecosystem: gradle
     directory: /
     schedule:
