@@ -20,12 +20,12 @@ echo Imgutil build complete.
 echo "Bundling..."
 cd ..
 mkdir output
-# Copy docusaurus build to final output
-cp -R ./doc/build ./build
-# Copy imgutil build to final output
-cp -R ./imgutil/dist ./build/imgutil
-# Copy static files to final output
-cp -R ./apk ./build/apk
-cp -R ./legacy-apk ./build/legacy-apk
+# Move docusaurus build to final output
+mv ./doc/build ./build
+# Move imgutil build to final output
+mv ./imgutil/dist ./build/imgutil
+# Move static files to final output
+mv ./apk ./build/apk
+mv ./legacy-apk ./build/legacy-apk
 
 echo Build complete.
