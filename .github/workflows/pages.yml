@@ -16,6 +16,8 @@ on:
 
 jobs:
   build:
+    # Run if the Android CI build was successful, on PRs from docs/ branches, or if this is a manual workflow run
+    if: ${{ github.event.workflow_run.conclusion == 'success' || sstartsWith(github.head_ref, 'docs/') || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -45,8 +47,8 @@ jobs:
           retention-days: 90
 
   deploy:
-    # Run if the Android CI build was successful or if this is a manual workflow run
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    # Run only on master branch and not on pull requests
+    if: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
     needs: ["build"]
     runs-on: ubuntu-latest
     environment:
