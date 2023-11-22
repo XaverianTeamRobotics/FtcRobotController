@@ -95,3 +95,27 @@ jobs:
         uses: actions/deploy-pages@v2
         with:
           artifact_name: "github-pages-deploy"
+
+  test-deploy:
+    if: ${{ github.event_name == 'pull_request' }}
+    needs: ["build"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Pages build artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: "github-pages-build"
+
+      - name: Extract Pages build artifact
+        run: |
+          mkdir pages-build
+          tar -xvf artifact.tar -C pages-build
+            - name: Cloudflare Pages GitHub Action
+
+      - name: Upload build to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: "xbhs-robotics-docs"
+          directory: "pages-build"
