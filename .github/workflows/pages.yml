@@ -68,7 +68,7 @@ jobs:
       id-token: write
     # Only allow one concurrent deployment
     concurrency:
-      group: pages
+      group: pages-deploy
       cancel-in-progress: false
 
     steps:
@@ -108,6 +108,10 @@ jobs:
     needs:
       - build
     runs-on: ubuntu-latest
+    # Only allow one concurrent test deployment per branch
+    concurrency:
+      group: pages-test-deploy-${{ github.ref }}
+      cancel-in-progress: true
 
     steps:
       - name: Download Pages build artifact
