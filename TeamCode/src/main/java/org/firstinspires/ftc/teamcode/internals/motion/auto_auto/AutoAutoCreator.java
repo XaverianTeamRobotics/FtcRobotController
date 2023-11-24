@@ -33,11 +33,13 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
         Pose2d start = config.getTeamColor() == 0 ? new Pose2d(12, 64.50, Math.toRadians(-90.00)) : new Pose2d(12, -64.50, Math.toRadians(90.00));
         Auto auto = new Auto(start);
         TrajectorySequenceBuilder builder = auto.begin();
+        // TEMPORARY!!!!
         if (config.getTeamColor() == 0) {
             builder = new BlueLeftToLeftBackdrop().addPathSegment(builder);
         } else {
             builder = new RedRightToRightBackdrop().addPathSegment(builder);
         }
+
         auto = builder.completeTrajectory().complete();
 
         runner = new AutoRunner(auto, auto.getDrivetrain(), null, null, null);
