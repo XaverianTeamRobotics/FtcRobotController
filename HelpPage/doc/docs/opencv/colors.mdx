@@ -64,3 +64,45 @@ Now why is this useful? The YCrCb color scheme is great because **_brightness an
 that we can interpret the colors, regardless of what the brightness of our surroundings are, as opposed to RGB where a
 change in brightness affects all three channels.
 
+## Converting between colors
+
+Converting between color spaces is really easy, but you have to keep track of when you switch, because there is no way to get
+OpenCV to tell you what color space you are using.
+
+
+First, we have to know what our source color space is. By default, the `input` parameter is in RGB.
+
+Second, we need to know what our intended color space is. Supported color spaces are RGB, GRAY, HSV, LAB, XYZ, YCrCb (and more).
+
+Then we can simply use the following function:
+```java
+ImgProc.cvtColor(source, destination , color_space);
+```
+
+Source and destination are both any `Mat`, though ideally the destination should be blank.
+
+For the color space parameter, there are constants in the ImgProc class. Some examples are:
+ - ImgProc.COLOR_RGB2HSV
+ - ImgProc.COLOR_HSV2RGB
+
+:::tip
+You can use the autocomplete menu to list what conversions are supported. Just type in `ImgProc.COLOR_` and let the IDE
+list all the options.
+
+You may have to convert from one color to another first.
+:::
+
+As an example, we can put the grayscale version of RGB in a new `Mat` like so:
+```java
+Mat inputGray = new Mat();
+ImgProc.cvtColor(input, inputGray, ImgProc.COLOR_RGB2GRAY);
+```
+
+Whenever we are done, we should make sure `input` is still in RGB. If it isn't, OpenCV will assume it is and the display
+in the dashboard will have incorrect colors.
+
+:::caution
+Whenever we convert to grayscale, we lose all color information. Whenever we convert back to RGB, it will still not have color.
+This is because all color spaces except grayscale have 3 channels, whereas grayscale only has 1, so it is impossible to get those
+channels back.
+:::
