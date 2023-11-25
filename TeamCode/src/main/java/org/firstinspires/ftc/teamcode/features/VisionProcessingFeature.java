@@ -16,9 +16,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class SpikeMarkDetector extends Feature implements Buildable {
+public class VisionProcessingFeature extends Feature implements Buildable {
 
-    private VisionPipeline detector;
+    private VisionPipeline pipeline;
 
     private int spot = 0;
     private final ArrayList<Integer> previousSpots = new ArrayList<>();
@@ -30,13 +30,15 @@ public class SpikeMarkDetector extends Feature implements Buildable {
     /**
      * Use this when only using one camera at a time.
      */
-    public SpikeMarkDetector() {}
+    public VisionProcessingFeature(VisionPipeline pipeline) {
+        this.pipeline = pipeline;
+    }
 
     /**
      * Use this when two cameras are streaming concurrently.
      * @param index The index of the camera, either 0 or 1.
      */
-    public SpikeMarkDetector(int index) {
+    public VisionProcessingFeature(int index) {
         indexed = true;
         this.index = index;
     }
@@ -59,11 +61,7 @@ public class SpikeMarkDetector extends Feature implements Buildable {
             camera = OpenCvCameraFactory.getInstance().createWebcam(Devices.camera0, cameraMonitorViewId);
         }
 
-        detector = new SpikeMarkDetectionPipeline();
-
-        detector.setDebugEnabled(true);
-
-        camera.setPipeline(detector);
+        camera.setPipeline(pipeline);
         FtcDashboard.getInstance().startCameraStream(camera, 0);
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -88,7 +86,7 @@ public class SpikeMarkDetector extends Feature implements Buildable {
 
     @Override
     public void loop() {
-        spot = detector.getPosition();
+        spot = pipeline.getPosition();
         previousSpots.add(spot);
         // Get the average spot out of all spots, then round it
         averageSpot = (int) Math.round(previousSpots.stream().mapToInt(Integer::intValue).average().orElse(0));
@@ -107,11 +105,11 @@ public class SpikeMarkDetector extends Feature implements Buildable {
     }
 
     public void setTeamColor(SpikeMarkDetectionPipeline.TeamColor color) {
-        detector.setTeamColor(color);
+        pipeline.setTeamColor(color);
     }
 
     public void setDebugEnabled(boolean enabled) {
-        detector.setDebugEnabled(enabled);
+        pipeline.setDebugEnabled(enabled);
     }
 
 }

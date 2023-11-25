@@ -167,6 +167,7 @@ const config = {
       prism: {
         theme: require("prism-react-renderer/themes/dracula"),
         darkTheme: require("prism-react-renderer/themes/dracula"),
+        additionalLanguages: ['java'],
       },
       footer: {
         style: "light",

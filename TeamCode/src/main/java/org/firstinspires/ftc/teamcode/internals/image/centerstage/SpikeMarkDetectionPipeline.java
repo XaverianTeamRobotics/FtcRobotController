@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.internals.image.centerstage;
 
 import com.acmerobotics.dashboard.config.Config;
+import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
@@ -13,7 +14,7 @@ import static org.opencv.features2d.Features2d.drawKeypoints;
 import static org.opencv.imgproc.Imgproc.*;
 
 @Config
-public class SpikeMarkDetectionPipeline extends OpenCvPipeline {
+public class SpikeMarkDetectionPipeline extends VisionPipeline {
     public static int ZONE1_X = 50;
     public static int ZONE1_Y = 240;
     public static int ZONE1_WIDTH = 100;
@@ -22,12 +23,9 @@ public class SpikeMarkDetectionPipeline extends OpenCvPipeline {
     public static int ZONE2_Y = 230;
     public static int ZONE2_WIDTH = 160;
     public static int ZONE2_HEIGHT = 200;
-    private volatile int position = 0;
-    private volatile boolean debugEnabled = false;
     public static boolean isBlueTeam = true;
     public static int BLUE_THRESH = 150;
     public static int RED_THRESH = 150;
-
     public static int MIN_AVG_AREA = 45;
 
     @Override
@@ -100,27 +98,9 @@ public class SpikeMarkDetectionPipeline extends OpenCvPipeline {
         return input;
     }
 
-    public int getPosition() {
-        return position;
-    }
-    public TeamColor getTeamColor() {
-        if (isBlueTeam) return TeamColor.BLUE;
-        else return TeamColor.RED;
-    }
-
+    @Override
     public void setTeamColor(TeamColor teamColor) {
         isBlueTeam = teamColor == TeamColor.BLUE;
-    }
-
-    public boolean isDebugEnabled() {
-        return debugEnabled;
-    }
-
-    public void setDebugEnabled(boolean debugEnabled) {
-        this.debugEnabled = debugEnabled;
-    }
-
-    public enum TeamColor {
-        BLUE, RED
+        color = teamColor;
     }
 }
