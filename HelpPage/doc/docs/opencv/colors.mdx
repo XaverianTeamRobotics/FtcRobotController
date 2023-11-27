@@ -1,0 +1,66 @@
+---
+sidebar_position: 2
+title: Color Spaces
+sidebar_label: Color Spaces
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Color Spaces
+
+## How do we see colors?
+
+Our eyes see color in three components: red, green, and blue. The pixels on your screen are actually a combination of red,
+green, and blue lights, but because these lights are so close to each other compared to how far away your eyes are,
+they appear as one color. If you have a giant TV and you stand really close, you may actually be able to see each color 
+of pixel.
+
+Armed with this knowledge, we can break a color down into 3 channels, on for red, one for green, and one for blue. 
+Here's a picture of me flying an airplane.
+
+<img alt="Me flying an airplane" src="/img/opencv-guide/flying_airplane.jpeg" width="30%"/>
+
+But let's break that down into the three red, green, and blue channels.
+
+<Tabs>
+  <TabItem value="red" label="Red">
+    <img alt="Me flying an airplane" src="/img/opencv-guide/flying_airplane_red.jpeg" width="30%"/>
+  </TabItem>
+  <TabItem value="green" label="Green">
+    <img alt="Me flying an airplane" src="/img/opencv-guide/flying_airplane_green.jpeg" width="30%"/>
+  </TabItem>
+  <TabItem value="blue" label="Blue">
+    <img alt="Me flying an airplane" src="/img/opencv-guide/flying_airplane_blue.jpeg" width="30%"/>
+  </TabItem>
+</Tabs>
+
+Each channel represents how red, green or blue something is, where black means no color.
+
+## Looking through another lens
+
+But let's look at what happens if I change the image to a different color schemes. Try and guess what happens in each of
+the three channels.
+
+<Tabs>
+    <TabItem value="1" label="Channel 1">
+        <img alt="Me flying an airplane" src="/img/opencv-guide/flying_airplane_y.jpeg" width="30%"/>
+    </TabItem>
+    <TabItem value="2" label="Channel 2">
+        <img alt="Me flying an airplane" src="/img/opencv-guide/flying_airplane_Cr.jpeg" width="30%"/>
+    </TabItem>
+    <TabItem value="3" label="Channel 3">
+        <img alt="Me flying an airplane" src="/img/opencv-guide/flying_airplane_Cb.jpeg" width="30%"/>
+    </TabItem>
+</Tabs>
+
+That image uses a color scheme called YCrCb, where there are three channels, Y is luminance, Cr is red, and Cb is blue.
+This color scheme is based off how our brains *interpret* colors. We recognize objects based on the contrast in brightness.
+In the first channel, Y, you can clearly see the contrast between the dashboard and the sky as well as my body and the rest
+of the cockpit. If we look at the second channel, Cr, my skin stands out from my sweatshirt because the sweatshirt is blue
+and my skin is not. If we look at the third channel, Cb, you can see that my blue sweatshirt stands out from everything else.
+
+Now why is this useful? The YCrCb color scheme is great because **_brightness and color are not intertwined_**. This means
+that we can interpret the colors, regardless of what the brightness of our surroundings are, as opposed to RGB where a
+change in brightness affects all three channels.
+

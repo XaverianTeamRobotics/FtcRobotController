@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
  * Controls: Use the right trigger to raise the slide and the left trigger to lower it. Move the
  * right stick up or down to control the motor in port 5.
  */
-public class LinearSlide extends Feature {
+public class TiltableLinearSlide extends Feature {
     @Override
     public void loop() {
         Devices.motor4.setPower(0.25 * (Devices.controller1.getRightTrigger() - Devices.controller1.getLeftTrigger()));

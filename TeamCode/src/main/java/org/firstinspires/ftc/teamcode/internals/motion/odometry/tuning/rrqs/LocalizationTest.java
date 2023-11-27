@@ -5,6 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain;
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.SettingLoader;
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.SettingLoaderFailureException;
+import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
+import org.firstinspires.ftc.teamcode.internals.time.Clock;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -15,31 +20,64 @@ import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.Autonomo
  */
 //@Disabled
 @TeleOp(group = "drive")
-public class LocalizationTest extends LinearOpMode {
+public class LocalizationTest extends OperationMode {
+    private AutonomousDrivetrain drive;
+
     @Override
-    public void runOpMode() throws InterruptedException {
-        AutonomousDrivetrain drive = new AutonomousDrivetrain(hardwareMap);
-
+    public void construct() {
+        drive = new AutonomousDrivetrain(hardwareMap);
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
 
-        waitForStart();
+    @Override
+    public void run() {
+        drive.setWeightedDrivePower(
+                new Pose2d(
+                        -gamepad1.left_stick_y,
+                        -gamepad1.left_stick_x,
+                        -gamepad1.right_stick_x
+                )
+        );
 
-        while (!isStopRequested()) {
-            drive.setWeightedDrivePower(
-                    new Pose2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x,
-                            -gamepad1.right_stick_x
-                    )
-            );
+        drive.update();
 
+        Pose2d poseEstimate = drive.getPoseEstimate();
+        Logging.log("x", poseEstimate.getX());
+        Logging.log("y", poseEstimate.getY());
+        Logging.log("heading", poseEstimate.getHeading());
+        if (gamepad1.a) {
+            drive.setWeightedDrivePower(new Pose2d(0, 0, 0));
             drive.update();
 
-            Pose2d poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("x", poseEstimate.getX());
-            telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", poseEstimate.getHeading());
-            telemetry.update();
+            Logging.log("Saving...");
+            Logging.update();
+            Clock.sleep(1000);
+            Logging.clear();
+            Logging.update();
+            try {
+                SettingLoader.save();
+                Logging.log("Saved");
+                Logging.update();
+                Clock.sleep(1000);
+            } catch(SettingLoaderFailureException e) {
+                System.out.println("Saving settings failed! " + e.getMessage());
+                Logging.log("Couldn't save settings! Check logcat for more details.");
+                Logging.update();
+                e.printStackTrace();
+                System.out.println(e.toString());
+                Clock.sleep(1000);
+            }
         }
+        if (gamepad1.y) {
+            drive.setWeightedDrivePower(new Pose2d(0, 0, 0));
+            drive.update();
+            drive = new AutonomousDrivetrain(hardwareMap);
+            drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            Logging.log("Reset config");
+            Logging.update();
+            Clock.sleep(1000);
+        }
+        Logging.update();
     }
 }
