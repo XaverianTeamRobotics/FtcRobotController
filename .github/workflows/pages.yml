@@ -46,7 +46,7 @@ jobs:
           mv ./TeamCode/build/dokka/html ./HelpPage/build/javadoc
 
       - name: Upload Pages build artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v2
         with:
           name: github-pages-build
           path: ./HelpPage/build
@@ -115,7 +115,7 @@ jobs:
 
     steps:
       - name: Download Pages build artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: github-pages-build
 
