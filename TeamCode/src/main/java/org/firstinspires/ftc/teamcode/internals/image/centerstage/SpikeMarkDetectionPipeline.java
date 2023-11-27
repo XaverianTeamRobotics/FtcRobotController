@@ -42,15 +42,15 @@ public class SpikeMarkDetectionPipeline extends VisionPipeline {
         ArrayList<Mat> YCrCbChannels = new ArrayList<>();
         split(labColorSpace, YCrCbChannels);
 
+        // Get the channel of interest (Cb for blue team, Cr for red team)
+        int channelOfInterest = isBlueTeam ? 2 : 1;
+        Mat channel = YCrCbChannels.get(channelOfInterest);
+
         /*
          * Define the box surrounding where each position is
          * Zone 1: x1 = 100, x2 = 200, y1 = 240, y2 = 370
          * Zone 2: x1 = 400, x2 = 560, y1 = 230, y2 = 430
          */
-
-        int channelOfInterest = isBlueTeam ? 2 : 1;
-        Mat channel = YCrCbChannels.get(channelOfInterest);
-
         // Zone 1
         Rect zone1Rect = new Rect(ZONE1_X, ZONE1_Y, ZONE1_WIDTH, ZONE1_HEIGHT);
         Mat zone1 = new Mat(channel, zone1Rect);
