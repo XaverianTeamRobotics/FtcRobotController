@@ -111,15 +111,15 @@ const config = {
             position: "right",
             items: [
               {
-                href: "https://robotics.xbhs.net/apk",
+                href: "/apk/",
                 label: "Flash Robot Controller APK"
               },
               {
-                href: "https://robotics.xbhs.net/legacy-apk",
+                href: "/legacy-apk/",
                 label: "Download Driver Station APK"
               },
               {
-                href: "https://robotics.xbhs.net/imgutil",
+                href: "/imgutil/",
                 label: "Upload Images to robotics.xbhs.com"
               },
             ]
@@ -130,15 +130,15 @@ const config = {
             position: "right",
             items: [
               {
-                href: "https://robotics.xbhs.net/javadoc",
+                href: "/javadoc/",
                 label: "Javadoc (all)"
               },
               {
-                href: "https://robotics.xbhs.net/javadoc/-team-code/org.firstinspires.ftc.teamcode.features/index.html",
+                href: "/javadoc/-team-code/org.firstinspires.ftc.teamcode.features/index.html",
                 label: "Javadoc (features)"
               },
               {
-                href: "https://robotics.xbhs.net/javadoc/-team-code/org.firstinspires.ftc.teamcode.opmodes/index.html",
+                href: "/javadoc/-team-code/org.firstinspires.ftc.teamcode.opmodes/index.html",
                 label: "Javadoc (opmodes)"
               },
             ]
