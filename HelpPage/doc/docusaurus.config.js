@@ -112,15 +112,18 @@ const config = {
             items: [
               {
                 href: "/apk/",
-                label: "Flash Robot Controller APK"
+                label: "Flash Robot Controller APK",
+                target: '_blank'
               },
               {
                 href: "/legacy-apk/",
-                label: "Download Driver Station APK"
+                label: "Download Driver Station APK",
+                target: '_blank'
               },
               {
                 href: "/imgutil/",
-                label: "Upload Images to robotics.xbhs.com"
+                label: "Upload Images to robotics.xbhs.com",
+                target: '_blank'
               },
             ]
           },
@@ -131,15 +134,18 @@ const config = {
             items: [
               {
                 href: "/javadoc/",
-                label: "Javadoc (all)"
+                label: "Javadoc (all)",
+                target: '_blank'
               },
               {
                 href: "/javadoc/-team-code/org.firstinspires.ftc.teamcode.features/index.html",
-                label: "Javadoc (features)"
+                label: "Javadoc (features)",
+                target: '_blank'
               },
               {
                 href: "/javadoc/-team-code/org.firstinspires.ftc.teamcode.opmodes/index.html",
-                label: "Javadoc (opmodes)"
+                label: "Javadoc (opmodes)",
+                target: '_blank'
               },
             ]
           },
