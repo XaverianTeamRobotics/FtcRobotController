@@ -30,13 +30,14 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
         config = new AutoAutoCreatorConfig();
         config.askQuestions();
         if (!config.isValid()) throw new RuntimeException("Invalid auto auto config");
-        Pose2d start = config.getTeamColor() == 0 ? new Pose2d(12, 64.50, Math.toRadians(-90.00)) : new Pose2d(12, -64.50, Math.toRadians(90.00));
-        Auto auto = new Auto(start);
-        TrajectorySequenceBuilder builder = auto.begin();
+        AutoNoNavigationZones.addCenterstageDefaults();
+        /* TODO: Left or right side */ Pose2d start = config.getTeamColor() == 0 ?
+                new Pose2d(12, 64.50, Math.toRadians(-90.00)) : new Pose2d(12, -64.50, Math.toRadians(90.00));
+        TrajectorySequenceBuilder builder = new Auto(start).begin();
 
 
 
-        auto = builder.completeTrajectory().complete();
+        Auto auto = builder.completeTrajectory().complete();
 
         runner = new AutoRunner(auto, auto.getDrivetrain(), null, null, null);
     }

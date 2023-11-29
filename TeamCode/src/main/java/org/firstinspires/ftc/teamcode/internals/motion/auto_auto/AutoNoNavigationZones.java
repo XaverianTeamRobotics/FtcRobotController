@@ -24,35 +24,65 @@ public class AutoNoNavigationZones {
         public NoNavZone(Vector2d point1, Vector2d point2) {
             this.point1 = point1;
             this.point2 = point2;
+        }
 
-            // Make sure point1 is the bottom left point and point2 is the top right point
-            if (point1.getX() > point2.getX()) {
-                double temp = point1.getX();
-                point1 = new Vector2d(point2.getX(), point1.getY());
-                point2 = new Vector2d(temp, point2.getY());
-            }
+        public boolean isInside(double x, double y) {
+            // Check if the point is inside the no navigation zone
 
-            if (point1.getY() > point2.getY()) {
-                double temp = point1.getY();
-                point1 = new Vector2d(point1.getX(), point2.getY());
-                point2 = new Vector2d(point2.getX(), temp);
-            }
+            // Define the rectangle as 4 doubles: top, bottom, left, right
+
+            // Top is the greater y-value
+            double top = Math.max(point1.getY(), point2.getY());
+            // Bottom is the lesser y-value
+            double bottom = Math.min(point1.getY(), point2.getY());
+
+            // Left is the lesser x-value
+            double left = Math.min(point1.getX(), point2.getX());
+            // Right is the greater x-value
+            double right = Math.max(point1.getX(), point2.getX());
+
+            return (bottom <= y && y <= top) && (left <= x && x <= right);
         }
     }
 
+    /**
+     * Adds a no navigation zone to the list of no navigation zones
+     * @param point1 The bottom left point of the no navigation zone
+     * @param point2 The top right point of the no navigation zone
+     */
     public static void addNoNavZone(Vector2d point1, Vector2d point2) {
         NO_NAV_ZONES.add(new NoNavZone(point1, point2));
     }
 
-    public static void addCenterstageDefaults() {
-        NO_NAV_ZONES.add(new NoNavZone(new Vector2d(24, -12), new Vector2d(72, 12)));
+    /**
+     * Adds a no navigation zone to the list of no navigation zones
+     * @param zone The no navigation zone to add
+     */
+    public static void addNoNavZone(NoNavZone zone) {
+        NO_NAV_ZONES.add(zone);
     }
 
+    /**
+     * Adds the default no navigation zones for the center stage field
+     */
+    public static void addCenterstageDefaults() {
+        addNoNavZone(new NoNavZone(new Vector2d(-24, 72), new Vector2d(0, 24)));        // Blue truss
+        addNoNavZone(new NoNavZone(new Vector2d(-24, -72), new Vector2d(0, -24)));      // Red truss
+        addNoNavZone(new NoNavZone(new Vector2d(60, 24), new Vector2d(72, 48)));        // Blue backdrop
+        addNoNavZone(new NoNavZone(new Vector2d(60, -24), new Vector2d(72, -48)));      // Red backdrop
+    }
+
+    /**
+     * Check if an array of points is intersecting any of the no navigation zones
+     * @param points The array of points to check
+     * @param checkRadius Whether to check the radius around each point
+     * @return True if the array of points is intersecting any of the no navigation zones, false otherwise
+     */
     private static boolean isIntersecting(ArrayList<Vector2d> points, boolean checkRadius) {
         // Check if any of the points are inside any of the no navigation zones
         for (Vector2d point : points)
             for (NoNavZone zone : NO_NAV_ZONES)
-                if (isInside(point.getX(), point.getY(), zone.point1, zone.point2))
+                if (zone.isInside(point.getX(), point.getY()))
                     return true;
 
         if (checkRadius) { // We need to check the radius around each point, defined by ROBOT_MIN_SAFE_RADIUS
@@ -67,21 +97,27 @@ public class AutoNoNavigationZones {
                 }
             }
 
-            if (isIntersecting(pointsAround, false)) return true;
+            return isIntersecting(pointsAround, false);
         }
         return false;
     }
 
+    /**
+     * Check if a line is intersecting any of the no navigation zones
+     * @param line The line to check
+     * @param checkRadius Whether to check the radius around each point
+     * @return True if the array of points is intersecting any of the no navigation zones, false otherwise
+     */
     public static boolean isIntersecting(Line line, boolean checkRadius) {
         // Generate an array of points along the line
         double m = (line.getPoint2().getY() - line.getPoint1().getY()) / (line.getPoint2().getX() - line.getPoint1().getX());
 
-        MathFunction f = x -> line.getPoint1().getY() + m * (x - line.getPoint1().getX());
+        MathFunction f = line.getFunction();
 
         ArrayList<Vector2d> points = new ArrayList<>();
         // If the line is vertical, we need to use a different method
         if (!Double.isInfinite(m)) {
-            for (double x = line.getPoint1().getX(); x <= line.getPoint2().getX(); x += 0.01) {
+            for (double x = Math.min(line.getPoint1().getX(), line.getPoint2().getX()); x <= Math.max(line.getPoint1().getX(), line.getPoint2().getX()); x += 0.01) {
                 points.add(new Vector2d(x, f.evaluate(x)));
             }
         } else {
@@ -94,11 +130,12 @@ public class AutoNoNavigationZones {
         return isIntersecting(points, checkRadius);
     }
 
+    /**
+     * Check if a line or the radius around the line is intersecting any of the no navigation zones
+     * @param line The line to check
+     * @return True if the array of points is intersecting any of the no navigation zones, false otherwise
+     */
     public static boolean isIntersecting(Line line) {
         return isIntersecting(line, true);
-    }
-
-    private static boolean isInside(double x, double y, Vector2d point1, Vector2d point2) {
-        return (point1.getX() <= x && x <= point2.getX()) && (point1.getY() <= y && y <= point2.getY());
     }
 }
