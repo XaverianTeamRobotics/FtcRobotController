@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.opmodes.ScrimmageBotCenterstage1;
 
 import java.util.UUID;
 
-public class AutoAutoCreator extends OperationMode implements AutonomousOperation {
+public class BasicAutoAutoCreator extends OperationMode implements AutonomousOperation {
     private AutoAutoCreatorConfig config;
     Timer time;
     AutoRunner runner;
@@ -33,8 +33,12 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
         Pose2d start = config.getTeamColor() == 0 ? new Pose2d(12, 64.50, Math.toRadians(-90.00)) : new Pose2d(12, -64.50, Math.toRadians(90.00));
         Auto auto = new Auto(start);
         TrajectorySequenceBuilder builder = auto.begin();
-
-
+        // TEMPORARY!!!!
+        if (config.getTeamColor() == 0) {
+            builder = new BlueLeftToLeftBackdrop().addPathSegment(builder);
+        } else {
+            builder = new RedRightToRightBackdrop().addPathSegment(builder);
+        }
 
         auto = builder.completeTrajectory().complete();
 
