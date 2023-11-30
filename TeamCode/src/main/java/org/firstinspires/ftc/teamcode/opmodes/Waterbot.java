@@ -32,7 +32,7 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 public class Waterbot extends OperationMode implements TeleOperation {
     @Override
     public void construct() {
-        registerFeature(new NativeMecanumDrivetrain(false));
+        registerFeature(new NativeMecanumDrivetrain(true));
         registerFeature(new PixelGrabber());
         registerFeature(new ActuatorFeature());
         registerFeature(new TiltableLinearSlide());
