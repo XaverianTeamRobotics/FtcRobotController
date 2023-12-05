@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BestPathFinder {
-    private ArrayList<ArrayList<AutoAutoPathSegment>> allPaths;
-    private ArrayList<AutoAutoPathSegment> pathSegments;
+    private final ArrayList<ArrayList<AutoAutoPathSegment>> allPaths = new ArrayList<>();
+    private final ArrayList<AutoAutoPathSegment> pathSegments = new ArrayList<>();
 
     public ArrayList<ArrayList<AutoAutoPathSegment>> getAllPaths() {
-        ArrayList<ArrayList<AutoAutoPathSegment>> allPaths = new ArrayList<>();
+        allPaths.clear();
 
         int duplicates = 0;
         while (duplicates < 100) {
@@ -34,11 +34,12 @@ public class BestPathFinder {
                 allPaths.add(path);
             }
         }
-        this.allPaths = allPaths;
         return allPaths;
     }
 
     public ArrayList<AutoAutoPathSegment> getPathSegments() {
+        pathSegments.clear();
+
         pathSegments.add(new BlueLeftToLeftBackdrop());
         pathSegments.add(new OriginToBlueBackdrop());
         pathSegments.add(new RedRightToRightBackdrop());
