@@ -22,16 +22,4 @@ public abstract class AutoAutoPathSegment {
      * @return the end position of the path segment
      */
     public abstract Vector2d getEndPosition();
-
-    /**
-     * Gets the start rotation of the path segment
-     * @return the start rotation of the path segment
-     */
-    public abstract double getStartRotation();
-
-    /**
-     * Gets the end rotation of the path segment
-     * @return the end rotation of the path segment
-     */
-    public abstract double getEndRotation();
 }

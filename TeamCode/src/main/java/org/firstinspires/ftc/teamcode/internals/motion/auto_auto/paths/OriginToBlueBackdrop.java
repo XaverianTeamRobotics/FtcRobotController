@@ -21,14 +21,4 @@ public class OriginToBlueBackdrop extends AutoAutoPathSegment {
     public Vector2d getEndPosition() {
         return new Vector2d(48.00, 36.00);
     }
-
-    @Override
-    public double getStartRotation() {
-        return 0;
-    }
-
-    @Override
-    public double getEndRotation() {
-        return 0;
-    }
 }

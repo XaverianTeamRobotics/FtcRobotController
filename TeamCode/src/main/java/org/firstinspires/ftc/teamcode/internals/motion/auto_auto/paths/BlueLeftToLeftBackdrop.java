@@ -19,14 +19,4 @@ public class BlueLeftToLeftBackdrop extends AutoAutoPathSegment {
     public Vector2d getEndPosition() {
         return new Vector2d(60.00, 64.50);
     }
-
-    @Override
-    public double getStartRotation() {
-        return -90;
-    }
-
-    @Override
-    public double getEndRotation() {
-        return -90;
-    }
 }

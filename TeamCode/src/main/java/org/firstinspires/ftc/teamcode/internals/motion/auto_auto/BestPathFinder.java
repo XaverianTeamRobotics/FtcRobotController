@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.BlueLeftToLeftBackdrop;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.OriginToBlueBackdrop;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.RedRightToRightBackdrop;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -33,5 +36,22 @@ public class BestPathFinder {
         }
         this.allPaths = allPaths;
         return allPaths;
+    }
+
+    public ArrayList<AutoAutoPathSegment> getPathSegments() {
+        pathSegments.add(new BlueLeftToLeftBackdrop());
+        pathSegments.add(new OriginToBlueBackdrop());
+        pathSegments.add(new RedRightToRightBackdrop());
+
+        // For every two path segments, add a line which connects the start of one to the end of the other
+        for (AutoAutoPathSegment segment1 : pathSegments) {
+            for (AutoAutoPathSegment segment2 : pathSegments) {
+                if (segment1.getStartPosition() != segment2.getEndPosition()) {
+                    pathSegments.add(new LineToPathSegment(segment2.getEndPosition(), segment1.getStartPosition()));
+                }
+            }
+        }
+
+        return pathSegments;
     }
 }
