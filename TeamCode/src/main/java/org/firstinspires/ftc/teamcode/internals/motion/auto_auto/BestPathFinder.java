@@ -14,7 +14,6 @@ public class BestPathFinder {
 
         int duplicates = 0;
         while (duplicates < 100) {
-            // Instance of random class
             Random rand = new Random();
 
             int length = rand.nextInt(pathSegments.size()) + 1;
@@ -22,7 +21,8 @@ public class BestPathFinder {
             for (int i = 0; i < length; i++) {
                 int index = rand.nextInt(pathSegments.size());
                 AutoAutoPathSegment segment = pathSegments.get(index);
-                path.add(segment);
+                if (!pathSegments.contains(segment)) path.add(segment);
+                else i--;
             }
 
             if (allPaths.contains(path)) {
