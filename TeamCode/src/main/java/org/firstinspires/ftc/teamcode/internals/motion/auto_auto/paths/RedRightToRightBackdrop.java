@@ -4,7 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoAutoPathSegment;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
 
-public class RedRightToRightBackdrop implements AutoAutoPathSegment {
+public class RedRightToRightBackdrop extends AutoAutoPathSegment {
     @Override
     public TrajectorySequenceBuilder addPathSegment(TrajectorySequenceBuilder builder) {
         return builder.lineTo(getEndPosition());
