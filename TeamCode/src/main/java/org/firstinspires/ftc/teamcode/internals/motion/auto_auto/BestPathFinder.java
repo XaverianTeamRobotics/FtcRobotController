@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
 
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.BlueLeftToLeftBackdrop;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.OriginToBlueBackdrop;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.RedRightToRightBackdrop;
@@ -12,7 +11,13 @@ public class BestPathFinder {
     private final ArrayList<ArrayList<AutoAutoPathSegment>> allPaths = new ArrayList<>();
     private final ArrayList<AutoAutoPathSegment> pathSegments = new ArrayList<>();
 
-    public ArrayList<ArrayList<AutoAutoPathSegment>> getAllPaths() {
+    public BestPathFinder() {
+        populatePathSegments();
+        populateAllPaths();
+        trimAllPaths();
+    }
+
+    private void populateAllPaths() {
         allPaths.clear();
 
         int duplicates = 0;
@@ -34,12 +39,15 @@ public class BestPathFinder {
                 allPaths.add(path);
             }
         }
-        return allPaths;
     }
 
-    public ArrayList<AutoAutoPathSegment> getPathSegments() {
+    /**
+     * Populate the pathSegments list
+     */
+    private void populatePathSegments() {
         pathSegments.clear();
 
+        // ADD PATH SEGMENTS HERE!!!!
         pathSegments.add(new BlueLeftToLeftBackdrop());
         pathSegments.add(new OriginToBlueBackdrop());
         pathSegments.add(new RedRightToRightBackdrop());
@@ -53,6 +61,34 @@ public class BestPathFinder {
             }
         }
 
+    }
+
+    /**
+     * Trim paths which are not continuous
+     */
+    private void trimAllPaths() {
+        ArrayList<ArrayList<AutoAutoPathSegment>> newAllPaths = new ArrayList<>();
+        for (ArrayList<AutoAutoPathSegment> path : allPaths ) {
+            boolean pathValid = true;
+            for (int i = 1; i < path.size(); i++) {
+                if (path.get(i).getStartPosition() != path.get(i-1).getEndPosition()) {
+                    pathValid = false;
+                    break;
+                }
+            }
+
+            if (pathValid) newAllPaths.add(path);
+        }
+        allPaths.clear();
+        allPaths.addAll(newAllPaths);
+
+    }
+
+    public ArrayList<ArrayList<AutoAutoPathSegment>> getAllPaths() {
+        return allPaths;
+    }
+
+    public ArrayList<AutoAutoPathSegment> getPathSegments() {
         return pathSegments;
     }
 }
