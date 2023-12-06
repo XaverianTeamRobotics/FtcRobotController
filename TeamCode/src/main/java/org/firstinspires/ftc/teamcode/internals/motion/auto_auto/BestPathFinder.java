@@ -105,8 +105,10 @@ public class BestPathFinder {
                     if (isVector2dEquals(pathStart, start)) {
                         ArrayList<AutoAutoPathSegment> newPath = new ArrayList<>(path);
                         Vector2d lastEndPosition = path.get(path.size() - 1).getEndPosition();
-                        newPath.add(new LineToPathSegment(lastEndPosition, end));
-                        result.add(newPath);
+                        if (!AutoNoNavigationZones.isIntersecting(new Line(lastEndPosition, end))) {
+                            newPath.add(new LineToPathSegment(lastEndPosition, end));
+                            result.add(newPath);
+                        }
                     }
                 }
             }
@@ -143,6 +145,8 @@ public class BestPathFinder {
                 fastestPath = entry.getKey();
             }
         }
+
+        if (fastestPath == null) throw new RuntimeException("No valid path was found from " + start + " to " + end);
 
         return fastestPath;
     }
