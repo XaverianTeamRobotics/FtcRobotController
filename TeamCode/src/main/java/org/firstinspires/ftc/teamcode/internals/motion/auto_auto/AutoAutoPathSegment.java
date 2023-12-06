@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class AutoAutoPathSegment {
     /**
@@ -22,4 +23,8 @@ public abstract class AutoAutoPathSegment {
      * @return the end position of the path segment
      */
     public abstract Vector2d getEndPosition();
+
+    public @NotNull String toString() {
+        return "{AutoAutoPathSegment: Start: " + getStartPosition() + ", End: " + getEndPosition() + "}";
+    }
 }
