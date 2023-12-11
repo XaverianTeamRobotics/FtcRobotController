@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
 
+import android.util.Log;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.math.geometry.Line;
@@ -67,11 +68,11 @@ public class BestPathFinder {
 
         // For every two path segments, add a line which connects the start of one to the end of the other
         ArrayList<AutoAutoPathSegment> intermediatePathSegments = new ArrayList<>();
-        for (AutoAutoPathSegment segment1 : pathSegments) {
-            for (AutoAutoPathSegment segment2 : pathSegments) {
-                if (!isVector2dEquals(segment1.getEndPosition(), segment2.getStartPosition())) {
-                    if (!AutoNoNavigationZones.isIntersecting(new Line(segment2.getEndPosition(), segment1.getStartPosition()))) {
-                        intermediatePathSegments.add(new LineToPathSegment(segment2.getEndPosition(), segment1.getStartPosition()));
+        for (int i = 0; i < pathSegments.size(); i++) {
+            for (int j = 0; j < pathSegments.size(); j++) {
+                if (i != j) {
+                    if (isVector2dEquals(pathSegments.get(i).getEndPosition(), pathSegments.get(j).getStartPosition())) {
+                        intermediatePathSegments.add(new LineToPathSegment(pathSegments.get(i).getEndPosition(), pathSegments.get(j).getStartPosition()));
                     }
                 }
             }
@@ -152,7 +153,11 @@ public class BestPathFinder {
         if (path.isEmpty()) throw new IllegalArgumentException("'path' cannot be empty!");
         TrajectorySequenceBuilder builder = new Auto(new Pose2d(path.get(0).getStartPosition(), startRotation)).begin();
         for (AutoAutoPathSegment segment : path) {
-            builder = segment.addPathSegment(builder);
+            try {
+                builder = segment.addPathSegment(builder);
+            } catch (Exception e) {
+                Log.e("BestPathFinder", "Error while adding path segment " + segment.getClass().getSimpleName() + " to trajectory sequence builder", e);
+            }
         }
         return builder.completeTrajectory();
     }

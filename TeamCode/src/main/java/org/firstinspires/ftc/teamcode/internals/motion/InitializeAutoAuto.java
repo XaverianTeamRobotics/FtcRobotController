@@ -16,6 +16,14 @@ public class InitializeAutoAuto extends OperationMode implements AutonomousOpera
 
 	@Override
 	public void construct() {
+		initialize();
+	}
+
+	@Override
+	public void run() {
+	}
+
+	public static void initialize() {
 		Logging.setAutoClear(false);
 		Logging.clear();
 		long time = System.currentTimeMillis();
@@ -32,9 +40,5 @@ public class InitializeAutoAuto extends OperationMode implements AutonomousOpera
 		Logging.update();
 
 		Logging.setAutoClear(true);
-	}
-
-	@Override
-	public void run() {
 	}
 }
