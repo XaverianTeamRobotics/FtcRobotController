@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.BlueLeftToLeftBackdrop;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.RedRightToRightBackdrop;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.AutoRunner;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
@@ -21,6 +19,8 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
     private AutoAutoCreatorConfig config;
     Timer time;
     AutoRunner runner;
+
+    private Vector2d backdrop = new Vector2d(0, 0);
 
     @Override
     public Class<? extends OperationMode> getNext() {

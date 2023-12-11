@@ -12,9 +12,8 @@ public class BestPathFinderTest {
 	public void printAllPaths() {
 		System.out.println("BestPathFinderTest: Started");
 		long time = System.currentTimeMillis();
-		BestPathFinder finder = new BestPathFinder();
 
-		for (ArrayList<AutoAutoPathSegment> path : finder.getPathsToPoint(new Vector2d(0, 0), new Vector2d(47, 36))) {
+		for (ArrayList<AutoAutoPathSegment> path : BestPathFinder.getPathsToPoint(new Vector2d(0, 0), new Vector2d(47, 36))) {
 			System.out.println(path);
 		}
 		System.out.println("BestPathFinderTest: Time taken - " + (System.currentTimeMillis() - time) + "ms");

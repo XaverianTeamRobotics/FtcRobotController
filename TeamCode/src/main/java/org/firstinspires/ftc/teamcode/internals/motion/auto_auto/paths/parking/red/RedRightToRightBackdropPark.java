@@ -1,24 +1,22 @@
-package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths;
+package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.red;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoAutoPathSegment;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
 
-public class OriginToBlueBackdrop extends AutoAutoPathSegment {
+public class RedRightToRightBackdropPark extends AutoAutoPathSegment {
     @Override
     public TrajectorySequenceBuilder addPathSegment(TrajectorySequenceBuilder builder) {
-        return builder
-                .splineTo(new Vector2d(30.75, 9.26), Math.toRadians(36.89))
-                .splineTo(getEndPosition(), Math.toRadians(0));
+        return builder.lineTo(getEndPosition());
     }
 
     @Override
     public Vector2d getStartPosition() {
-        return new Vector2d(0, 0);
+        return new Vector2d(12, -64.50);
     }
 
     @Override
     public Vector2d getEndPosition() {
-        return new Vector2d(48.00, 36.00);
+        return new Vector2d(60.00, -62.50);
     }
 }

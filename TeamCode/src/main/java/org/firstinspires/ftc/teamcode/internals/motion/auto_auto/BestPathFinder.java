@@ -3,9 +3,13 @@ package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.math.geometry.Line;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.BlueLeftToLeftBackdrop;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.OriginToBlueBackdrop;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.RedRightToRightBackdrop;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.blue.BlueBackdropToBlueLeftPark;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.blue.BlueBackdropToBlueRightPark;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.blue.BlueLeftToLeftBackdropPark;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.OriginToBlueBackdrop;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.red.RedBackdropToRedLeftPark;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.red.RedBackdropToRedRightPark;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.red.RedRightToRightBackdropPark;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
@@ -15,21 +19,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BestPathFinder {
-    private ArrayList<ArrayList<AutoAutoPathSegment>> allPaths = new ArrayList<>();
-    private ArrayList<AutoAutoPathSegment> pathSegments = new ArrayList<>();
+    private static ArrayList<ArrayList<AutoAutoPathSegment>> allPaths = new ArrayList<>();
+    private static ArrayList<AutoAutoPathSegment> pathSegments = new ArrayList<>();
 
-    public BestPathFinder() {
+    public static void populate() {
         populatePathSegments();
         populateAllPaths();
     }
 
-    private void populateAllPaths() {
+    private static void populateAllPaths() {
         allPaths.clear();
 
         generateCombinations(new ArrayList<>(), 0);
     }
 
-    private void generateCombinations(ArrayList<AutoAutoPathSegment> current, int start) {
+    private static void generateCombinations(ArrayList<AutoAutoPathSegment> current, int start) {
         if (!current.isEmpty()) {
             allPaths.add(new ArrayList<>(current));
         }
@@ -47,13 +51,19 @@ public class BestPathFinder {
     /**
      * Populate the pathSegments list
      */
-    private void populatePathSegments() {
+    private static void populatePathSegments() {
         pathSegments = new ArrayList<>();
 
         // ADD PATH SEGMENTS HERE!!!!
-        pathSegments.add(new BlueLeftToLeftBackdrop());
+        pathSegments.add(new BlueLeftToLeftBackdropPark());
         pathSegments.add(new OriginToBlueBackdrop());
-        pathSegments.add(new RedRightToRightBackdrop());
+        pathSegments.add(new RedRightToRightBackdropPark());
+
+        pathSegments.add(new BlueBackdropToBlueLeftPark());
+        pathSegments.add(new BlueBackdropToBlueRightPark());
+
+        pathSegments.add(new RedBackdropToRedLeftPark());
+        pathSegments.add(new RedBackdropToRedRightPark());
 
         // For every two path segments, add a line which connects the start of one to the end of the other
         ArrayList<AutoAutoPathSegment> intermediatePathSegments = new ArrayList<>();
@@ -70,19 +80,19 @@ public class BestPathFinder {
         pathSegments.addAll(intermediatePathSegments);
     }
 
-    public ArrayList<ArrayList<AutoAutoPathSegment>> getAllPaths() {
+    public static ArrayList<ArrayList<AutoAutoPathSegment>> getAllPaths() {
         return allPaths;
     }
 
-    public ArrayList<AutoAutoPathSegment> getPathSegments() {
+    public static ArrayList<AutoAutoPathSegment> getPathSegments() {
         return pathSegments;
     }
 
-    private boolean isVector2dEquals(Vector2d one, Vector2d two) {
+    private static boolean isVector2dEquals(Vector2d one, Vector2d two) {
         return one.getX() == two.getX() && one.getY() == two.getY();
     }
 
-    public ArrayList<ArrayList<AutoAutoPathSegment>> getPathsToPoint(Vector2d start, Vector2d end) {
+    public static ArrayList<ArrayList<AutoAutoPathSegment>> getPathsToPoint(Vector2d start, Vector2d end) {
         ArrayList<ArrayList<AutoAutoPathSegment>> result = new ArrayList<>();
 
         for (ArrayList<AutoAutoPathSegment> path : allPaths) {
@@ -114,10 +124,31 @@ public class BestPathFinder {
             }
         }
 
+        // If the result is still empty, add all paths with a LineToPathSegment from start to the first start point
+        if (result.isEmpty()) {
+            for (ArrayList<AutoAutoPathSegment> path : allPaths) {
+                if (!path.isEmpty()) {
+                    Vector2d pathStart = path.get(0).getStartPosition();
+                    Vector2d pathEnd = path.get(path.size() - 1).getStartPosition();
+
+                    if (isVector2dEquals(pathEnd, end)) {
+                        ArrayList<AutoAutoPathSegment> newPath = new ArrayList<>();
+                        newPath.add(new LineToPathSegment(start, pathStart));
+                        newPath.addAll(path);
+                        Vector2d lastEndPosition = path.get(path.size() - 1).getEndPosition();
+                        if (!AutoNoNavigationZones.isIntersecting(new Line(lastEndPosition, end))) {
+                            newPath.add(new LineToPathSegment(lastEndPosition, end));
+                            result.add(newPath);
+                        }
+                    }
+                }
+            }
+        }
+
         return result;
     }
 
-    public TrajectorySequence getSequence(ArrayList<AutoAutoPathSegment> path, double startRotation) throws IllegalArgumentException {
+    public static TrajectorySequence getSequence(ArrayList<AutoAutoPathSegment> path, double startRotation) throws IllegalArgumentException {
         if (path.isEmpty()) throw new IllegalArgumentException("'path' cannot be empty!");
         TrajectorySequenceBuilder builder = new Auto(new Pose2d(path.get(0).getStartPosition(), startRotation)).begin();
         for (AutoAutoPathSegment segment : path) {
@@ -126,7 +157,7 @@ public class BestPathFinder {
         return builder.completeTrajectory();
     }
 
-    public ArrayList<AutoAutoPathSegment> getFastestPathToPoint(Vector2d start, Vector2d end, double startRotation) {
+    public static ArrayList<AutoAutoPathSegment> getFastestPathToPoint(Vector2d start, Vector2d end, double startRotation) {
         ArrayList<ArrayList<AutoAutoPathSegment>> paths = getPathsToPoint(start, end);
         HashMap<ArrayList<AutoAutoPathSegment>, Double> sequenceDurationTable = new HashMap<>();
 

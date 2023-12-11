@@ -17,12 +17,8 @@ public class BestPathFinderTestOpMode extends OperationMode implements TeleOpera
 		Logging.log("BestPathFinderTest: Started");
 		Logging.update();
 		long time = System.currentTimeMillis();
-		AutoNoNavigationZones.addCenterstageDefaults();
-		BestPathFinder finder = new BestPathFinder();
-		Logging.log("BestPathFinderTest: Init Time - " + (System.currentTimeMillis() - time) + "ms");
-		Logging.update();
 
-		Logging.log(finder.getFastestPathToPoint(new Vector2d(0, 0), new Vector2d(47, 36), 0).toString());
+		Logging.log(BestPathFinder.getFastestPathToPoint(new Vector2d(0, 0), new Vector2d(47, 36), 0).toString());
 
 		Logging.log("BestPathFinderTest: Overall Time - " + (System.currentTimeMillis() - time) + "ms");
 		Logging.update();
