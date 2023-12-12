@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.AutoRunn
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.internals.registration.AutonomousOperation;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 import org.firstinspires.ftc.teamcode.internals.time.Clock;
 import org.firstinspires.ftc.teamcode.internals.time.Timer;
 import org.firstinspires.ftc.teamcode.opmodes.ScrimmageBotCenterstage1;
@@ -77,6 +78,9 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
 
         TrajectorySequenceBuilder builder = new Auto(start).begin();
 
+        Logging.log("Calculating path...");
+        Logging.update();
+        long startT = System.currentTimeMillis();
         Vector2d last = start.vec();
         for (Vector2d poi : pois) {
             ArrayList<AutoAutoPathSegment> path = BestPathFinder.getFastestPathToPoint(last, poi, 0);
@@ -85,6 +89,8 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
                 last = segment.getEndPosition();
             }
         }
+        Logging.log("Calculated path in " + (System.currentTimeMillis() - startT) + "ms");
+        Logging.update();
 
         Auto auto = builder.completeTrajectory().complete();
 
