@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths;
+package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoAutoPathSegment;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
 
-public class OriginToBlueBackdrop implements AutoAutoPathSegment {
+public class OriginToBlueBackdrop extends AutoAutoPathSegment {
     @Override
     public TrajectorySequenceBuilder addPathSegment(TrajectorySequenceBuilder builder) {
         return builder
@@ -20,15 +20,5 @@ public class OriginToBlueBackdrop implements AutoAutoPathSegment {
     @Override
     public Vector2d getEndPosition() {
         return new Vector2d(48.00, 36.00);
-    }
-
-    @Override
-    public double getStartRotation() {
-        return 0;
-    }
-
-    @Override
-    public double getEndRotation() {
-        return 0;
     }
 }

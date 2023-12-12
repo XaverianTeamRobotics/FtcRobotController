@@ -2,14 +2,17 @@ package org.firstinspires.ftc.teamcode.internals.telemetry.logging;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import kotlinx.serialization.descriptors.PrimitiveKind;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Logging {
 
     public static MultipleTelemetry TELEMETRY;
+    private static Telemetry telemetry;
 
     public static void setTelemetry(Telemetry driver) {
         TELEMETRY = new MultipleTelemetry(driver, FtcDashboard.getInstance().getTelemetry());
+        telemetry = driver;
     }
 
     public static void update() {
@@ -34,6 +37,10 @@ public class Logging {
 
     public static void log(String key, Object value) {
         logData(key, value);
+    }
+
+    public static void setAutoClear(boolean autoClear) {
+        telemetry.setAutoClear(autoClear);
     }
 
 }
