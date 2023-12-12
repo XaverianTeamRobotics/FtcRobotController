@@ -5,7 +5,10 @@ import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.Tra
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AutoAutoPathSegment {
-    /**
+	public static final double START_L_Y = 64.50;
+	public static final double START_L_X = 12.00;
+
+	/**
      * Adds the path segment to the builder
      * @param builder the builder to add the path segment to
      * @return the builder with the path segment added

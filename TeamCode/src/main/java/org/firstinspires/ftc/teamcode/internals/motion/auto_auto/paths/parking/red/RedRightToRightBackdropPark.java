@@ -12,7 +12,7 @@ public class RedRightToRightBackdropPark extends AutoAutoPathSegment {
 
     @Override
     public Vector2d getStartPosition() {
-        return new Vector2d(12, -64.50);
+        return new Vector2d(START_L_X, -START_L_Y);
     }
 
     @Override

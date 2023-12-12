@@ -21,11 +21,19 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
     Timer time;
     AutoRunner runner;
 
-    private final Vector2d backdrop = new Vector2d(0, 0);
-    private final Vector2d spikeMark = new Vector2d(0, 0);
-    private final Vector2d leftPark = new Vector2d(0, 0);
-    private final Vector2d rightPark = new Vector2d(0, 0);
-    private final Vector2d middlePark = new Vector2d(0, 0);
+    private final Vector2d backdrop = new Vector2d(48.00, 36.00);
+    private final Vector2d spikeMark = new Vector2d(12.00, 36.00);
+    private final Vector2d spikeMark2 = new Vector2d(-36.00, 36.00);
+    private final Vector2d leftPark = new Vector2d(60.00, 60.00);
+    private final Vector2d rightPark = new Vector2d(60.00, 12.00);
+    private final Vector2d middlePark = new Vector2d(48.00, 36.00);
+
+    private final Vector2d redBackdrop = new Vector2d(backdrop.getX(), -backdrop.getY());
+    private final Vector2d redSpikeMark = new Vector2d(spikeMark2.getX(), -spikeMark2.getY());
+    private final Vector2d redSpikeMark2 = new Vector2d(spikeMark.getX(), -spikeMark.getY());
+    private final Vector2d redLeftPark = new Vector2d(rightPark.getX(), -rightPark.getY());
+    private final Vector2d redRightPark = new Vector2d(leftPark.getX(), -leftPark.getY());
+    private final Vector2d redMiddlePark = new Vector2d(middlePark.getX(), -middlePark.getY());
 
     private final ArrayList<Vector2d> pois = new ArrayList<>();
 
@@ -42,7 +50,18 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
         if (!config.isValid()) throw new RuntimeException("Invalid auto auto config");
         AutoNoNavigationZones.addCenterstageDefaults();
 
-        if (config.getPlaceSpikeMark()) pois.add(spikeMark);
+        // Change the values based on the team color
+        Vector2d backdrop = config.getTeamColor() == 0 ? this.backdrop : redBackdrop;
+        Vector2d spikeMark = config.getTeamColor() == 0 ? this.spikeMark : redSpikeMark;
+        Vector2d spikeMark2 = config.getTeamColor() == 0 ? this.spikeMark2 : redSpikeMark2;
+        Vector2d leftPark = config.getTeamColor() == 0 ? this.leftPark : redLeftPark;
+        Vector2d rightPark = config.getTeamColor() == 0 ? this.rightPark : redRightPark;
+        Vector2d middlePark = config.getTeamColor() == 0 ? this.middlePark : redMiddlePark;
+
+        if (config.getPlaceSpikeMark()) {
+            if (config.getStartingPosition() == 0) pois.add(spikeMark);
+            else if (config.getStartingPosition() == 1) pois.add(spikeMark2);
+        }
         if (config.getPlaceBackdrop()) pois.add(backdrop);
 
         if (config.getParkPlace() == 0) pois.add(leftPark);
@@ -58,7 +77,14 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
 
         TrajectorySequenceBuilder builder = new Auto(start).begin();
 
-        builder.lineTo(new Vector2d(0, 0));
+        Vector2d last = start.vec();
+        for (Vector2d poi : pois) {
+            ArrayList<AutoAutoPathSegment> path = BestPathFinder.getFastestPathToPoint(last, poi, 0);
+            for (AutoAutoPathSegment segment : path) {
+                builder = segment.addPathSegment(builder);
+                last = segment.getEndPosition();
+            }
+        }
 
         Auto auto = builder.completeTrajectory().complete();
 
