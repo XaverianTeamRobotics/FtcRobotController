@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.internals.time.Clock;
 import org.firstinspires.ftc.teamcode.internals.time.Timer;
 import org.firstinspires.ftc.teamcode.opmodes.ScrimmageBotCenterstage1;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import static java.lang.Math.toRadians;
@@ -19,6 +20,14 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
     private AutoAutoCreatorConfig config;
     Timer time;
     AutoRunner runner;
+
+    private final Vector2d backdrop = new Vector2d(0, 0);
+    private final Vector2d spikeMark = new Vector2d(0, 0);
+    private final Vector2d leftPark = new Vector2d(0, 0);
+    private final Vector2d rightPark = new Vector2d(0, 0);
+    private final Vector2d middlePark = new Vector2d(0, 0);
+
+    private final ArrayList<Vector2d> pois = new ArrayList<>();
 
     @Override
     public Class<? extends OperationMode> getNext() {
@@ -32,6 +41,13 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
         config.askQuestions();
         if (!config.isValid()) throw new RuntimeException("Invalid auto auto config");
         AutoNoNavigationZones.addCenterstageDefaults();
+
+        if (config.getPlaceSpikeMark()) pois.add(spikeMark);
+        if (config.getPlaceBackdrop()) pois.add(backdrop);
+
+        if (config.getParkPlace() == 0) pois.add(leftPark);
+        else if (config.getParkPlace() == 2) pois.add(rightPark);
+        else if (config.getParkPlace() == 1) pois.add(middlePark);
 
         double y = (config.getTeamColor() == 0 ? 1 : -1) * 64.50;
         double rot = config.getTeamColor() == 0 ? toRadians(-90.00) : toRadians(90.00);
