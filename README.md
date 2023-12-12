@@ -2,7 +2,7 @@
 
 This GitHub repository contains the source code that is used to build an Android app to control a *FIRST* Tech Challenge competition robot for Hawks Robotics: The Ryken Force.
 
-**Note: the master branch is protected. You cannot push directly to it.**
+_**Note: the master branch is protected. You cannot push directly to it.**_
 
 ## Requirements
 To use this Android Studio project, you will need Android Studio 2021.2 (codename Chipmunk) or later.
@@ -23,7 +23,7 @@ Both *FIRST* and our team have documentation and support.
 
 * [*FIRST* Online Documentation](https://github.com/FIRST-Tech-Challenge/FtcRobotController/wiki)
 * [GM0 Software Section](https://gm0.org/en/latest/docs/software/index.html)
-* [Internal Team Documentation](https://xaverianteamrobotics.github.io/FtcRobotController)
+* [Internal Team Documentation](https://robotics.xbhs.net)
 
 ### Javadoc Reference Material
 
