@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import org.firstinspires.ftc.teamcode.features.*;
+import org.firstinspires.ftc.teamcode.internals.misc.DrivetrainMapMode;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 
@@ -32,7 +33,7 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 public class Waterbot extends OperationMode implements TeleOperation {
     @Override
     public void construct() {
-        registerFeature(new NativeMecanumDrivetrain(false));
+        registerFeature(new NativeMecanumDrivetrain(DrivetrainMapMode.BL_FL_BR_FR, false, false, false));
         registerFeature(new PixelGrabber());
         registerFeature(new ActuatorFeature());
         registerFeature(new TiltableLinearSlide());
