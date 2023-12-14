@@ -4,6 +4,8 @@ import android.util.Log;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.math.geometry.Line;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.blue.BlueLeftStartToBlueBackdrop;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.red.RedRightStartToRedBackdrop;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.blue.BlueBackdropToBlueLeftPark;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.blue.BlueBackdropToBlueRightPark;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.blue.BlueLeftToLeftBackdropPark;
@@ -57,14 +59,24 @@ public class BestPathFinder {
 
         // ADD PATH SEGMENTS HERE!!!!
         pathSegments.add(new BlueLeftToLeftBackdropPark());
-        pathSegments.add(new OriginToBlueBackdrop());
         pathSegments.add(new RedRightToRightBackdropPark());
+
+        pathSegments.add(new OriginToBlueBackdrop());
+        // TODO: Origin to red backdrop
+
+        pathSegments.add(new BlueLeftStartToBlueBackdrop());
+        // TODO: Blue Right
 
         pathSegments.add(new BlueBackdropToBlueLeftPark());
         pathSegments.add(new BlueBackdropToBlueRightPark());
 
+        pathSegments.add(new RedRightStartToRedBackdrop());
+        // TODO: Red left
+
         pathSegments.add(new RedBackdropToRedLeftPark());
         pathSegments.add(new RedBackdropToRedRightPark());
+
+        // TODO: To Spike Marks and from spike marks to backdrop
 
         // For every two path segments, add a line which connects the start of one to the end of the other
         ArrayList<AutoAutoPathSegment> intermediatePathSegments = new ArrayList<>();
