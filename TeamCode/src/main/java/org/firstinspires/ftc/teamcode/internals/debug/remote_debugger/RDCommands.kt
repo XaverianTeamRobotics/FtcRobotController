@@ -10,6 +10,12 @@ import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.motor
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.motor5
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.motor6
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.motor7
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo0
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo1
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo2
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo3
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo4
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo5
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.AdvancedLogging
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
 import java.text.DateFormat.getDateTimeInstance
@@ -58,6 +64,25 @@ fun motorDisableMessage(motor: Int): String {
 }
 
 /*
+ * Send a message to the client indicating that a servo is availiable for debugging.
+ */
+fun servoEnableMessage(servo: Int, enabled: Boolean): String {
+    val json = JsonObject()
+    json.addProperty("type", "enable-servo")
+    json.addProperty("servo", servo.toString())
+    json.addProperty("enabled", enabled)
+    return Gson().toJson(json)
+}
+
+fun servoEnableMessage(servo: Int): String {
+    return servoEnableMessage(servo, true)
+}
+
+fun servoDisableMessage(servo: Int): String {
+    return servoEnableMessage(servo, false)
+}
+
+/*
  * Send a message indicating a motor's power
  */
 fun motorPowerMessage(motor: Int, power: Double): String {
@@ -68,8 +93,16 @@ fun motorPowerMessage(motor: Int, power: Double): String {
     return Gson().toJson(json)
 }
 
-
-
+/*
+ * Send a message indicating a servo's position
+ */
+fun servoPositionMessage(servo: Int, position: Double): String {
+    val json = JsonObject()
+    json.addProperty("type", "servo-position")
+    json.addProperty("servo", servo.toString())
+    json.addProperty("position", position)
+    return Gson().toJson(json)
+}
 
 // ================== CALLBACKS ================== //
 
@@ -89,6 +122,24 @@ fun motorPowerCallback(motor: Int, power: Double) {
         5 -> motor5             .power = power
         6 -> motor6             .power = power
         7 -> motor7             .power = power
+    }
+}
+
+/*
+ * A callback for a servo's position.
+ */
+
+fun servoPositionCallback(servo: Int, position: Double) {
+    Logging.log("Servo#", servo)
+    Logging.log("ServoPos", position)
+    Logging.update()
+    when (servo) {
+        0 -> servo0.position = position
+        1 -> servo1.position = position
+        2 -> servo2.position = position
+        3 -> servo3.position = position
+        4 -> servo4.position = position
+        5 -> servo5.position = position
     }
 }
 

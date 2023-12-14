@@ -69,6 +69,16 @@ class RDWebSocketServer(address: InetSocketAddress?) :
         initBroadcasts.add(motorEnableMessage(number))
     }
 
+    @Throws(IllegalArgumentException::class)
+    fun enableServo(number: Int) {
+        if (number > 5 || 0 > number) {
+            throw IllegalArgumentException("enableServo must be between 0 and 5")
+        }
+
+        broadcast(servoEnableMessage(number))
+        initBroadcasts.add(servoEnableMessage(number))
+    }
+
     override fun onStart() {
         logger.log(LogRecord(FINE, "Remote debugger started on port $port"))
         AdvancedLogging.logText("Started Web Server")
@@ -92,6 +102,16 @@ class RDWebSocketServer(address: InetSocketAddress?) :
         for (i in 0..7) {
             broadcast(motorPowerMessage(i, motorPowers[i]))
         }
+
+        // Update all enabled servos
+        for (i in 0..5) {
+            broadcast(servoEnableMessage(i, enabledServos[i]))
+        }
+
+        // Update all servo positions
+        for (i in 0..5) {
+            broadcast(servoPositionMessage(i, servoPositions[i]))
+        }
     }
 
     companion object {
@@ -99,6 +119,8 @@ class RDWebSocketServer(address: InetSocketAddress?) :
         private val initBroadcasts: MutableList<String> = mutableListOf()
         val motorPowers = Array(8) { 0.0 }
         val enabledMotors = Array(8) { false }
+        val servoPositions = Array(6) { 0.0 }
+        val enabledServos = Array(6) { false }
 
         @JvmStatic
         fun initializeWebsocketServer(): RDWebSocketServer {
@@ -127,6 +149,25 @@ class RDWebSocketServer(address: InetSocketAddress?) :
         }
 
         /**
+         * Tell the client we can use a specific servo.
+         * Be careful, as the static method does _**not**_ broadcast
+         * the message to existing websockets,
+         * only to new ones.
+         *
+         * @param number The servo number to enalbe
+         * @throws IllegalArgumentException If the number is not between 0 and 5
+         */
+        @JvmStatic
+        @Throws(IllegalArgumentException::class)
+        fun enableServoStatic(number: Int) {
+            if (number > 5 || 0 > number) {
+                throw IllegalArgumentException("enableServo must be between 0 and 5")
+            }
+
+            enabledServos[number] = true
+        }
+
+        /**
          * Creates a message to enable a motor
          * @param number The motor number to enable
          * @param speed The speed to set the motor to
@@ -141,6 +182,23 @@ class RDWebSocketServer(address: InetSocketAddress?) :
             }
 
             motorPowers[number] = speed
+        }
+
+        /**
+         * Creates a message to enable a servo
+         * @param number The servo number to enable
+         * @param position The speed to set the servo to
+         *
+         * @throws IllegalArgumentException If the number is not between 0 and 5 or the speed is not between 0 and 100
+         */
+        @JvmStatic
+        @Throws(IllegalArgumentException::class)
+        fun setServoPositionStatic(number: Int, position: Double) {
+            if (number > 5 || 0 > number) {
+                throw IllegalArgumentException("number must be between 0 and 5")
+            }
+
+            servoPositions[number] = position
         }
     }
 }

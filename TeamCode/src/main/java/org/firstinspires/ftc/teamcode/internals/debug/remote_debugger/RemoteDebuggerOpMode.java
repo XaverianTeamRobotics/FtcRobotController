@@ -11,6 +11,9 @@ public class RemoteDebuggerOpMode extends OperationMode implements TeleOperation
         RDWebSocketServer.enableMotorStatic(1);
         RDWebSocketServer.enableMotorStatic(2);
         RDWebSocketServer.enableMotorStatic(3);
+        RDWebSocketServer.enableServoStatic(0);
+        RDWebSocketServer.enableServoStatic(1);
+
         registerFeature(new Debugger());
     }
 
