@@ -23,7 +23,7 @@ jobs:
         run: ./gradlew assembleDebug --scan --stacktrace --info --no-daemon -x test
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: TeamCode-debug.apk
           path: TeamCode/build/outputs/apk/debug/TeamCode-debug.apk
