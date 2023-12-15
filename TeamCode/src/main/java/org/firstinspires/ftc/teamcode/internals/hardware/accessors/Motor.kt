@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.internals.hardware.data.StandardMotorParam
 class Motor(override var name: String): DeviceAccessor(name) {
 
     init {
-        // Check if its a special motor. If it is, add to the RD Server
+        // Check if it's a special motor. If it is, add to the RD Server
         if (standardMotorID() != null) {
             RDWebSocketServer.enableMotorStatic(standardMotorID()!!)
         }
@@ -59,14 +59,14 @@ class Motor(override var name: String): DeviceAccessor(name) {
         }
 
     /**
-     * Determines whether the robot is busy, that is, when a motor is acively driving to a position. If you're using this method, you should probably consider redesigning whatever you're using this method for.
+     * Determines whether the robot is busy, that is, when a motor is actively driving to a position. If you're using this method, you should probably consider redesigning whatever you're using this method for.
      */
     fun isBusy(): Boolean {
         return HardwareGetter.isMotorBusy(name)
     }
 
     /**
-     * Return the 0-7 code of the motor if it is one of the stantard motors, or null if it is not.
+     * Return the 0-7 code of the motor if it is one of the standard motors, or null if it is not.
      */
     fun standardMotorID(): Int? {
         return when (name) {

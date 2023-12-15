@@ -149,12 +149,31 @@ class RDWebSocketServer(address: InetSocketAddress?) :
         }
 
         /**
+         * Tell the client we can use specific motors.
+         * Be careful, as the static method does _**not**_ broadcast
+         * the message to existing websockets,
+         * only to new ones.
+         * Enables range from number to numberTo inclusive
+         *
+         * @param number The first motor number to enable
+         * @param numberTo The last motor number to enable
+         * @throws IllegalArgumentException If the number is not between 0 and 7
+         */
+        @JvmStatic
+        @Throws(IllegalArgumentException::class)
+        fun enableMotorStatic(number: Int, numberTo: Int) {
+            for (i in number..numberTo) {
+                enableMotorStatic(i)
+            }
+        }
+
+        /**
          * Tell the client we can use a specific servo.
          * Be careful, as the static method does _**not**_ broadcast
          * the message to existing websockets,
          * only to new ones.
          *
-         * @param number The servo number to enalbe
+         * @param number The servo number to enable
          * @throws IllegalArgumentException If the number is not between 0 and 5
          */
         @JvmStatic
@@ -165,6 +184,25 @@ class RDWebSocketServer(address: InetSocketAddress?) :
             }
 
             enabledServos[number] = true
+        }
+
+        /**
+         * Tell the client we can use specific servos.
+         * Be careful, as the static method does _**not**_ broadcast
+         * the message to existing websockets,
+         * only to new ones.
+         * Enables range from number to numberTo inclusive
+         *
+         * @param number The first servo number to enable
+         * @param numberTo The last servo number to enable
+         * @throws IllegalArgumentException If the number is not between 0 and 5
+         */
+        @JvmStatic
+        @Throws(IllegalArgumentException::class)
+        fun enableServoStatic(number: Int, numberTo: Int) {
+            for (i in number..numberTo) {
+                enableServoStatic(i)
+            }
         }
 
         /**
