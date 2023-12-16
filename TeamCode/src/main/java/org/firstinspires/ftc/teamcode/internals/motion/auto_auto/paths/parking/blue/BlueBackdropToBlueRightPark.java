@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.Tra
 public class BlueBackdropToBlueRightPark extends AutoAutoPathSegment {
 	@Override
 	public TrajectorySequenceBuilder addPathSegment(TrajectorySequenceBuilder builder) {
-		return builder.
-				lineTo(new Vector2d(48.00, 12.00))
+		return builder
+				.lineTo(new Vector2d(48.00, 12.00))
 				.lineTo(new Vector2d(60.00, 12.00));
 	}
 

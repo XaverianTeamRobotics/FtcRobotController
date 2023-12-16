@@ -13,7 +13,9 @@ public class LineToPathSegment extends AutoAutoPathSegment {
 
 	@Override
 	public TrajectorySequenceBuilder addPathSegment(TrajectorySequenceBuilder builder) {
-		return builder.lineTo(endPosition);
+		if (!(startPosition.getX() == endPosition.getX() && startPosition.getY() == endPosition.getY()))
+			return builder.lineTo(endPosition);
+		else return builder;
 	}
 
 	@Override

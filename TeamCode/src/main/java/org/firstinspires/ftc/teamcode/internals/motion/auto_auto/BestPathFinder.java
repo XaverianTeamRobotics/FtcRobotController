@@ -5,11 +5,14 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.math.geometry.Line;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.blue.BlueLeftStartToBlueBackdrop;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.red.MiddleToRedBackdrop;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.red.RedRightStartToRedBackdrop;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.middle.blue.BlueRightToMiddle;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.middle.red.RedLeftToMiddle;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.blue.BlueBackdropToBlueLeftPark;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.blue.BlueBackdropToBlueRightPark;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.blue.BlueLeftToLeftBackdropPark;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.OriginToBlueBackdrop;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.blue.MiddleToBlueBackdrop;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.red.RedBackdropToRedLeftPark;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.red.RedBackdropToRedRightPark;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.red.RedRightToRightBackdropPark;
@@ -41,7 +44,7 @@ public class BestPathFinder {
             allPaths.add(new ArrayList<>(current));
         }
 
-        for (int i = start; i < pathSegments.size(); i++) {
+        for (int i = 0; i < pathSegments.size(); i++) {
             // Check if the end of the last segment is equal to the start of the next segment
             if (current.isEmpty() || isVector2dEquals(current.get(current.size() - 1).getEndPosition(), pathSegments.get(i).getStartPosition())) {
                 ArrayList<AutoAutoPathSegment> newCurrent = new ArrayList<>(current);
@@ -58,20 +61,20 @@ public class BestPathFinder {
         pathSegments = new ArrayList<>();
 
         // ADD PATH SEGMENTS HERE!!!!
+        pathSegments.add(new BlueRightToMiddle());
+        pathSegments.add(new RedLeftToMiddle());
+
         pathSegments.add(new BlueLeftToLeftBackdropPark());
         pathSegments.add(new RedRightToRightBackdropPark());
 
-        pathSegments.add(new OriginToBlueBackdrop());
-        // TODO: Origin to red backdrop
+        pathSegments.add(new MiddleToBlueBackdrop());
+        pathSegments.add(new MiddleToRedBackdrop());
 
         pathSegments.add(new BlueLeftStartToBlueBackdrop());
-        // TODO: Blue Right
+        pathSegments.add(new RedRightStartToRedBackdrop());
 
         pathSegments.add(new BlueBackdropToBlueLeftPark());
         pathSegments.add(new BlueBackdropToBlueRightPark());
-
-        pathSegments.add(new RedRightStartToRedBackdrop());
-        // TODO: Red left
 
         pathSegments.add(new RedBackdropToRedLeftPark());
         pathSegments.add(new RedBackdropToRedRightPark());
@@ -83,7 +86,9 @@ public class BestPathFinder {
         for (int i = 0; i < pathSegments.size(); i++) {
             for (int j = 0; j < pathSegments.size(); j++) {
                 if (i != j) {
-                    if (isVector2dEquals(pathSegments.get(i).getEndPosition(), pathSegments.get(j).getStartPosition())) {
+                    if (
+                            isVector2dEquals(pathSegments.get(i).getEndPosition(), pathSegments.get(j).getStartPosition()) &&
+                            AutoNoNavigationZones.isIntersecting(new Line(pathSegments.get(i).getEndPosition(), pathSegments.get(j).getStartPosition()))) {
                         intermediatePathSegments.add(new LineToPathSegment(pathSegments.get(i).getEndPosition(), pathSegments.get(j).getStartPosition()));
                     }
                 }

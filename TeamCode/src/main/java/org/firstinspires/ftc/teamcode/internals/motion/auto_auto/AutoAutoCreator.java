@@ -59,40 +59,57 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
         Vector2d rightPark = config.getTeamColor() == 0 ? this.rightPark : redRightPark;
         Vector2d middlePark = config.getTeamColor() == 0 ? this.middlePark : redMiddlePark;
 
-        if (config.getPlaceSpikeMark()) {
-            if (config.getStartingPosition() == 0) pois.add(spikeMark);
-            else if (config.getStartingPosition() == 1) pois.add(spikeMark2);
-        }
         if (config.getPlaceBackdrop()) pois.add(backdrop);
 
         if (config.getParkPlace() == 0) pois.add(leftPark);
         else if (config.getParkPlace() == 2) pois.add(rightPark);
         else if (config.getParkPlace() == 1) pois.add(middlePark);
 
-        double y = (config.getTeamColor() == 0 ? 1 : -1) * 64.50;
+        double y = (config.getTeamColor() == 0 ? 1 : -1) * AutoAutoPathSegment.START_L_Y;
         double rot = config.getTeamColor() == 0 ? toRadians(-90.00) : toRadians(90.00);
         boolean xStartingPos = config.getStartingPosition() == 0;
         if (config.getTeamColor() == 1) xStartingPos = !xStartingPos;
-        double x = xStartingPos ? 12 : -36;
+        double x = xStartingPos ? AutoAutoPathSegment.START_L_X : -36;
         Pose2d start = new Pose2d(x, y, rot);
+
+        telemetry.setAutoClear(false);
 
         TrajectorySequenceBuilder builder = new Auto(start).begin();
 
         Logging.log("Calculating path...");
         Logging.update();
         long startT = System.currentTimeMillis();
+        BestPathFinder.populate();
         Vector2d last = start.vec();
+
+        if (config.getPlaceSpikeMark()) {
+            builder = builder.forward(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK);
+            builder = builder.completeTrajectory().appendTrajectory();
+            // DO SPIKE MARK LOGIC!!!!
+            // WE MUST RETURN TO THE ORIGINAL POSITION IN OUR ORIGINAL ROTATION!!!!!!!
+            builder = builder.back(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK);
+            builder = builder.completeTrajectory().appendTrajectory();
+        }
+        boolean firstTimeRun = true;
         for (Vector2d poi : pois) {
             ArrayList<AutoAutoPathSegment> path = BestPathFinder.getFastestPathToPoint(last, poi, 0);
             for (AutoAutoPathSegment segment : path) {
-                builder = segment.addPathSegment(builder);
-                last = segment.getEndPosition();
+                Logging.log("Adding Path Segment " + segment.getClass().getSimpleName());
+                Logging.update();
+                try {
+                    builder = segment.addPathSegment(builder);
+                    last = segment.getEndPosition();
+                } catch (Exception ignored) {
+                    emergencyStop("Failed to add " + segment.getClass().getSimpleName());
+                }
             }
         }
         Logging.log("Calculated path in " + (System.currentTimeMillis() - startT) + "ms");
         Logging.update();
 
         Auto auto = builder.completeTrajectory().complete();
+
+        telemetry.setAutoClear(false);
 
         runner = new AutoRunner(auto, auto.getDrivetrain(), null, null, null);
     }
