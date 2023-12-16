@@ -1,55 +1,41 @@
-# Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
 on:
-  # Run automatically after the Android CI release finishes
-  workflow_run:
-    workflows: ["Android CI"]
-    branches: ["master"]
-    types: ["completed"]
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  # Run on pull requests to master
-  pull_request:
-    # Note that this specifies the target branch, not the branch that the PR is from
-    branches: ["master"]
+  push:
+    branches:
+      - master
 
 jobs:
   build:
-    # Run if the Android CI build was successful, on PRs from docs/ branches, or if this is a manual workflow run
-    if: ${{ github.event.workflow_run.conclusion == 'success' || startsWith(github.head_ref, 'docs/') || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build website
-        run: ./build.sh
-        working-directory: ./HelpPage/scripts/
-
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          java-version: "11"
-          distribution: "temurin"
-          cache: "gradle"
+          java-version: 11
+          distribution: temurin
+          cache: gradle
 
       - name: Build JavaDoc using Dokka
         run: |
+          mkdir ./javadoc
           ./gradlew :TeamCode:dokkaHtml --no-daemon
-          mv ./TeamCode/build/dokka/html ./HelpPage/build/javadoc
+          mv ./TeamCode/build/dokka/html ./javadoc
 
       - name: Upload Pages build artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          name: "github-pages-build"
-          path: "./HelpPage/build"
+          path: ./javadoc/html
           retention-days: 90
 
   deploy:
-    # Only run deployment from the master branch and not on pull requests
-    if: ${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
-    needs: ["build"]
+    needs:
+      - build
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -61,37 +47,13 @@ jobs:
       id-token: write
     # Only allow one concurrent deployment
     concurrency:
-      group: "pages"
+      group: pages-deploy
       cancel-in-progress: false
+
     steps:
       - name: Configure Pages
-        uses: actions/configure-pages@v3
-
-      - name: Download Pages build artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: "github-pages-build"
-
-      - name: Extract Pages build artifact
-        run: |
-          mkdir pages-build
-          tar -xvf artifact.tar -C pages-build
-
-      - name: Download the latest APK
-        run: |
-          mkdir -p ./pages-build/apk/bin
-          cd ./pages-build/apk/bin
-          curl -LO https://github.com/XaverianTeamRobotics/FtcRobotController/releases/download/latest-ci-build/TeamCode-debug.apk
-
-      - name: Upload final Pages artifact
-        uses: actions/upload-pages-artifact@v2
-        with:
-          name: "github-pages-deploy"
-          path: "./pages-build"
-          retention-days: 90
+        uses: actions/configure-pages@v4
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
-        with:
-          artifact_name: "github-pages-deploy"
+        uses: actions/deploy-pages@v3
