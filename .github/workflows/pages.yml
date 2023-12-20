@@ -28,7 +28,7 @@ jobs:
           mv ./TeamCode/build/dokka/html ./javadoc
 
       - name: Upload Pages build artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./javadoc/html
           retention-days: 90
