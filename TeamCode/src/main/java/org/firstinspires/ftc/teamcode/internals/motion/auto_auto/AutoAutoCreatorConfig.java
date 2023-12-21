@@ -34,7 +34,7 @@ public class AutoAutoCreatorConfig {
     private boolean placeSpikeMark = false;
 
     /**
-     * The place to park. 0 is left of backdrop, 1 is in front of backdrop, 2 is right of backdrop, 3 is starting point.
+     * The place to park. 0 is left of backdrop, 1 is in front of backdrop, 2 is right of backdrop, 3 is starting point (unused).
      * -1 is invalid.
      */
     private int parkPlace = -1;
@@ -60,8 +60,8 @@ public class AutoAutoCreatorConfig {
         String leftAnswer = "Left of Backdrop";
         String middleAnswer = "Middle of Backdrop";
         String rightAnswer = "Right of Backdrop";
-        String startingPositionAnswer = "Starting Position";
-        MenuManager parkPlaceMenu = Questions.askAsyncC1("Where should we park after scoring?", leftAnswer, middleAnswer, rightAnswer, startingPositionAnswer);
+        String startingPositionAnswer = "Starting Position"; // unused
+        MenuManager parkPlaceMenu = Questions.askAsyncC1("Where should we park after scoring?", leftAnswer, middleAnswer, rightAnswer);
 
         teamColor = teamColorMenu.run().toString().equals("Blue") ? 0 : 1;
         startingPosition = startingPositionMenu.run().toString().equals("Left") ? 0 : 1;
