@@ -61,7 +61,7 @@ public class AutoAutoCreatorConfig {
         String middleAnswer = "Middle of Backdrop";
         String rightAnswer = "Right of Backdrop";
         String startingPositionAnswer = "Starting Position"; // unused
-        MenuManager parkPlaceMenu = Questions.askAsyncC1("Where should we park after scoring?", leftAnswer, middleAnswer, rightAnswer);
+        MenuManager parkPlaceMenu = Questions.askAsyncC1("Where should the bot park after scoring?", leftAnswer, middleAnswer, rightAnswer);
 
         teamColor = teamColorMenu.run().toString().equals("Blue") ? 0 : 1;
         startingPosition = startingPositionMenu.run().toString().equals("Left") ? 0 : 1;
