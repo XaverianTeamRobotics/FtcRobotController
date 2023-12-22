@@ -2,36 +2,34 @@ package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
+import org.jetbrains.annotations.NotNull;
 
-public interface AutoAutoPathSegment {
-    /**
+public abstract class AutoAutoPathSegment {
+	public static final double START_L_Y = 64.50;
+	public static final double START_L_X = 12.00;
+	public static final double START_R_X = -36.00;
+	public static final double DISTANCE_TO_SPIKE_MARK = (START_L_Y % 24) + 12;
+
+	/**
      * Adds the path segment to the builder
      * @param builder the builder to add the path segment to
      * @return the builder with the path segment added
      */
-    TrajectorySequenceBuilder addPathSegment(TrajectorySequenceBuilder builder);
+    public abstract TrajectorySequenceBuilder addPathSegment(TrajectorySequenceBuilder builder);
 
     /**
      * Gets the start position of the path segment
      * @return the start position of the path segment
      */
-    Vector2d getStartPosition();
+    public abstract Vector2d getStartPosition();
 
     /**
      * Gets the end position of the path segment
      * @return the end position of the path segment
      */
-    Vector2d getEndPosition();
+    public abstract Vector2d getEndPosition();
 
-    /**
-     * Gets the start rotation of the path segment
-     * @return the start rotation of the path segment
-     */
-    double getStartRotation();
-
-    /**
-     * Gets the end rotation of the path segment
-     * @return the end rotation of the path segment
-     */
-    double getEndRotation();
+    public @NotNull String toString() {
+        return "{AutoAutoPathSegment: Start: " + getStartPosition() + ", End: " + getEndPosition() + "}";
+    }
 }
