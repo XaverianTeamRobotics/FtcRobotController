@@ -90,7 +90,8 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
             builder = builder.back(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK);
             builder = builder.completeTrajectory().appendTrajectory();
         }
-        boolean firstTimeRun = true;
+
+        boolean needToScore = config.getPlaceBackdrop();
         for (Vector2d poi : pois) {
             ArrayList<AutoAutoPathSegment> path = BestPathFinder.getFastestPathToPoint(last, poi, 0);
             for (AutoAutoPathSegment segment : path) {
@@ -101,6 +102,14 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
                     last = segment.getEndPosition();
                 } catch (Exception ignored) {
                     emergencyStop("Failed to add " + segment.getClass().getSimpleName());
+                }
+
+                if ((segment.getEndPosition().getY() == 36.00 || segment.getEndPosition().getY() == -36.00)
+                        && segment.getEndPosition().getX() == 48.00
+                        && needToScore) {
+                    // DO SCORING LOGIC!!!!
+                    // WE MUST RETURN TO THE ORIGINAL POSITION IN OUR ORIGINAL ROTATION!!!!!!!
+                    needToScore = false;
                 }
             }
         }
