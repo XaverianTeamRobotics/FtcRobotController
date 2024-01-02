@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  * A mecanum drivetrain. This relies on odometry. Use {@link NativeMecanumDrivetrain} if you don't have odometry.
  */
 @Config
-public class MecanumDrivetrain extends Feature implements Buildable {
+public class PowerplayMecanumDrivetrain extends Feature implements Buildable {
 
     private final boolean FIELD_CENTRIC;
     private final boolean DRIVER_ASSIST;
@@ -35,7 +35,7 @@ public class MecanumDrivetrain extends Feature implements Buildable {
     private final RatelimitCalc rcX = new RatelimitCalc(xYMin, xYMax, pMin, pMax);
     private final RatelimitCalc rcY = new RatelimitCalc(yYMin, yYMax, pMin, pMax);
 
-    public MecanumDrivetrain(boolean fieldCentric, boolean driverAssist) {
+    public PowerplayMecanumDrivetrain(boolean fieldCentric, boolean driverAssist) {
         FIELD_CENTRIC = fieldCentric;
         DRIVER_ASSIST = driverAssist;
     }

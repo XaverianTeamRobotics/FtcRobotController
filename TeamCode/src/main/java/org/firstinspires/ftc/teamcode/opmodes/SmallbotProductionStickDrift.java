@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import org.firstinspires.ftc.teamcode.features.FourMotorArmNoManualLevel;
 import org.firstinspires.ftc.teamcode.features.Hand;
-import org.firstinspires.ftc.teamcode.features.MecanumDrivetrain;
+import org.firstinspires.ftc.teamcode.features.PowerplayMecanumDrivetrain;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 
@@ -10,7 +10,7 @@ public class SmallbotProductionStickDrift extends OperationMode implements TeleO
 
     @Override
     public void construct() {
-        registerFeature(new MecanumDrivetrain(false, true));
+        registerFeature(new PowerplayMecanumDrivetrain(false, true));
         registerFeature(new FourMotorArmNoManualLevel());
         registerFeature(new Hand());
     }
