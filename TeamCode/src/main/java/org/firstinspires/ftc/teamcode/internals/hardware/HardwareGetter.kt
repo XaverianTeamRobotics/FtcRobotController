@@ -796,8 +796,15 @@ class Devices {
         @JvmStatic lateinit var distanceSensor1: LaserDistanceSensor
         @JvmStatic lateinit var distanceSensor2: LaserDistanceSensor
         @JvmStatic lateinit var armDistanceSensor: LaserDistanceSensor
+        @JvmStatic lateinit var encoder0: Encoder
+        @JvmStatic lateinit var encoder1: Encoder
+        @JvmStatic lateinit var encoder2: Encoder
+        @JvmStatic lateinit var encoder3: Encoder
+        @JvmStatic lateinit var encoder4: Encoder
         @JvmStatic lateinit var encoder5: Encoder
         @JvmStatic lateinit var encoder6: Encoder
+        @JvmStatic lateinit var encoder7: Encoder
+        @JvmStatic lateinit var encoder8: Encoder
 
         private var enableReg: Boolean = false
 
