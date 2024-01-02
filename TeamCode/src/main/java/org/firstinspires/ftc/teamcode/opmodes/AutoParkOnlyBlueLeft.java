@@ -2,10 +2,6 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import org.firstinspires.ftc.teamcode.features.FourMotorArm;
-import org.firstinspires.ftc.teamcode.features.Hand;
-import org.firstinspires.ftc.teamcode.features.SleeveDetector;
-import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.AutoRunner;
 import org.firstinspires.ftc.teamcode.internals.registration.AutonomousOperation;

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import org.firstinspires.ftc.teamcode.features.FourMotorArm;
+import org.firstinspires.ftc.teamcode.features.PowerplayFourMotorArm;
 import org.firstinspires.ftc.teamcode.features.Hand;
 import org.firstinspires.ftc.teamcode.features.JCam;
 import org.firstinspires.ftc.teamcode.features.SleeveDetector;
@@ -40,7 +40,7 @@ public class PowerplayGhostAutoLeft extends OperationMode implements AutonomousO
         time = Clock.make(UUID.randomUUID().toString());
         Hand hand = new Hand(true);
         registerFeature(hand);
-        FourMotorArm arm = new FourMotorArm();
+        PowerplayFourMotorArm arm = new PowerplayFourMotorArm();
         registerFeature(arm);
         sleeve = new SleeveDetector(0);
         registerFeature(sleeve);
@@ -59,7 +59,7 @@ public class PowerplayGhostAutoLeft extends OperationMode implements AutonomousO
 
             // when we're 2 inches into the path, raise the arm. we do ths 2 inches into the path to provide adequate clearance with the wall
             .addDisplacementMarker(4, () -> {
-                FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.JNCT_HIGH);
+                PowerplayFourMotorArm.autoRunArm(PowerplayFourMotorArm.ArmPosition.JNCT_HIGH);
                 JCam.toggle();
             })
             // drive to the junction
@@ -68,33 +68,33 @@ public class PowerplayGhostAutoLeft extends OperationMode implements AutonomousO
             .splineTo(new Vector2d(34.58, 7.00), Math.toRadians(221.32))
             .completeTrajectory()
             // center ourselves on the pole
-            .appendWait(FourMotorArm::autoComplete)
+            .appendWait(PowerplayFourMotorArm::autoComplete)
             .appendWait(JCam::complete)
             .appendWait(1000)
             .appendAction(() -> this.driveToPole(poleLocalizer))
             .appendAction(JCam::toggle)
             // open the hand and then lower the arm to cone_high
             .appendAction(() -> Clock.sleep(100))
-            .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.JNCT_HIGH_LOWER))
-            .appendWait(FourMotorArm::autoComplete)
+            .appendAction(() -> PowerplayFourMotorArm.autoRunArm(PowerplayFourMotorArm.ArmPosition.JNCT_HIGH_LOWER))
+            .appendWait(PowerplayFourMotorArm::autoComplete)
             .appendAction(Hand::autoOpen)
             .appendWait(Hand::complete)
-            .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.JNCT_HIGH))
-            .appendWait(FourMotorArm::autoComplete)
+            .appendAction(() -> PowerplayFourMotorArm.autoRunArm(PowerplayFourMotorArm.ArmPosition.JNCT_HIGH))
+            .appendWait(PowerplayFourMotorArm::autoComplete)
 
             // SECOND CONE
 
-            .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.CONE_HIGH))
+            .appendAction(() -> PowerplayFourMotorArm.autoRunArm(PowerplayFourMotorArm.ArmPosition.CONE_HIGH))
             .appendTrajectory()
             // drive to the cone stack
             .lineToSplineHeading(new Pose2d(38.92, 11.11, Math.toRadians(0.11)))
             .splineToConstantHeading(new Vector2d(59.00, 12.00), Math.toRadians(0))
             .completeTrajectory()
             // once the arm is at the right position, close in on the top cone and begin raising the arm. we also wait a fraction of a second so the arm has enough time to raise above the stack so when we drive backwards, the cone we've picked up doesnt knock over the whole stack
-            .appendWait(FourMotorArm::autoComplete)
+            .appendWait(PowerplayFourMotorArm::autoComplete)
             .appendAction(Hand::autoClose)
             .appendWait(Hand::complete)
-            .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.JNCT_HIGH))
+            .appendAction(() -> PowerplayFourMotorArm.autoRunArm(PowerplayFourMotorArm.ArmPosition.JNCT_HIGH))
             .appendWait(500)
             .appendAction(JCam::toggle)
             .appendTrajectory()
@@ -106,16 +106,16 @@ public class PowerplayGhostAutoLeft extends OperationMode implements AutonomousO
             .splineToConstantHeading(new Vector2d(34.58, 11.00), Math.toRadians(221.32))
             .completeTrajectory()
             // center ourselves on the pole
-            .appendWait(FourMotorArm::autoComplete)
+            .appendWait(PowerplayFourMotorArm::autoComplete)
             .appendWait(JCam::complete)
             .appendAction(JCam::toggle)
             .appendWait(JCam::complete)
-            .appendAction(FourMotorArm::autoLevelArm)
-            .appendAction(FourMotorArm::autoComplete)
+            .appendAction(PowerplayFourMotorArm::autoLevelArm)
+            .appendAction(PowerplayFourMotorArm::autoComplete)
 
             // PARKING --- SPOT 2 PART 1
 
-            .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.RESET))
+            .appendAction(() -> PowerplayFourMotorArm.autoRunArm(PowerplayFourMotorArm.ArmPosition.RESET))
             .appendTrajectory()
             // we drive close to the second parking position
             .lineToSplineHeading(new Pose2d(34.28, 11.20, Math.toRadians(267.34)))
@@ -130,7 +130,7 @@ public class PowerplayGhostAutoLeft extends OperationMode implements AutonomousO
             .begin()
             .lineToConstantHeading(new Vector2d(57.77, 12.17))
             .completeTrajectory()
-            .appendWait(FourMotorArm::autoComplete)
+            .appendWait(PowerplayFourMotorArm::autoComplete)
             .appendAction(Devices.encoder5::save)
             .appendAction(Devices.encoder6::save)
             .complete();
@@ -138,7 +138,7 @@ public class PowerplayGhostAutoLeft extends OperationMode implements AutonomousO
             .begin()
             .lineToConstantHeading(new Vector2d(34.28, 14.20))
             .completeTrajectory()
-            .appendWait(FourMotorArm::autoComplete)
+            .appendWait(PowerplayFourMotorArm::autoComplete)
             .appendAction(Devices.encoder5::save)
             .appendAction(Devices.encoder6::save)
             .complete();
@@ -147,7 +147,7 @@ public class PowerplayGhostAutoLeft extends OperationMode implements AutonomousO
             .turn(Math.toRadians(90.00))
             .lineToConstantHeading(new Vector2d(8.00, 12.00))
             .completeTrajectory()
-            .appendWait(FourMotorArm::autoComplete)
+            .appendWait(PowerplayFourMotorArm::autoComplete)
             .appendAction(Devices.encoder5::save)
             .appendAction(Devices.encoder6::save)
             .complete();

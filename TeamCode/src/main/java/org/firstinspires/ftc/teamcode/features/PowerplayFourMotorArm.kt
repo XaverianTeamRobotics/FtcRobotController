@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DSLogging
  * <p>
  * Both controllers: Press any bumper to immediately cancel the auto-move.
  */
-class FourMotorArm : Feature(), Buildable {
+class PowerplayFourMotorArm : Feature(), Buildable {
 
     override fun build() {
         Devices.encoder5.reset()

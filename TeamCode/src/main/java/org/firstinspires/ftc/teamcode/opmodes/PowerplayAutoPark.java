@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import org.firstinspires.ftc.teamcode.features.FourMotorArm;
+import org.firstinspires.ftc.teamcode.features.PowerplayFourMotorArm;
 import org.firstinspires.ftc.teamcode.features.Hand;
 import org.firstinspires.ftc.teamcode.features.SleeveDetector;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
@@ -28,7 +28,7 @@ public class PowerplayAutoPark extends OperationMode implements AutonomousOperat
         time = Clock.make(UUID.randomUUID().toString());
         Hand hand = new Hand(true);
         registerFeature(hand);
-        FourMotorArm arm = new FourMotorArm();
+        PowerplayFourMotorArm arm = new PowerplayFourMotorArm();
         registerFeature(arm);
         sleeve = new SleeveDetector();
         registerFeature(sleeve);
@@ -43,20 +43,20 @@ public class PowerplayAutoPark extends OperationMode implements AutonomousOperat
             // FIRST PARK
 
             // when we're 2 inches into the path, raise the arm. we do ths 2 inches into the path to provide adequate clearance with the wall
-            .addDisplacementMarker(2, () -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.CONE_LOW))
+            .addDisplacementMarker(2, () -> PowerplayFourMotorArm.autoRunArm(PowerplayFourMotorArm.ArmPosition.CONE_LOW))
             // drive to spot 2
             .splineToConstantHeading(new Vector2d(-35.50, 43.93), Math.toRadians(270.65))
             .splineToConstantHeading(new Vector2d(-35.00, 11.70), Math.toRadians(270.45))
             .splineTo(new Vector2d(-38.01, 10.30), Math.toRadians(177.99)) // two
             .completeTrajectory()
             // once the arm reaches the correct height, park
-            .appendWait(FourMotorArm::autoComplete)
+            .appendWait(PowerplayFourMotorArm::autoComplete)
             .appendAction(() -> {
                 if(spot == 2) {
-                    FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.RESET);
+                    PowerplayFourMotorArm.autoRunArm(PowerplayFourMotorArm.ArmPosition.RESET);
                 }
             })
-            .appendWait(FourMotorArm::autoComplete)
+            .appendWait(PowerplayFourMotorArm::autoComplete)
             .appendAction(Devices.encoder5::save)
             .appendAction(Devices.encoder6::save)
             .complete();
@@ -65,9 +65,9 @@ public class PowerplayAutoPark extends OperationMode implements AutonomousOperat
             .begin()
             .lineTo(new Vector2d(-11.21, 8.28)) // one
             .completeTrajectory()
-            .appendWait(FourMotorArm::autoComplete)
-            .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.RESET))
-            .appendWait(FourMotorArm::autoComplete)
+            .appendWait(PowerplayFourMotorArm::autoComplete)
+            .appendAction(() -> PowerplayFourMotorArm.autoRunArm(PowerplayFourMotorArm.ArmPosition.RESET))
+            .appendWait(PowerplayFourMotorArm::autoComplete)
             .appendAction(Devices.encoder5::save)
             .appendAction(Devices.encoder6::save)
             .complete();
@@ -76,9 +76,9 @@ public class PowerplayAutoPark extends OperationMode implements AutonomousOperat
             .turn(Math.toRadians(90.00))
             .lineTo(new Vector2d(-61.33, 11.27)) // three
             .completeTrajectory()
-            .appendWait(FourMotorArm::autoComplete)
-            .appendAction(() -> FourMotorArm.autoRunArm(FourMotorArm.ArmPosition.RESET))
-            .appendWait(FourMotorArm::autoComplete)
+            .appendWait(PowerplayFourMotorArm::autoComplete)
+            .appendAction(() -> PowerplayFourMotorArm.autoRunArm(PowerplayFourMotorArm.ArmPosition.RESET))
+            .appendWait(PowerplayFourMotorArm::autoComplete)
             .appendAction(Devices.encoder5::save)
             .appendAction(Devices.encoder6::save)
             .complete();

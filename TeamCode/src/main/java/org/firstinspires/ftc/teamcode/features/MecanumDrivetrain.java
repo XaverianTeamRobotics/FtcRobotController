@@ -28,7 +28,7 @@ public class MecanumDrivetrain extends Feature implements Buildable {
     public static double xMult = 0.6, yMult = 0.6, rMult = 0.6;
     public static double xYMin = 7, xYMax = 1;
     public static double yYMin = 7, yYMax = 1;
-    public static double pMin = FourMotorArm.ArmPosition.RESET.getHeight(), pMax = FourMotorArm.ArmPosition.JNCT_HIGH.getHeight();
+    public static double pMin = PowerplayFourMotorArm.ArmPosition.RESET.getHeight(), pMax = PowerplayFourMotorArm.ArmPosition.JNCT_HIGH.getHeight();
     public static boolean simulated = false;
     private final SlewRateLimiter rlX = new SlewRateLimiter(1);
     private final SlewRateLimiter rlY = new SlewRateLimiter(1);
