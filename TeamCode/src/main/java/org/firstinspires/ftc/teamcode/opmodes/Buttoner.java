@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import android.util.Log;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
 import org.firstinspires.ftc.teamcode.internals.hardware.accessors.Gamepad;
 import org.firstinspires.ftc.teamcode.internals.hardware.data.GamepadRequestInput;
@@ -19,7 +20,8 @@ public class Buttoner extends OperationMode implements TeleOperation {
         Logging.log(val + "");
         //Devices.controller1.registerButton(GamepadRequestInput.A, "Testing"); // will fail
         Logging.log("Hi");
-        Logging.update();
+
+        
 
         //Devices.controller1.buttonSearch("Testing");
         //Devices.controller1.getRightTrigger(); // will fail the test
