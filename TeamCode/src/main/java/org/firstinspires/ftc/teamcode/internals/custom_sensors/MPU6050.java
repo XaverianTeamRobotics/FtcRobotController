@@ -8,14 +8,21 @@ import com.qualcomm.robotcore.hardware.configuration.annotations.DevicePropertie
 import com.qualcomm.robotcore.hardware.configuration.annotations.I2cDeviceType;
 import com.qualcomm.robotcore.util.TypeConversion;
 
-import java.util.ArrayList;
-
-import static java.lang.Math.*;
-
 @I2cDeviceType()
 @DeviceProperties(name = "Adafruit MPU-6050", xmlTag = "MPU6050", description = "Adafruit MPU-6050 6-DoF Accelerometer and Gyroscope")
 public class MPU6050 extends I2cDeviceSynchDevice<I2cDeviceSynch> implements HardwareDevice {
-    public ArrayList<double[]> accelHistory = new ArrayList<>();
+    private static final int ACC_2G = 0;
+    private static final int ACC_4G = 1;
+    private static final int ACC_8G = 2;
+    private static final int ACC_16G = 3;
+
+    private static final int GYRO_250DPS = 0;
+    private static final int GYRO_500DPS = 1;
+    private static final int GYRO_1000DPS = 2;
+    private static final int GYRO_2000DPS = 3;
+
+    private double[] orientation = new double[3]; // Pitch, Roll, Yaw
+    private double lastTimeOfOrientationMeasurement;
 
     public MPU6050(I2cDeviceSynch i2cDeviceSynch, boolean deviceClientIsOwned) {
         super(i2cDeviceSynch, deviceClientIsOwned);
@@ -24,6 +31,7 @@ public class MPU6050 extends I2cDeviceSynchDevice<I2cDeviceSynch> implements Har
 
         super.registerArmingStateCallback(false);
         this.deviceClient.engage();
+        lastTimeOfOrientationMeasurement = System.currentTimeMillis();
     }
 
     @Override
@@ -52,9 +60,6 @@ public class MPU6050 extends I2cDeviceSynchDevice<I2cDeviceSynch> implements Har
 
         return true;
     }
-    
-    // Create some basic functions to read the sensor data from the registers
-    // Note that most values are 16-bit and in 2's complement format
 
     /**
      * Get the three-axis acceleration data from the sensor
@@ -64,89 +69,105 @@ public class MPU6050 extends I2cDeviceSynchDevice<I2cDeviceSynch> implements Har
      * Z - up/down
      */
     public double[] getAcceleration() {
-        double[] accel = new double[3];
-        accel[0] = read2RegistersFloat(Register.ACCEL_XOUT_H);
-        accel[1] = read2RegistersFloat(Register.ACCEL_YOUT_H);
-        accel[2] = read2RegistersFloat(Register.ACCEL_ZOUT_H);
-        double[] timestampedAccel = new double[4];
-        timestampedAccel[0] = accel[0];
-        timestampedAccel[1] = accel[1];
-        timestampedAccel[2] = accel[2];
-        timestampedAccel[3] = System.currentTimeMillis();
-        accelHistory.add(timestampedAccel);
-        if (accelHistory.size() > 1000) {
-            accelHistory.remove(0);
-        }
-        return accel;
+        double[] data = getData();
+        double rawAccX = data[0];
+        double rawAccY = data[1];
+        double rawAccZ = data[2];
+
+        double accScale = getAccelScale();
+
+        double accX = rawAccX / (accScale);
+        double accY = rawAccY / (accScale);
+        double accZ = rawAccZ / (accScale);
+
+        return new double[] { accX, accY, accZ };
     }
 
     /**
-     * Get a noise-corrected acceleration value
-     * Note: Because of the algorithm used, this may lag behind rapid changes in acceleration
-     * The algorith is an average of the past 100 ms of acceleration data
-     * @return an array of three doubles containing the acceleration data, in g. X, Y, and Z
-     * X - left/right
-     * Y - forward/backward
-     * Z - up/down
-     */
-    public double[] getAccelerationCorrected() {
-        double[] accel = new double[3];
-        double[] accelSum = new double[3];
-        for (double[] accelData : accelHistory) {
-            if (accelData[3] - System.currentTimeMillis() > 100) {
-                continue;
-            }
-            accelSum[0] += accelData[0];
-            accelSum[1] += accelData[1];
-            accelSum[2] += accelData[2];
-        }
-        accel[0] = accelSum[0] / accelHistory.size();
-        accel[1] = accelSum[1] / accelHistory.size();
-        accel[2] = accelSum[2] / accelHistory.size();
-        return accel;
-    }
-
-    /**
-     * Find the sensor's orientation relative to itself
+     * Find the sensor's angular velocity
      * @return an array of three doubles containing the gyroscope data, in degrees per second. X, Y, and Z
      * X - pitch
      * Y - roll
      * Z - yaw
      */
-    public double[] getRelativeOrientation() {
-        double[] gyro = new double[3];
-        gyro[0] = read2Registers(Register.GYRO_XOUT_H);
-        gyro[1] = read2Registers(Register.GYRO_YOUT_H);
-        gyro[2] = read2Registers(Register.GYRO_ZOUT_H);
-        return gyro;
+    public double[] getAngularVelocity() {
+        double[] data = getData();
+        double rawGyroX = data[4];
+        double rawGyroY = data[5];
+        double rawGyroZ = data[6];
+
+        double gyroScale = getGyroScale();
+
+        double gyroX = rawGyroX / (gyroScale);
+        double gyroY = rawGyroY / (gyroScale);
+        double gyroZ = rawGyroZ / (gyroScale);
+
+        return new double[] { gyroX, gyroY, gyroZ };
     }
 
-    /**
-     * Find the sensor's orientation relative to gravity.
-     * Sensor must remain stationary for accurate results
-     * @return an array of two doubles containing the pitch and roll angles relative to earth, in degrees. Pitch then Roll
-     */
-    public double[] getAbsoluteOrientation() {
-        double[] accel = getAcceleration();
-        double[] pitchRoll = new double[2];
-        pitchRoll[0] = atan2(accel[1], sqrt(pow(accel[0], 2) + pow(accel[2], 2)));
-        pitchRoll[1] = atan2(accel[0], sqrt(pow(accel[1], 2) + pow(accel[2], 2)));
-        return pitchRoll;
+    private void setAccelScale(int scale) {
+        writeShort(Register.ACCEL_CONFIG, (short) (scale << 3));
     }
 
-    protected short read2Registers(Register reg)
-    {
+    private double getAccelScale() {
+        int accelCode = read2Registers(Register.ACCEL_CONFIG) >> 3;
+        switch (accelCode) {
+            case ACC_2G:
+                return 2048;
+            case ACC_4G:
+                return 4096;
+            case ACC_8G:
+                return 8192;
+            case ACC_16G:
+                return 16384;
+            default:
+                throw new RuntimeException("Invalid accelerometer scale code");
+        }
+    }
+
+    private void setGyroScale(int scale) {
+        writeShort(Register.GYRO_CONFIG, (short) (scale << 3));
+    }
+
+    private double getGyroScale() {
+        int gyroCode = read2Registers(Register.GYRO_CONFIG) >> 3;
+        switch (gyroCode) {
+            case GYRO_250DPS:
+                return 131;
+            case GYRO_500DPS:
+                return 65.5;
+            case GYRO_1000DPS:
+                return 32.8;
+            case GYRO_2000DPS:
+                return 16.4;
+            default:
+                throw new RuntimeException("Invalid gyroscope scale code");
+        }
+    }
+
+    private double[] getData() {
+        double[] data = new double[7];
+        byte[] buffer = deviceClient.read(Register.ACCEL_XOUT.bVal, 14);
+        data[0] = TypeConversion.byteArrayToShort(new byte[] { buffer[0], buffer[1] });     // X acceleration
+        data[1] = TypeConversion.byteArrayToShort(new byte[] { buffer[2], buffer[3] });     // Y acceleration
+        data[2] = TypeConversion.byteArrayToShort(new byte[] { buffer[4], buffer[5] });     // Z acceleration
+        data[3] = TypeConversion.byteArrayToShort(new byte[] { buffer[6], buffer[7] });     // Temperature
+        data[4] = TypeConversion.byteArrayToShort(new byte[] { buffer[8], buffer[9] });     // X gyro
+        data[5] = TypeConversion.byteArrayToShort(new byte[] { buffer[10], buffer[11] });   // Y gyro
+        data[6] = TypeConversion.byteArrayToShort(new byte[] { buffer[12], buffer[13] });   // Z gyro
+        return data;
+	}
+
+    protected short read2Registers(Register reg) {
         return TypeConversion.byteArrayToShort(deviceClient.read(reg.bVal, 2));
     }
 
-    protected float read2RegistersFloat(Register reg)
-    {
+    protected float read2RegistersFloat(Register reg) {
         // Take the first register and use it as the high byte, and the second register as the "decimal" byte
         return (float) (TypeConversion.byteArrayToShort(deviceClient.read(reg.bVal, 2)) / 16384.0);
     }
 
-    protected void writeShort(Register reg, short data)
-    {
+    protected void writeShort(Register reg, short data) {
         deviceClient.write8(reg.bVal, data);
     }
 
@@ -166,20 +187,13 @@ public class MPU6050 extends I2cDeviceSynchDevice<I2cDeviceSynch> implements Har
         CONFIG(0x1A),
         GYRO_CONFIG(0x1B),
         ACCEL_CONFIG(0x1C),
-        ACCEL_XOUT_H(0x3B),
-        ACCEL_XOUT_L(0x3C),
-        ACCEL_YOUT_H(0x3D),
-        ACCEL_YOUT_L(0x3E),
-        ACCEL_ZOUT_H(0x3F),
-        ACCEL_ZOUT_L(0x40),
-        TEMP_OUT_H(0x41),
-        TEMP_OUT_L(0x42),
-        GYRO_XOUT_H(0x43),
-        GYRO_XOUT_L(0x44),
-        GYRO_YOUT_H(0x45),
-        GYRO_YOUT_L(0x46),
-        GYRO_ZOUT_H(0x47),
-        GYRO_ZOUT_L(0x48),
+        ACCEL_XOUT(0x3B),
+        ACCEL_YOUT(0x3D),
+        ACCEL_ZOUT(0x3F),
+        TEMP_OUT(0x41),
+        GYRO_XOUT(0x43),
+        GYRO_YOUT(0x45),
+        GYRO_ZOUT(0x47),
         SMPLRT_DIV(0x19),
         INT_ENABLE(0x38),
         INT_STATUS(0x3A),
