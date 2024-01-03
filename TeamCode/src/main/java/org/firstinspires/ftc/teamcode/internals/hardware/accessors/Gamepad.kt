@@ -44,10 +44,10 @@ class Gamepad(override var name: String): DeviceAccessor(name) {
     }
 
     /**
-     * Searches through all of the registered buttons and returns
+     * Searches through all the registered buttons and returns
      * the button that matches the string.
-     * @param act The useage to search for.
-     * @return The button's value that matches the useage.
+     * @param act The usage to search for.
+     * @return The button's value that matches the usage.
      */
     fun buttonSearch(act: String): Double {
         for (i in buttonReg) {

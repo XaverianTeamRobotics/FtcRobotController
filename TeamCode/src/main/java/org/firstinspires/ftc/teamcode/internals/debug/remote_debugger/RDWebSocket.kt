@@ -56,6 +56,10 @@ class RDWebSocket(
                 messageSerialized.jsonObject["motor"]!!.jsonPrimitive.content.toInt(),
                 messageSerialized.jsonObject["power"]!!.jsonPrimitive.content.toDouble()
             )
+            "set-servo-position" -> servoPositionCallback(
+                messageSerialized.jsonObject["servo"]!!.jsonPrimitive.content.toInt(),
+                messageSerialized.jsonObject["position"]!!.jsonPrimitive.content.toDouble()
+            )
             "telemetry-print" -> logCallback(messageSerialized.jsonObject["content"]!!.jsonPrimitive.content)
         }
     }

@@ -810,7 +810,7 @@ class Devices {
 
         /**
          * Must be called to enable button registration
-         * otherwise button search won't work and button collisons won't
+         * otherwise button search won't work and button collisions won't
          * be caught
          */
         @JvmStatic
@@ -867,7 +867,7 @@ fun initConfigDevices() {
             deviceArr[0].name = mappedDevice
         }
         // for each device:
-        // if the device is a DeviceAccessor, lets instantiate it as such, otherwise we fallback to using hardwareMap.get()
+        // if the device is a DeviceAccessor, lets instantiate it as such, otherwise we fall back to using hardwareMap.get()
         // if the device isn't a valid device at all (not a DeviceAccessor nor HardwareDevice) we just ignore it. this may actually happen pretty often depending on how the config is written
         for(cdevice in deviceArr) {
             if(cdevice.device != null && cdevice.name != null) {
