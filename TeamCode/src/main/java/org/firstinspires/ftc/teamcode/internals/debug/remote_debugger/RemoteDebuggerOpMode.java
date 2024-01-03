@@ -8,7 +8,7 @@ public class RemoteDebuggerOpMode extends OperationMode implements TeleOperation
     @Override
     public void construct() {
         RDWebSocketServer.enableMotorStatic(0, 3);
-        RDWebSocketServer.enableServoStatic(0, 1);
+        RDWebSocketServer.enableServoStatic(0, 6);
 
         registerFeature(new Debugger());
     }
