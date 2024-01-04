@@ -14,40 +14,38 @@ import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.*;
  * <p>
  * All controls are in controller 2
  * <p>
- * The SHARE button resets the home position of the arm
+ * The SHARE/BACK button resets the home position of the arm
  * <p>
- * The OPTIONS button disables auto claw rotation and the auto lift
+ * The OPTIONS/START button disables auto claw rotation and the auto lift
  */
 public class ArmClaw extends Feature implements Buildable {
-    public static final int R_OPEN = 83, L_OPEN = 20;
-    public static final int R_CLOSED = 100, L_CLOSED = 5;
-    private final boolean autoClawRotation;
+    public static final int R_OPEN = 10, L_OPEN = 90;
+    public static final int R_CLOSED = 0, L_CLOSED = 60;
     private double counter = 0;
     private boolean dpadPressed = false;
-    private double counter2 = 0; //left servo
-    private double counter3 = 0; //right servo
-    private boolean dpadPressed2 = false; //left servo
-    private boolean dpadPressed3 = false; //right servo
+    private double counterLeft = 0; //left servo
+    private double counterRight = 0; //right servo
+    private boolean dpadPressedLeft = false; //left servo
+    private boolean dpadPressedRight = false; //right servo
     private int encoderHomePosition = 0;
     private boolean autonomousArmControl = false;
     private boolean autonomousIntakeControl = false;
     private boolean autonomousClawRotationControl = false;
     private boolean autonomousClawReleaseControl = false;
-
-    public ArmClaw() {
-        this.autoClawRotation = false;
-    }
-
-    public ArmClaw(boolean autoClawRotation) {
-        this.autoClawRotation = autoClawRotation;
-    }
+    private int armTargetHeight;
+    private boolean armLiftingInProgress = false;
+    private final int t2StraightUpPos = 0;
 
     public void build(){
-        servo0.setPosition(L_OPEN);
-        servo1.setPosition(R_OPEN);
-        servo2.setPosition(0);
+        servo3.setPosition(L_OPEN);
+        servo2.setPosition(R_OPEN);
+//        servo0.setPosition(0);
         motor0.setPower(0);
-        encoderHomePosition = encoder4.getPosition();
+        encoderHomePosition = -encoder3.getPosition();
+        setHumanArmControl();
+        setHumanIntakeControl();
+        setHumanClawRotationControl();
+        setHumanClawReleaseControl();
     }
 
     /**
@@ -57,11 +55,11 @@ public class ArmClaw extends Feature implements Buildable {
      */
     public enum KeyPositions {
         HOME(0),
-        ONE(1), // temp
-        TWO(2), // temp
-        THREE(3), // temp
-        FOUR(4), // temp
-        FIVE(5); // temp
+        ONE(500), // temp
+        TWO(750), // temp
+        THREE(1000), // temp
+        FOUR(1500), // temp
+        FIVE(2000); // temp
 
         private final int position;
 
@@ -89,7 +87,7 @@ public class ArmClaw extends Feature implements Buildable {
             dpadPressed = true;
         } else if (!Devices.controller2.getDpadDown()) dpadPressed = false;
         if (counter % 2 != 0) {
-            return R_CLOSED;
+            return 100;
         } else {
             return 0;
         }
@@ -100,14 +98,14 @@ public class ArmClaw extends Feature implements Buildable {
      * and close the left servo (left grabber)
      */
     private int leftButtonPressedCount() {
-        if (Devices.controller2.getDpadLeft() && !dpadPressed2) {
-            counter2 += 1;
-            dpadPressed2 = true;
+        if (Devices.controller2.getDpadLeft() && !dpadPressedLeft) {
+            counterLeft += 1;
+            dpadPressedLeft = true;
         }
         else if (!Devices.controller2.getDpadLeft()) {
-            dpadPressed2 = false;
+            dpadPressedLeft = false;
         }
-        if (counter2 % 2 != 0) {
+        if (counterLeft % 2 != 0) {
             return L_CLOSED;
         }
         else {
@@ -116,11 +114,11 @@ public class ArmClaw extends Feature implements Buildable {
     }
 
     public void openLeftGrabber() {
-        servo0.setPosition(L_OPEN);
+        servo3.setPosition(L_OPEN);
     }
 
     public void closeLeftGrabber() {
-        servo0.setPosition(L_CLOSED);
+        servo3.setPosition(L_CLOSED);
     }
 
     /**
@@ -128,14 +126,14 @@ public class ArmClaw extends Feature implements Buildable {
      * and close the right servo (right grabber)
      */
     private int rightButtonPressedCount() {
-        if (Devices.controller2.getDpadRight() && !dpadPressed3) {
-            counter3 += 1;
-            dpadPressed3 = true;
+        if (Devices.controller2.getDpadRight() && !dpadPressedRight) {
+            counterRight += 1;
+            dpadPressedRight = true;
         }
         else if (!Devices.controller2.getDpadRight()) {
-            dpadPressed3 = false;
+            dpadPressedRight = false;
         }
-        if (counter3 % 2 != 0) {
+        if (counterRight % 2 != 0) {
             return R_CLOSED;
         }
         else {
@@ -144,20 +142,20 @@ public class ArmClaw extends Feature implements Buildable {
     }
 
     public void openRightGrabber() {
-        servo1.setPosition(R_OPEN);
+        servo2.setPosition(R_OPEN);
     }
 
     public void closeRightGrabber() {
-        servo1.setPosition(R_CLOSED);
+        servo2.setPosition(R_CLOSED);
     }
 
     public void autoStartIntake() {
-        autonomousIntakeControl = true;
+        blockHumanIntakeControl();
         motor2.setPower(-100);
     }
 
     public void autoStopIntake() {
-        autonomousIntakeControl = true;
+        blockHumanIntakeControl();
         motor2.setPower(0);
     }
 
@@ -170,11 +168,6 @@ public class ArmClaw extends Feature implements Buildable {
         autonomousIntakeControl = true;
     }
 
-    public void autoRotateClaw() {
-        autonomousClawRotationControl = true;
-        // TODO: Rotate claw
-    }
-
     public void setHumanClawRotationControl() {
         autonomousClawRotationControl = false;
     }
@@ -183,8 +176,24 @@ public class ArmClaw extends Feature implements Buildable {
         autonomousClawRotationControl = true;
     }
 
+    public void autoRotateClaw1(int i) {
+        blockHumanClawRotationControl();
+        servo0.setPosition(i);
+    }
+
+    public void autoRotateClaw2(int i) {
+        blockHumanClawRotationControl();
+        servo1.setPosition(i);
+    }
+
+    public void autoRaiseArm(KeyPositions pos) {
+        autoRaiseArm(pos.getPosition());
+    }
+
     public void autoRaiseArm(int height) {
-        autonomousArmControl = true;
+        blockHumanArmControl();
+        armTargetHeight = height;
+        armLiftingInProgress = true;
     }
 
     public void setHumanArmControl() {
@@ -195,12 +204,20 @@ public class ArmClaw extends Feature implements Buildable {
         autonomousArmControl = true;
     }
 
+    public void setHumanClawReleaseControl() {
+        autonomousClawReleaseControl = false;
+    }
+
+    public void blockHumanClawReleaseControl() {
+        autonomousClawReleaseControl = true;
+    }
+
     public void armEmergencyStop() {
         Devices.motor0.setPower(0);
         Devices.motor1.setPower(0);
     }
 
-    public ControlMode getOverallControlMode() {
+    public ControlMode getArmControlMode() {
         if (autonomousArmControl) {
             return ControlMode.AUTONOMOUS;
         } else {
@@ -224,36 +241,79 @@ public class ArmClaw extends Feature implements Buildable {
         }
     }
 
+    public ControlMode getClawReleaseControlMode() {
+        if (autonomousClawReleaseControl) {
+            return ControlMode.AUTONOMOUS;
+        } else {
+            return ControlMode.HUMAN;
+        }
+    }
+
+    public boolean isArmLiftingInProgress() {
+		return autonomousArmControl && armLiftingInProgress;
+    }
+
+    public double getArmDistanceSensor() {
+        return distanceSensor.getDistance();
+    }
+
     public void loop() {
-        Logging.log("Overall Arm Control Mode", getOverallControlMode());
-        Logging.log("Intake Control Mode", getIntakeControlMode());
-        Logging.log("Claw Rotation Control Mode", getClawRotationControlMode());
-        if (Devices.controller2.getOptions()) {
-            autonomousArmControl = false;
+        if (Devices.controller2.getStart()) {
+            setHumanArmControl();
             armEmergencyStop();
             setHumanIntakeControl();
             setHumanClawRotationControl();
-            autonomousClawReleaseControl = false;
+            setHumanClawReleaseControl();
         }
-        double motorPower = -(Devices.controller2.getRightTrigger() - Devices.controller2.getLeftTrigger()) * 0.75;
+
+        Logging.log("Arm Control Mode", getArmControlMode());
+        Logging.log("Intake Control Mode", getIntakeControlMode());
+        Logging.log("Claw Rotation Control Mode", getClawRotationControlMode());
+        Logging.log("Claw Release Control Mode", getClawReleaseControlMode());
+        Logging.log("Arm Encoder Position", -encoder3.getPosition());
+        Logging.log("Servo0 pos", servo0.getPosition());
+        Logging.log("Servo1 pos", servo1.getPosition());
+        Logging.update();
+
+        double motorPower;
+        if (!autonomousArmControl) {
+            motorPower = -(Devices.controller2.getRightTrigger() - Devices.controller2.getLeftTrigger()) * 0.75;
+
+            if (controller1.getBack()) {
+                encoderHomePosition = -encoder3.getPosition();
+            }
+        } else {
+            double deltaPos = armTargetHeight + encoder3.getPosition();
+            if (deltaPos < -25) motorPower = 100;
+            else if (deltaPos > 25) motorPower = -100;
+            else {
+                armLiftingInProgress = false;
+                motorPower = 0;
+                setHumanArmControl();
+            }
+        }
+
         Devices.motor0.setPower(motorPower);
         Devices.motor1.setPower(motorPower);
 
         if (!autonomousClawReleaseControl) {
             //the motors must move in opposite directions
-            servo0.setPosition(leftButtonPressedCount()); //this operates the left grabber
-            servo1.setPosition(rightButtonPressedCount()); //this operates the right grabber
+            servo3.setPosition(leftButtonPressedCount()); //this operates the left grabber
+            servo2.setPosition(rightButtonPressedCount()); //this operates the right grabber
         }
+
         if (!autonomousClawRotationControl) {
-            if (Devices.controller2.getLeftBumper()) {
-                servo2.setPosition(servo2.getPosition() + 0.5);
-                //this will rotate the entire claw mechanism so that it is in line with the backboard
-            }
-            if (Devices.controller2.getRightBumper()) {
-                servo2.setPosition(servo2.getPosition() - 0.5);
-                //this will return the claw mechanism back to the initial position
-            }
+            double grabber0Pos = servo0.getPosition();
+            grabber0Pos += controller2.getLeftStickX() / 100;
+            grabber0Pos = Math.max(0, Math.min(100, grabber0Pos));
+            servo0.setPosition(grabber0Pos);
+
+            double grabber1Pos = servo1.getPosition();
+            grabber1Pos += controller2.getRightStickX() / 100;
+            grabber1Pos = Math.max(0, Math.min(100, grabber1Pos));
+            servo1.setPosition(grabber1Pos);
         }
+
         if (!autonomousIntakeControl) {
             Devices.motor2.setPower(-intakeCount());
         }

@@ -2,8 +2,14 @@ package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import org.firstinspires.ftc.teamcode.features.ArmClaw;
+import org.firstinspires.ftc.teamcode.features.VisionProcessingFeature;
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
+import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline;
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.AutoRunner;
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.internals.registration.AutonomousOperation;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
@@ -13,11 +19,13 @@ import org.firstinspires.ftc.teamcode.internals.time.Timer;
 import org.firstinspires.ftc.teamcode.opmodes.ScrimmageBotCenterstage1;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 import static java.lang.Math.toRadians;
 
 public class AutoAutoCreator extends OperationMode implements AutonomousOperation {
+
     private AutoAutoCreatorConfig config;
     Timer time;
     AutoRunner runner;
@@ -35,6 +43,9 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
     private final Vector2d redLeftPark = new Vector2d(rightPark.getX(), -rightPark.getY());
     private final Vector2d redRightPark = new Vector2d(leftPark.getX(), -leftPark.getY());
     private final Vector2d redMiddlePark = new Vector2d(middlePark.getX(), -middlePark.getY());
+    private ArmClaw armClaw;
+    private VisionProcessingFeature visionProcessor;
+    private Auto auto;
 
     private final ArrayList<Vector2d> pois = new ArrayList<>();
 
@@ -45,6 +56,11 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
 
     @Override
     public void construct() {
+        armClaw = new ArmClaw();
+        visionProcessor = new VisionProcessingFeature(new SpikeMarkDetectionPipeline());
+        registerFeature(armClaw);
+        registerFeature(visionProcessor);
+
         time = Clock.make(UUID.randomUUID().toString());
         config = new AutoAutoCreatorConfig();
         config.askQuestions();
@@ -53,8 +69,6 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
 
         // Change the values based on the team color
         Vector2d backdrop = config.getTeamColor() == 0 ? this.backdrop : redBackdrop;
-        Vector2d spikeMark = config.getTeamColor() == 0 ? this.spikeMark : redSpikeMark;
-        Vector2d spikeMark2 = config.getTeamColor() == 0 ? this.spikeMark2 : redSpikeMark2;
         Vector2d leftPark = config.getTeamColor() == 0 ? this.leftPark : redLeftPark;
         Vector2d rightPark = config.getTeamColor() == 0 ? this.rightPark : redRightPark;
         Vector2d middlePark = config.getTeamColor() == 0 ? this.middlePark : redMiddlePark;
@@ -74,7 +88,10 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
 
         telemetry.setAutoClear(false);
 
-        TrajectorySequenceBuilder builder = new Auto(start).begin();
+        auto = new Auto(start);
+        AutonomousDrivetrain drivetrain = auto.getDrivetrain();
+
+        TrajectorySequenceBuilder builder = auto.begin();
 
         Logging.log("Calculating path...");
         Logging.update();
@@ -107,8 +124,30 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
                 if ((segment.getEndPosition().getY() == 36.00 || segment.getEndPosition().getY() == -36.00)
                         && segment.getEndPosition().getX() == 48.00
                         && needToScore) {
-                    // DO SCORING LOGIC!!!!
-                    // WE MUST RETURN TO THE ORIGINAL POSITION IN OUR ORIGINAL ROTATION!!!!!!!
+                    Runnable action = () -> {
+                        Pose2d p = drivetrain.getPoseEstimate();
+                        TrajectorySequenceBuilder b = drivetrain.trajectorySequenceBuilder(p);
+                        armClaw.autoRaiseArm(ArmClaw.KeyPositions.ONE);
+                        armClaw.autoRotateClaw1(50); // TODO: Replace value with actual value
+                        armClaw.autoRotateClaw2(50); // TODO: Replace value with actual value
+
+                        // Wait for the arm to finish moving
+                        waitUntil(() -> armClaw.isArmLiftingInProgress());
+
+                        double dist = armClaw.getArmDistanceSensor() / 2.54;
+                        b.forward(dist);
+
+                        if (config.getBackdropPixelPosition() == 1) armClaw.openLeftGrabber();
+                        else armClaw.openRightGrabber();
+
+                        b.back(dist);
+
+                        drivetrain.followTrajectorySequenceAsync(b.completeTrajectory());
+                        while(drivetrain.isBusy() && Objects.requireNonNull(HardwareGetter.getOpMode()).opModeIsActive()) {
+                            drivetrain.update();
+                        }
+                    };
+                    builder.completeTrajectory().appendAction(action).appendTrajectory();
                     needToScore = false;
                 }
             }
@@ -116,11 +155,11 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
         Logging.log("Calculated path in " + (System.currentTimeMillis() - startT) + "ms");
         Logging.update();
 
-        Auto auto = builder.completeTrajectory().complete();
+        auto = builder.completeTrajectory().complete();
 
-        telemetry.setAutoClear(false);
+        telemetry.setAutoClear(true);
 
-        runner = new AutoRunner(auto, auto.getDrivetrain(), null, null, null);
+        runner = new AutoRunner(auto, drivetrain, null, null, null);
     }
 
     @Override

@@ -63,12 +63,7 @@ public class ServoTest extends OperationMode implements TeleOperation {
         if (!crossP) temp += Devices.controller1.getCross() ? 10 : 0;
         if (!rbP) servoNum += Devices.controller1.getRightBumper() ? 1 : 0;
         if (!lbP) servoNum -= Devices.controller1.getLeftBumper() ? 1 : 0;
-        if (temp > 100) {
-            temp = 100.0;
-        }
-        if (temp < 0) {
-            temp = 0.0;
-        }
+        temp = Math.max(0, Math.min(100, temp));
         squareP = Devices.controller1.getSquare();
         crossP = Devices.controller1.getCross();
         rbP = Devices.controller1.getRightBumper();

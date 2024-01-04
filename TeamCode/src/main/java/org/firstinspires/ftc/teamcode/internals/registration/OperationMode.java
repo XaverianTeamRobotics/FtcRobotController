@@ -46,6 +46,9 @@ public abstract class OperationMode extends LinearOpMode {
             HardwareGetter.setOpMode(this);
             ScriptTemplate jloopingScript;
             ScriptRunner runner;
+            Logging.clear();
+            Logging.setAutoClear(true);
+            Logging.update();
             try {
                 jloopingScript = new ConvertToScript(this.getClass().getName(), this,
                     "absolutelyNothing", "run");
@@ -130,7 +133,7 @@ public abstract class OperationMode extends LinearOpMode {
         throw new RobotRebootException(reason);
     }
 
-    interface ConditionalWait {
+    public interface ConditionalWait {
         /**
          * Returns whether or not the condition is met.
          * @return True if the condition is met, false otherwise.
