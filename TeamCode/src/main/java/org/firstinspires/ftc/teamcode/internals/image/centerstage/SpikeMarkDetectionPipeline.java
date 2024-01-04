@@ -28,10 +28,7 @@ public class SpikeMarkDetectionPipeline extends VisionPipeline {
     public static int RED_THRESH = 150;
     public static int MIN_AVG_AREA = 45;
 
-    @Override
-    public void init(Mat mat) {}
-
-    @Override
+	@Override
     public Mat processFrame(Mat input) {
 
         // Convert to YCrCb

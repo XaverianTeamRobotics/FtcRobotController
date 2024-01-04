@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.features.ArmClaw;
 import org.firstinspires.ftc.teamcode.features.VisionProcessingFeature;
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
+import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline;
 import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto;
@@ -45,7 +46,7 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
     private final Vector2d redMiddlePark = new Vector2d(middlePark.getX(), -middlePark.getY());
     private ArmClaw armClaw;
     private VisionProcessingFeature visionProcessor;
-    private Auto auto;
+	private int spot = 0;
 
     private final ArrayList<Vector2d> pois = new ArrayList<>();
 
@@ -58,14 +59,16 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
     public void construct() {
         armClaw = new ArmClaw();
         visionProcessor = new VisionProcessingFeature(new SpikeMarkDetectionPipeline());
-        registerFeature(armClaw);
-        registerFeature(visionProcessor);
 
         time = Clock.make(UUID.randomUUID().toString());
         config = new AutoAutoCreatorConfig();
         config.askQuestions();
         if (!config.isValid()) throw new RuntimeException("Invalid auto auto config");
         AutoNoNavigationZones.addCenterstageDefaults();
+
+        visionProcessor.setTeamColor(config.getTeamColor() == 0 ? VisionPipeline.TeamColor.BLUE : VisionPipeline.TeamColor.RED);
+        registerFeature(armClaw);
+        registerFeature(visionProcessor);
 
         // Change the values based on the team color
         Vector2d backdrop = config.getTeamColor() == 0 ? this.backdrop : redBackdrop;
@@ -88,7 +91,7 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
 
         telemetry.setAutoClear(false);
 
-        auto = new Auto(start);
+		Auto auto = new Auto(start);
         AutonomousDrivetrain drivetrain = auto.getDrivetrain();
 
         TrajectorySequenceBuilder builder = auto.begin();
@@ -137,6 +140,9 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
                         double dist = armClaw.getArmDistanceSensor() / 2.54;
                         b.forward(dist);
 
+                        if (spot == 1) b.strafeLeft(10); // TODO: Replace value with actual value
+                        if (spot == 3) b.strafeRight(10); // TODO: Replace value with actual value
+
                         if (config.getBackdropPixelPosition() == 1) armClaw.openLeftGrabber();
                         else armClaw.openRightGrabber();
 
@@ -164,6 +170,7 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
 
     @Override
     public void run() {
-        runner.run();
+        if (spot == 0) runner.run();
+        else spot = visionProcessor.getSpot();
     }
 }
