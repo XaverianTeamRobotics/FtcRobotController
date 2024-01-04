@@ -257,8 +257,8 @@ public class ArmClaw extends Feature implements Buildable {
     }
 
     public void servoPickupPos() {
-        servo0.setPosition(5);
-        servo1.setPosition(20);
+        servo0.setPosition(20);
+        servo1.setPosition(5);
     }
 
     public void loop() {
