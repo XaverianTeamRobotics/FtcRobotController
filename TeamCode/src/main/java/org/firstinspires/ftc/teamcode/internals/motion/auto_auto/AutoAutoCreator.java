@@ -10,14 +10,13 @@ import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetec
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.AutoRunner;
-import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.internals.registration.AutonomousOperation;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 import org.firstinspires.ftc.teamcode.internals.time.Clock;
 import org.firstinspires.ftc.teamcode.internals.time.Timer;
-import org.firstinspires.ftc.teamcode.opmodes.ScrimmageBotCenterstage1;
+import org.firstinspires.ftc.teamcode.opmodes.LasagnaBot;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -52,7 +51,7 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
 
     @Override
     public Class<? extends OperationMode> getNext() {
-        return ScrimmageBotCenterstage1.class;
+        return LasagnaBot.class;
     }
 
     @Override

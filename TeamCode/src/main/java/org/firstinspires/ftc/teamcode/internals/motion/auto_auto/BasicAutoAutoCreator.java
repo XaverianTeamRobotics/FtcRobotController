@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.internals.registration.AutonomousOperation
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.time.Clock;
 import org.firstinspires.ftc.teamcode.internals.time.Timer;
-import org.firstinspires.ftc.teamcode.opmodes.ScrimmageBotCenterstage1;
+import org.firstinspires.ftc.teamcode.opmodes.LasagnaBot;
 
 import java.util.UUID;
 
@@ -21,7 +21,7 @@ public class BasicAutoAutoCreator extends OperationMode implements AutonomousOpe
 
     @Override
     public Class<? extends OperationMode> getNext() {
-        return ScrimmageBotCenterstage1.class;
+        return LasagnaBot.class;
     }
 
     @Override
