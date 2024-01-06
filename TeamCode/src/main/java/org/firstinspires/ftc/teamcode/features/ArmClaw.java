@@ -3,7 +3,11 @@ package org.firstinspires.ftc.teamcode.features;
 import org.firstinspires.ftc.teamcode.internals.features.Buildable;
 import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;//our two devices our the motors for the arm
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
+import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
+
+import java.util.Objects;
 
 import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.*;
 
@@ -175,12 +179,12 @@ public class ArmClaw extends Feature implements Buildable {
         autonomousClawRotationControl = true;
     }
 
-    public void autoRotateClaw1(int i) {
+    public void autoRotateClaw1(double i) {
         blockHumanClawRotationControl();
         servo0.setPosition(i);
     }
 
-    public void autoRotateClaw2(int i) {
+    public void autoRotateClaw2(double i) {
         blockHumanClawRotationControl();
         servo1.setPosition(i);
     }
@@ -288,8 +292,8 @@ public class ArmClaw extends Feature implements Buildable {
             }
         } else {
             double deltaPos = armTargetHeight + encoder3.getPosition();
-            if (deltaPos < -25) motorPower = 100;
-            else if (deltaPos > 25) motorPower = -100;
+            if (deltaPos < -25) motorPower = 50;
+            else if (deltaPos > 25) motorPower = -50;
             else {
                 armLiftingInProgress = false;
                 motorPower = 0;
@@ -311,12 +315,12 @@ public class ArmClaw extends Feature implements Buildable {
                 servoPickupPos();
             } else {
                 double grabber0Pos = servo0.getPosition();
-                grabber0Pos += controller2.getLeftStickX() * 0.0005;
+                grabber0Pos += controller2.getLeftStickX() * 0.00075;
                 grabber0Pos = Math.max(0, Math.min(100, grabber0Pos));
                 servo0.setPosition(grabber0Pos);
 
                 double grabber1Pos = servo1.getPosition();
-                grabber1Pos += controller2.getRightStickX() * 0.0005;
+                grabber1Pos += controller2.getRightStickX() * 0.00075;
                 grabber1Pos = Math.max(0, Math.min(100, grabber1Pos));
                 servo1.setPosition(grabber1Pos);
             }
@@ -333,6 +337,11 @@ public class ArmClaw extends Feature implements Buildable {
             }
             if (controller2.getSquare()) servo4.setPosition(100);
             else if (controller2.getCircle()) servo4.setPosition(40);
+            if (controller2.getRightStickButton()) {
+                servo8.setPosition(100);
+                Objects.requireNonNull(HardwareGetter.getOpMode()).waitFor(0.5);
+                servo8.setPosition(50);
+            }
         }
     }
 }

@@ -129,9 +129,9 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
                     Runnable action = () -> {
                         Pose2d p = drivetrain.getPoseEstimate();
                         TrajectorySequenceBuilder b = drivetrain.trajectorySequenceBuilder(p);
-                        armClaw.autoRaiseArm(ArmClaw.KeyPositions.ONE);
-                        armClaw.autoRotateClaw1(50); // TODO: Replace value with actual value
-                        armClaw.autoRotateClaw2(50); // TODO: Replace value with actual value
+                        armClaw.autoRaiseArm(ArmClaw.KeyPositions.FOUR);
+                        armClaw.autoRotateClaw1(3); // TODO: Replace value with actual value
+                        armClaw.autoRotateClaw2(25); // TODO: Replace value with actual value
 
                         // Wait for the arm to finish moving
                         waitUntil(() -> armClaw.isArmLiftingInProgress());
@@ -139,8 +139,8 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
                         double dist = armClaw.getArmDistanceSensor() / 2.54;
                         b.forward(dist);
 
-                        if (spot == 1) b.strafeLeft(10); // TODO: Replace value with actual value
-                        if (spot == 3) b.strafeRight(10); // TODO: Replace value with actual value
+                        if (spot == 1) b.strafeLeft(5); // TODO: Replace value with actual value
+                        if (spot == 3) b.strafeRight(5); // TODO: Replace value with actual value
 
                         if (config.getBackdropPixelPosition() == 1) armClaw.openLeftGrabber();
                         else armClaw.openRightGrabber();

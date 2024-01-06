@@ -19,10 +19,10 @@ public class SpikeMarkDetectionPipeline extends VisionPipeline {
     public static int ZONE1_Y = 240;
     public static int ZONE1_WIDTH = 100;
     public static int ZONE1_HEIGHT = 130;
-    public static int ZONE2_X = 400;
-    public static int ZONE2_Y = 230;
+    public static int ZONE2_X = 450;
+    public static int ZONE2_Y = 330;
     public static int ZONE2_WIDTH = 160;
-    public static int ZONE2_HEIGHT = 200;
+    public static int ZONE2_HEIGHT = 140;
     public static boolean isBlueTeam = true;
     public static int BLUE_THRESH = 150;
     public static int RED_THRESH = 150;

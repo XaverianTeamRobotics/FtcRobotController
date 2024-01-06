@@ -17,6 +17,6 @@ public class AutoArmClawTest extends OperationMode implements TeleOperation {
 
     @Override
     public void run() {
-        claw.autoRaiseArm(ArmClaw.KeyPositions.ONE);
+        claw.autoRaiseArm(ArmClaw.KeyPositions.FOUR);
     }
 }

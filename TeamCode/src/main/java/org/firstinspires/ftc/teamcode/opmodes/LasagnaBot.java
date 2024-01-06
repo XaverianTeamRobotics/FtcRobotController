@@ -12,6 +12,7 @@ public class LasagnaBot extends OperationMode implements TeleOperation {
         registerFeature(new AirplaneLauncher());
         registerFeature(new MecanumDrivetrain(false));
         registerFeature(new ArmClaw());
+        registerFeature(new Lifter());
     }
 
     @Override

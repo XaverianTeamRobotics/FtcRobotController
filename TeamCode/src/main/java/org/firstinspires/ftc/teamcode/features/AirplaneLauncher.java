@@ -17,10 +17,10 @@ import org.firstinspires.ftc.teamcode.internals.hardware.data.GamepadRequestInpu
 public class AirplaneLauncher extends Feature implements Buildable {
     @Override
     public void build() {
-        Devices.enableButtonRegistration();
-        Devices.controller1.registerButton(GamepadRequestInput.TRIANGLE, "Launch plane");
-        Devices.controller1.registerButton(GamepadRequestInput.LEFT_BUMPER, "Move plane launcher down");
-        Devices.controller1.registerButton(GamepadRequestInput.RIGHT_BUMPER, "Move plane launcher up");
+//        Devices.enableButtonRegistration();
+//        Devices.controller1.registerButton(GamepadRequestInput.TRIANGLE, "Launch plane");
+//        Devices.controller1.registerButton(GamepadRequestInput.LEFT_BUMPER, "Move plane launcher down");
+//        Devices.controller1.registerButton(GamepadRequestInput.RIGHT_BUMPER, "Move plane launcher up");
         Devices.servo6.setPosition(35.0);
     }
 
@@ -31,9 +31,11 @@ public class AirplaneLauncher extends Feature implements Buildable {
         }
 
         if (Devices.controller1.getLeftBumper()) {
-            Devices.servo7.setPosition(Devices.servo7.getPosition() + 1);
+            Devices.servo7.setPosition(0);
         } else if (Devices.controller1.getRightBumper()) {
-            Devices.servo7.setPosition(Devices.servo7.getPosition() - 1);
+            Devices.servo7.setPosition(100);
+        } else {
+            Devices.servo7.setPosition(50);
         }
     }
 }
