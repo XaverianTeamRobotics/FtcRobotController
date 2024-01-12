@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.Tra
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AutoAutoPathSegment {
-	public static final double START_L_Y = 63;
+	public static final double START_L_Y = 60.86;
 	public static final double START_L_X = 12.00;
 	public static final double START_R_X = -36.00;
 	public static final double DISTANCE_TO_SPIKE_MARK = (START_L_Y % 24) + 12;

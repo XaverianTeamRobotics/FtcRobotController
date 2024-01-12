@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.opmodes.LasagnaBot;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Math.toRadians;
 
@@ -68,6 +69,8 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
         visionProcessor.setTeamColor(config.getTeamColor() == 0 ? VisionPipeline.TeamColor.BLUE : VisionPipeline.TeamColor.RED);
         registerFeature(armClaw);
         registerFeature(visionProcessor);
+        armClaw.closeLeftGrabber();
+        armClaw.closeRightGrabber();
 
         // Change the values based on the team color
         Vector2d backdrop = config.getTeamColor() == 0 ? this.backdrop : redBackdrop;
@@ -102,10 +105,51 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
         Vector2d last = start.vec();
 
         if (config.getPlaceSpikeMark()) {
+            AtomicInteger rotation = new AtomicInteger();
             builder = builder.forward(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK);
-            builder = builder.completeTrajectory().appendTrajectory();
-            // DO SPIKE MARK LOGIC!!!!
-            // WE MUST RETURN TO THE ORIGINAL POSITION IN OUR ORIGINAL ROTATION!!!!!!!
+            builder = builder.completeTrajectory()
+                    .appendAction(() -> {
+                        Pose2d p = drivetrain.getPoseEstimate();
+                        TrajectorySequenceBuilder b = drivetrain.trajectorySequenceBuilder(p);
+
+                        if (spot == 1) rotation.set(90);
+                        else if (spot == 3) rotation.set(-90);
+                        b.turn(Math.toRadians(rotation.get()));
+
+                        drivetrain.followTrajectorySequenceAsync(b.completeTrajectory());
+                        while(drivetrain.isBusy() && Objects.requireNonNull(HardwareGetter.getOpMode()).opModeIsActive()) {
+                            drivetrain.update();
+                        }
+                        b = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate());
+                    })
+                    .appendTrajectory()
+                    .turn(Math.toRadians(180))
+                    .completeTrajectory()
+                    .appendAction(() -> { armClaw.autoRaiseArm(100);})
+                    .appendWait(armClaw::isArmLiftingInProgress)
+                    .appendAction(() -> {
+                        armClaw.autoRotateClaw1(3);
+                        armClaw.autoRotateClaw2(33);
+                    })
+                    .appendAction(() -> { armClaw.autoRaiseArm(-100); })
+                    .appendWait(armClaw::isArmLiftingInProgress)
+                    .appendAction(() -> {
+                        if (config.getBackdropPixelPosition() == 0 || !config.getPlaceBackdrop()) armClaw.openRightGrabber();
+                        else if (config.getBackdropPixelPosition() == 1) armClaw.openLeftGrabber();
+                    })
+                    .appendAction(() -> { armClaw.autoRaiseArm(100);})
+                    .appendWait(armClaw::isBusy)
+                    .appendAction(() -> {
+                        armClaw.servoPickupPos();
+                    })
+                    .appendAction(() -> { armClaw.autoRaiseArm(0); })
+                    .appendWait(armClaw::isArmLiftingInProgress)
+                    .appendTrajectory()
+                    .forward(6)
+                    .turn(Math.toRadians(180))
+                    .turn(Math.toRadians(rotation.get()))
+                    .completeTrajectory()
+                    .appendTrajectory();
             builder = builder.back(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK);
             builder = builder.completeTrajectory().appendTrajectory();
         }
@@ -126,34 +170,35 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
                 if ((segment.getEndPosition().getY() == 36.00 || segment.getEndPosition().getY() == -36.00)
                         && segment.getEndPosition().getX() == 48.00
                         && needToScore) {
-                    Runnable action = () -> {
-                        Pose2d p = drivetrain.getPoseEstimate();
-                        TrajectorySequenceBuilder b = drivetrain.trajectorySequenceBuilder(p);
-                        armClaw.autoRaiseArm(ArmClaw.KeyPositions.FOUR);
-                        armClaw.autoRotateClaw1(3); // TODO: Replace value with actual value
-                        armClaw.autoRotateClaw2(25); // TODO: Replace value with actual value
-
-                        // Wait for the arm to finish moving
-                        waitUntil(() -> armClaw.isArmLiftingInProgress());
-
-                        double dist = armClaw.getArmDistanceSensor() / 2.54;
-                        b.forward(dist);
-
-                        if (spot == 1) b.strafeLeft(5); // TODO: Replace value with actual value
-                        if (spot == 3) b.strafeRight(5); // TODO: Replace value with actual value
-
-                        if (config.getBackdropPixelPosition() == 1) armClaw.openLeftGrabber();
-                        else armClaw.openRightGrabber();
-
-                        b.back(dist);
-
-                        drivetrain.followTrajectorySequenceAsync(b.completeTrajectory());
-                        while(drivetrain.isBusy() && Objects.requireNonNull(HardwareGetter.getOpMode()).opModeIsActive()) {
-                            drivetrain.update();
-                        }
-                    };
-                    builder.completeTrajectory().appendAction(action).appendTrajectory();
                     needToScore = false;
+                    builder = builder.completeTrajectory()
+                            .appendAction(() -> {
+                                armClaw.autoRaiseArm(ArmClaw.KeyPositions.FOUR);
+                                armClaw.autoRotateClaw1(1.2);
+                                armClaw.autoRotateClaw2(24.5);
+                            }).appendAction(() -> {
+                                Pose2d p = drivetrain.getPoseEstimate();
+                                TrajectorySequenceBuilder b = drivetrain.trajectorySequenceBuilder(p);
+                                if (spot == 1) b.strafeLeft(6);
+                                if (spot == 3) b.strafeRight(6);
+                                drivetrain.followTrajectorySequenceAsync(b.completeTrajectory());
+                                while(drivetrain.isBusy() && Objects.requireNonNull(HardwareGetter.getOpMode()).opModeIsActive()) {
+                                    drivetrain.update();
+                                }
+                                b = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate());
+                            }).appendWait(armClaw::isArmLiftingInProgress)
+                            .appendTrajectory()
+                            .turn(Math.toRadians(180))
+                            .back(12)
+                            .completeTrajectory()
+                            .appendAction(() -> {
+                                if (config.getBackdropPixelPosition() == 1) armClaw.openLeftGrabber();
+                                else armClaw.openRightGrabber();
+                            }).appendTrajectory()
+                            .forward(12)
+                            .turn(Math.toRadians(180))
+                            .lineToLinearHeading(new Pose2d(segment.getEndPosition().getX(), segment.getEndPosition().getY(), 0))
+                            .completeTrajectory().appendTrajectory();
                 }
             }
         }

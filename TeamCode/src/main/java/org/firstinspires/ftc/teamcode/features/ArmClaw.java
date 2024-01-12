@@ -51,6 +51,10 @@ public class ArmClaw extends Feature implements Buildable {
         setHumanClawReleaseControl();
     }
 
+    public boolean isBusy() {
+        return !isArmLiftingInProgress();
+    }
+
     /**
      * This method contains five key positions for the arm. Home represents the initial position, with the arm stowed.
      * One through five represent five different positions for the arm to be in.
@@ -59,9 +63,9 @@ public class ArmClaw extends Feature implements Buildable {
     public enum KeyPositions {
         HOME(0),
         ONE(500), // temp
-        TWO(750), // temp
-        THREE(1000), // temp
-        FOUR(1500), // temp
+        TWO(1000), // temp
+        THREE(1500), // temp
+        FOUR(1750), // temp
         FIVE(2000); // temp
 
         private final int position;
@@ -292,8 +296,8 @@ public class ArmClaw extends Feature implements Buildable {
             }
         } else {
             double deltaPos = armTargetHeight + encoder3.getPosition();
-            if (deltaPos < -25) motorPower = 50;
-            else if (deltaPos > 25) motorPower = -50;
+            if (deltaPos < -50) motorPower = 50;
+            else if (deltaPos > 50) motorPower = -50;
             else {
                 armLiftingInProgress = false;
                 motorPower = 0;

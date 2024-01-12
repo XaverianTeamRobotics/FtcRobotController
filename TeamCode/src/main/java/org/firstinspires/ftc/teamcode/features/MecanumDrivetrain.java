@@ -24,7 +24,7 @@ public class MecanumDrivetrain extends Feature implements Buildable {
 
     private final boolean FIELD_CENTRIC;
     private AutonomousDrivetrain drivetrain;
-    public static double xMult = 0.6, yMult = 0.6, rMult = 0.6;
+    public static double xMult = 1, yMult = 1, rMult = 1;
     public static double xYMin = 7, xYMax = 1;
     public static double yYMin = 7, yYMax = 1;
     public static boolean simulated = false;
