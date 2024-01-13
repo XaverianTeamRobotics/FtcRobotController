@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.internals.motion;
 
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoAutoCreator;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoAutoCreatorOld;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoNoNavigationZones;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.BestPathFinder;
 import org.firstinspires.ftc.teamcode.internals.registration.AutonomousOperation;
@@ -11,7 +10,7 @@ import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 public class InitializeAutoAuto extends OperationMode implements AutonomousOperation {
 	@Override
 	public Class<? extends OperationMode> getNext() {
-		return AutoAutoCreator.class;
+		return AutoAutoCreatorOld.class;
 	}
 
 	@Override
