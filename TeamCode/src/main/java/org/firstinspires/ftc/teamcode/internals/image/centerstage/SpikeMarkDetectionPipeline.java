@@ -28,35 +28,50 @@ public class SpikeMarkDetectionPipeline extends VisionPipeline {
     public static int RED_THRESH = 150;
     public static int MIN_AVG_AREA = 45;
 
-	@Override
+    private Mat labColorSpace;
+    private Mat channel;
+    private ArrayList<Mat> YCrCbChannels = new ArrayList<>();
+    private Mat zone1;
+    private Mat zone2;
+
+    @Override
+    public void init(Mat mat) {
+        super.init(mat);
+        labColorSpace = new Mat();
+        channel = new Mat();
+        zone1 = new Mat();
+        zone2 = new Mat();
+    }
+
+    @Override
     public Mat processFrame(Mat input) {
 
         // Convert to YCrCb
-        Mat labColorSpace = new Mat();
-        cvtColor(input, labColorSpace, COLOR_RGB2YCrCb);
+		cvtColor(input, labColorSpace, COLOR_RGB2YCrCb);
 
+        YCrCbChannels.clear();
         // Isolate the channels
-        ArrayList<Mat> YCrCbChannels = new ArrayList<>();
         split(labColorSpace, YCrCbChannels);
 
         // Get the channel of interest (Cb for blue team, Cr for red team)
         int channelOfInterest = isBlueTeam ? 2 : 1;
-        Mat channel = YCrCbChannels.get(channelOfInterest);
+		channel = YCrCbChannels.get(channelOfInterest);
 
-        /*
+		/*
          * Define the box surrounding where each position is
          * Zone 1: x1 = 100, x2 = 200, y1 = 240, y2 = 370
          * Zone 2: x1 = 400, x2 = 560, y1 = 230, y2 = 430
          */
         // Zone 1
         Rect zone1Rect = new Rect(ZONE1_X, ZONE1_Y, ZONE1_WIDTH, ZONE1_HEIGHT);
-        Mat zone1 = new Mat(channel, zone1Rect);
 
-        // Zone 2
+		zone1 = new Mat(channel, zone1Rect);
+
+		// Zone 2
         Rect zone2Rect = new Rect(ZONE2_X, ZONE2_Y, ZONE2_WIDTH, ZONE2_HEIGHT);
-        Mat zone2 = new Mat(channel, zone2Rect);
+		zone2 = new Mat(channel, zone2Rect);
 
-        // Draw the rectangles
+		// Draw the rectangles
         rectangle(input, zone1Rect, new Scalar(255, 0, 0), 2);
         rectangle(input, zone2Rect, new Scalar(255, 0, 0), 2);
 
@@ -87,9 +102,6 @@ public class SpikeMarkDetectionPipeline extends VisionPipeline {
             position = 0;
         }
 
-        channel.release();
-        zone1.release();
-        zone2.release();
         // add the number of the color to the image
         Imgproc.putText(input, String.valueOf(position), new Point(10, 50), FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 255, 255), 2);
         return input;

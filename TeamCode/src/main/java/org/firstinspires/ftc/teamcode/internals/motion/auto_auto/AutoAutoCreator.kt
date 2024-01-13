@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.features.VisionProcessingFeature
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companion.opMode
 import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline
 import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline
+import org.firstinspires.ftc.teamcode.internals.math.units.deg
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.AutoRunner
 import org.firstinspires.ftc.teamcode.internals.registration.AutonomousOperation
@@ -96,7 +97,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
         var last = start.vec()
 
         if (config!!.placeSpikeMark) {
-            val rotation = AtomicInteger()
+            var rotation = 0.deg
             builder = builder.forward(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)
             builder = builder.completeTrajectory()
                 .appendAction {
@@ -104,17 +105,16 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                     armClaw!!.closeLeftGrabber()
 
                     val p = drivetrain.poseEstimate
-                    var b = drivetrain.trajectorySequenceBuilder(p)
+                    with(drivetrain.trajectorySequenceBuilder(p)) {
+                        if (spot == 1) rotation = 90.deg
+                        else if (spot == 3) rotation = 90.deg
+                        turn(rotation.rad)
 
-                    if (spot == 1) rotation.set(90)
-                    else if (spot == 3) rotation.set(-90)
-                    b.turn(Math.toRadians(rotation.get().toDouble()))
-
-                    drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
-                    while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
-                        drivetrain.update()
+                        drivetrain.followTrajectorySequenceAsync(completeTrajectory())
+                        while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
+                            drivetrain.update()
+                        }
                     }
-                    b = drivetrain.trajectorySequenceBuilder(drivetrain.poseEstimate)
                 }
                 .appendTrajectory()
                 .turn(Math.toRadians(180.0))
@@ -143,7 +143,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                 .appendAction { waitUntil { armClaw!!.isComplete } }
                 .appendTrajectory()
                 .turn(Math.toRadians(180.0))
-                .turn(Math.toRadians(rotation.get().toDouble()))
+                .turn(rotation.rad)
                 .completeTrajectory()
                 .appendTrajectory()
             builder = builder.back(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)

@@ -1,1 +1,0 @@
-[Relative Navigation by Area and Visuals](https://docs.google.com/document/u/0/d/1XYvxFpel3gj0w1ezfnH03_NayS4MH9XnTeo674oF7A0/edit)
