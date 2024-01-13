@@ -69,6 +69,7 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
         visionProcessor.setTeamColor(config.getTeamColor() == 0 ? VisionPipeline.TeamColor.BLUE : VisionPipeline.TeamColor.RED);
         registerFeature(armClaw);
         registerFeature(visionProcessor);
+        armClaw.blockHumanClawReleaseControl();
         armClaw.closeLeftGrabber();
         armClaw.closeRightGrabber();
 
@@ -109,6 +110,9 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
             builder = builder.forward(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK);
             builder = builder.completeTrajectory()
                     .appendAction(() -> {
+                        armClaw.closeRightGrabber();
+                        armClaw.closeLeftGrabber();
+
                         Pose2d p = drivetrain.getPoseEstimate();
                         TrajectorySequenceBuilder b = drivetrain.trajectorySequenceBuilder(p);
 
@@ -126,26 +130,28 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
                     .turn(Math.toRadians(180))
                     .completeTrajectory()
                     .appendAction(() -> { armClaw.autoRaiseArm(100);})
-                    .appendWait(armClaw::isArmLiftingInProgress)
+                    .appendAction(() -> { waitUntil(() -> armClaw.isComplete()); })
                     .appendAction(() -> {
                         armClaw.autoRotateClaw1(3);
                         armClaw.autoRotateClaw2(33);
+                        waitFor(0.5);
                     })
                     .appendAction(() -> { armClaw.autoRaiseArm(-100); })
-                    .appendWait(armClaw::isArmLiftingInProgress)
+                    .appendAction(() -> { waitUntil(() -> armClaw.isComplete()); })
                     .appendAction(() -> {
                         if (config.getBackdropPixelPosition() == 0 || !config.getPlaceBackdrop()) armClaw.openRightGrabber();
                         else if (config.getBackdropPixelPosition() == 1) armClaw.openLeftGrabber();
+                        waitFor(0.5);
                     })
                     .appendAction(() -> { armClaw.autoRaiseArm(100);})
-                    .appendWait(armClaw::isBusy)
+                    .appendAction(() -> { waitUntil(() -> armClaw.isComplete()); })
                     .appendAction(() -> {
                         armClaw.servoPickupPos();
+                        waitFor(0.5);
                     })
                     .appendAction(() -> { armClaw.autoRaiseArm(0); })
-                    .appendWait(armClaw::isArmLiftingInProgress)
+                    .appendAction(() -> { waitUntil(() -> armClaw.isComplete()); })
                     .appendTrajectory()
-                    .forward(6)
                     .turn(Math.toRadians(180))
                     .turn(Math.toRadians(rotation.get()))
                     .completeTrajectory()
@@ -176,7 +182,9 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
                                 armClaw.autoRaiseArm(ArmClaw.KeyPositions.FOUR);
                                 armClaw.autoRotateClaw1(1.2);
                                 armClaw.autoRotateClaw2(24.5);
-                            }).appendAction(() -> {
+                            })
+                            .appendAction(() -> waitUntil(() -> armClaw.isComplete()))
+                            .appendAction(() -> {
                                 Pose2d p = drivetrain.getPoseEstimate();
                                 TrajectorySequenceBuilder b = drivetrain.trajectorySequenceBuilder(p);
                                 if (spot == 1) b.strafeLeft(6);
@@ -186,7 +194,7 @@ public class AutoAutoCreator extends OperationMode implements AutonomousOperatio
                                     drivetrain.update();
                                 }
                                 b = drivetrain.trajectorySequenceBuilder(drivetrain.getPoseEstimate());
-                            }).appendWait(armClaw::isArmLiftingInProgress)
+                            })
                             .appendTrajectory()
                             .turn(Math.toRadians(180))
                             .back(12)

@@ -40,8 +40,8 @@ public class ArmClaw extends Feature implements Buildable {
     private boolean armLiftingInProgress = false;
 
     public void build(){
-        servo3.setPosition(L_OPEN);
-        servo2.setPosition(R_OPEN);
+        servo3.setPosition(R_OPEN);
+        servo2.setPosition(L_OPEN);
         servoPickupPos();
         motor0.setPower(0);
         encoderHomePosition = -encoder3.getPosition();
@@ -51,7 +51,7 @@ public class ArmClaw extends Feature implements Buildable {
         setHumanClawReleaseControl();
     }
 
-    public boolean isBusy() {
+    public boolean isComplete() {
         return !isArmLiftingInProgress();
     }
 
@@ -121,11 +121,11 @@ public class ArmClaw extends Feature implements Buildable {
     }
 
     public void openLeftGrabber() {
-        servo3.setPosition(L_OPEN);
+        servo2.setPosition(R_OPEN);
     }
 
     public void closeLeftGrabber() {
-        servo3.setPosition(L_CLOSED);
+        servo2.setPosition(R_CLOSED);
     }
 
     /**
@@ -149,11 +149,11 @@ public class ArmClaw extends Feature implements Buildable {
     }
 
     public void openRightGrabber() {
-        servo2.setPosition(R_OPEN);
+        servo3.setPosition(L_OPEN);
     }
 
     public void closeRightGrabber() {
-        servo2.setPosition(R_CLOSED);
+        servo3.setPosition(L_CLOSED);
     }
 
     public void autoStartIntake() {
@@ -257,6 +257,17 @@ public class ArmClaw extends Feature implements Buildable {
     }
 
     public boolean isArmLiftingInProgress() {
+        double deltaPos = armTargetHeight + encoder3.getPosition();
+        int motorPower;
+        if (deltaPos < -50) motorPower = 50;
+        else if (deltaPos > 50) motorPower = -50;
+        else {
+            armLiftingInProgress = false;
+            motorPower = 0;
+            setHumanArmControl();
+        }
+        Devices.motor0.setPower(motorPower);
+        Devices.motor1.setPower(motorPower);
 		return autonomousArmControl && armLiftingInProgress;
     }
 
@@ -310,14 +321,20 @@ public class ArmClaw extends Feature implements Buildable {
 
         if (!autonomousClawReleaseControl) {
             //the motors must move in opposite directions
-            servo3.setPosition(leftButtonPressedCount()); //this operates the left grabber
-            servo2.setPosition(rightButtonPressedCount()); //this operates the right grabber
+            servo3.setPosition(leftButtonPressedCount());
+            servo2.setPosition(rightButtonPressedCount());
         }
 
         if (!autonomousClawRotationControl) {
             if (controller2.getTriangle()) {
                 servoPickupPos();
-            } else {
+            } else if (controller2.getLeftStickButton()) {
+                servo0.setPosition(20);
+                servo1.setPosition(33);
+            } else if (controller2.getRightStickButton()) {
+                servo0.setPosition(15);
+                servo1.setPosition(1);
+            }else {
                 double grabber0Pos = servo0.getPosition();
                 grabber0Pos += controller2.getLeftStickX() * 0.00075;
                 grabber0Pos = Math.max(0, Math.min(100, grabber0Pos));
@@ -341,7 +358,7 @@ public class ArmClaw extends Feature implements Buildable {
             }
             if (controller2.getSquare()) servo4.setPosition(100);
             else if (controller2.getCircle()) servo4.setPosition(40);
-            if (controller2.getRightStickButton()) {
+            if (controller1.getRightStickButton()) {
                 servo8.setPosition(100);
                 Objects.requireNonNull(HardwareGetter.getOpMode()).waitFor(0.5);
                 servo8.setPosition(50);
