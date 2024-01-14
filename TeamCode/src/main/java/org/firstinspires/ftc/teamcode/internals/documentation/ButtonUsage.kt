@@ -6,6 +6,14 @@ annotation class ButtonUsage(
     val controller: ControllerName
 )
 
+annotation class ReferToButtonUsage(
+    val referTo: String
+)
+
+annotation class ReferableButtonUsage(
+    val referableAs: String
+)
+
 enum class ButtonName {
     A, B, X, Y,
     DPAD_UP, DPAD_DOWN, DPAD_LEFT, DPAD_RIGHT,
