@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.tests;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import org.firstinspires.ftc.teamcode.internals.motion.InitializeAutoAuto;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoAutoPathSegment;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoNoNavigationZones;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.BestPathFinder;
@@ -11,10 +10,12 @@ import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 
 import java.util.ArrayList;
 
+import static org.firstinspires.ftc.teamcode.internals.motion.InitializeAutoAutoKt.initializeAutoAuto;
+
 public class BestPathFinderTestOpMode extends OperationMode implements TeleOperation {
 	@Override
 	public void construct() {
-		InitializeAutoAuto.initialize();
+		initializeAutoAuto();
 
 		Logging.setAutoClear(false);
 		Logging.log("BestPathFinderTest: Started");
