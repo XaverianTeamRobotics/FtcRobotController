@@ -26,6 +26,7 @@ dependencies {
     implementation 'com.michaell:jlooping:2.0.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.0'
+    implementation 'org.reflections:reflections:0.9.12'
 
     testImplementation 'junit:junit:4.13.2'
 }
