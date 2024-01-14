@@ -16,7 +16,6 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 
     id 'org.jetbrains.dokka' version '1.9.10'
-
 }
 
 // Include common definitions from above.
@@ -38,6 +37,14 @@ android {
             pickFirsts += ['**/*.so']
         }
         jniLibs.useLegacyPackaging true
+    }
+
+    kotlin {
+        jvmToolchain { 11 }
+    }
+
+    kotlinOptions {
+        jvmTarget = '11'
     }
 }
 
