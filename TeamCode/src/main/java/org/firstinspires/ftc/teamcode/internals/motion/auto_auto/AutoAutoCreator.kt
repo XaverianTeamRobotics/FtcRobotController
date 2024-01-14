@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companio
 import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline
 import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline
 import org.firstinspires.ftc.teamcode.internals.math.units.deg
+import org.firstinspires.ftc.teamcode.internals.motion.initializeAutoAuto
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.AutoRunner
 import org.firstinspires.ftc.teamcode.internals.registration.AutonomousOperation
@@ -93,7 +94,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
         Logging.log("Calculating path...")
         Logging.update()
         val startT = System.currentTimeMillis()
-        BestPathFinder.populate()
+        initializeAutoAuto()
         var last = start.vec()
 
         if (config!!.placeSpikeMark) {
