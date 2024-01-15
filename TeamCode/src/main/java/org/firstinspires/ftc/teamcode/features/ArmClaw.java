@@ -277,7 +277,7 @@ public class ArmClaw extends Feature implements Buildable {
 
     public void servoPickupPos() {
         servo0.setPosition(20);
-        servo1.setPosition(5);
+        servo1.setPosition(9);
     }
 
     public void loop() {
@@ -329,11 +329,11 @@ public class ArmClaw extends Feature implements Buildable {
             if (controller2.getTriangle()) {
                 servoPickupPos();
             } else if (controller2.getLeftStickButton()) {
-                servo0.setPosition(20);
-                servo1.setPosition(33);
+                servo0.setPosition(18.5);
+                servo1.setPosition(39.7);
             } else if (controller2.getRightStickButton()) {
-                servo0.setPosition(15);
-                servo1.setPosition(1);
+                servo0.setPosition(4);
+                servo1.setPosition(32);
             }else {
                 double grabber0Pos = servo0.getPosition();
                 grabber0Pos += controller2.getLeftStickX() * 0.00075;
