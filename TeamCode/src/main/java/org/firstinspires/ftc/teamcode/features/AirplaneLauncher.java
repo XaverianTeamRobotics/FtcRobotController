@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.features;
 
 
+import org.firstinspires.ftc.teamcode.internals.documentation.ButtonName;
+import org.firstinspires.ftc.teamcode.internals.documentation.ButtonUsage;
+import org.firstinspires.ftc.teamcode.internals.documentation.ControllerName;
+import org.firstinspires.ftc.teamcode.internals.documentation.ReferableButtonUsage;
 import org.firstinspires.ftc.teamcode.internals.features.Buildable;
 import org.firstinspires.ftc.teamcode.internals.features.Feature;
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
@@ -14,6 +18,10 @@ import org.firstinspires.ftc.teamcode.internals.hardware.data.GamepadRequestInpu
  * Controls: Press triangle to launch the plane. Press the left bumpet to move the launcher down and
  * the right bumper to move it up.
  */
+@ReferableButtonUsage(referableAs = "AirplaneLauncher")
+@ButtonUsage(button = ButtonName.Y, description = "Launch plane", controller = ControllerName.CONTROLLER_1)
+@ButtonUsage(button = ButtonName.LEFT_BUMPER, description = "Move plane launcher down", controller = ControllerName.CONTROLLER_1)
+@ButtonUsage(button = ButtonName.RIGHT_BUMPER, description = "Move plane launcher up", controller = ControllerName.CONTROLLER_1)
 public class AirplaneLauncher extends Feature implements Buildable {
     @Override
     public void build() {

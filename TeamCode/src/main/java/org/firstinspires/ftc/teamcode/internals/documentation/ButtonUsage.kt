@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.internals.documentation
 
+@Repeatable
 annotation class ButtonUsage(
     val description: String,
     val button: ButtonName,
     val controller: ControllerName
 )
 
+@Repeatable
 annotation class ReferToButtonUsage(
     val referTo: String
 )
