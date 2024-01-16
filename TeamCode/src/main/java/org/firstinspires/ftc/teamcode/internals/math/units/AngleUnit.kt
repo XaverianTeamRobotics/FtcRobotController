@@ -56,6 +56,10 @@ class AngleUnit internal constructor() {
         }
     }
 
+    operator fun compareTo(other: AngleUnit): Int {
+        return this.deg.compareTo(other.deg)
+    }
+
     override fun hashCode(): Int {
         return deg.hashCode()
     }

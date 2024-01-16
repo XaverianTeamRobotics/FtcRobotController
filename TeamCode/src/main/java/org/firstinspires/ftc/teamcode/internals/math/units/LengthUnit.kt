@@ -71,6 +71,10 @@ class LengthUnit internal constructor() {
         }
     }
 
+    operator fun compareTo(other: LengthUnit): Int {
+        return this.cm.compareTo(other.cm)
+    }
+
     override fun hashCode(): Int {
         return cm.hashCode()
     }
