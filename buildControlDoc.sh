@@ -5,7 +5,7 @@ git clone https://github.com/XaverianTeamRobotics/FTC-DocParser
 cd FTC-DocParser || exit 1
 cp ../"$APK_PATH" ./APK.apk
 ./unzipAPK.sh APK.apk
-./gradlew run
-cp ./doc-out/ ../doc-out/
+./gradlew run --no-daemon
+cp -r ./doc-out/ ../doc-out/
 cd ..
 rm -rf FTC-DocParser
