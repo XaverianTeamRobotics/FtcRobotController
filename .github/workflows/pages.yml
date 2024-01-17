@@ -52,6 +52,7 @@ jobs:
 
       - name: Build ControlDoc
         run: |
+          chmod +x ./buildControlDoc.sh
           ./buildControlDoc.sh TeamCode/build/outputs/apk/debug/TeamCode-debug.apk
 
       - name: Upload build artifact
