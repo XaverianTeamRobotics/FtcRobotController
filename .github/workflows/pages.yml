@@ -27,15 +27,42 @@ jobs:
           ./gradlew :TeamCode:dokkaHtml --no-daemon
           mv ./TeamCode/build/dokka/html ./javadoc
 
-      - name: Upload Pages build artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
         with:
           path: ./javadoc/html
-          retention-days: 90
+          name: javadoc
 
+  build-controldoc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: gradle
+
+      - name: Build APK with Gradle
+        run: ./gradlew assembleDebug --scan --stacktrace --info --no-daemon -x test
+
+      - name: Build ControlDoc
+        run: |
+          ./buildControlDoc.sh TeamCode/build/outputs/apk/debug/TeamCode-debug.apk
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: controldoc
+          path: doc-out/
   deploy:
     needs:
       - build-javadoc
+      - build-controldoc
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -51,6 +78,25 @@ jobs:
       cancel-in-progress: false
 
     steps:
+      - name: Get build artifact (javadoc)
+        uses: actions/download-artifact@v4
+        with:
+          name: javadoc
+          path: javadoc
+      - name: Get build artifact (controldoc)
+        uses: actions/download-artifact@v4
+        with:
+          name: controldoc
+          path: controldoc
+      - name: Move controldoc to javadoc
+        run: |
+          mv controldoc javadoc/controls
+      - name: Upload Pages build artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./javadoc
+          retention-days: 90
+
       - name: Configure Pages
         uses: actions/configure-pages@v4
 
