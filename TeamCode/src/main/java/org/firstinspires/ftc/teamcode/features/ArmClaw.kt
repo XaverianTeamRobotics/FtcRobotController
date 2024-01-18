@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.features
 
+import org.firstinspires.ftc.teamcode.internals.documentation.ButtonName
+import org.firstinspires.ftc.teamcode.internals.documentation.ButtonUsage
+import org.firstinspires.ftc.teamcode.internals.documentation.ControllerName
+import org.firstinspires.ftc.teamcode.internals.documentation.ReferableButtonUsage
 import org.firstinspires.ftc.teamcode.internals.features.Buildable
 import org.firstinspires.ftc.teamcode.internals.features.Feature
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices
@@ -24,6 +28,22 @@ import kotlin.math.min
  *
  * The OPTIONS/START button disables auto claw rotation and the auto lift
  */
+@ButtonUsage(button = ButtonName.Y, description = "Rotate claw to pickup position", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.LEFT_STICK_BUTTON, description = "Rotate claw to flat position", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.RIGHT_STICK_BUTTON, description = "Rotate claw to scoring position", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.DPAD_LEFT, description = "Toggle left grabber", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.DPAD_RIGHT, description = "Toggle right grabber", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.DPAD_UP, description = "Reverse intake (hold)", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.DPAD_DOWN, description = "Toggle intake", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.LEFT_BUMPER, description = "Pixel selector to left", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.RIGHT_BUMPER, description = "Pixel selector to right", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.X, description = "Pixel holder up", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.B, description = "Pixel holder down", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.LEFT_TRIGGER, description = "Lower arm", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.RIGHT_TRIGGER, description = "Raise arm", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.BACK, description = "Emergency stop autonomous features", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.RIGHT_STICK_BUTTON, description = "Windshield wiper :)", controller = ControllerName.CONTROLLER_1)
+@ReferableButtonUsage(referableAs = "ArmClaw")
 class ArmClaw : Feature(), Buildable {
     private var counter = 0.0
     private var dpadPressed = false
