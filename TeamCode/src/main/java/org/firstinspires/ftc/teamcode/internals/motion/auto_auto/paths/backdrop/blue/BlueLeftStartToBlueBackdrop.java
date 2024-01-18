@@ -9,6 +9,7 @@ public class BlueLeftStartToBlueBackdrop extends AutoAutoPathSegment {
 	@Override
 	public TrajectorySequenceBuilder addPathSegment(TrajectorySequenceBuilder builder) {
 		return builder
+				.splineTo(new Vector2d(28.50, 50.81), Math.toRadians(-11.06))
 				.splineTo(new Vector2d(48.00, 36.00), 0.0);
 	}
 

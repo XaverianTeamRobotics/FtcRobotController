@@ -1,8 +1,16 @@
 package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
 
+import org.firstinspires.ftc.teamcode.internals.documentation.ButtonName;
+import org.firstinspires.ftc.teamcode.internals.documentation.ButtonUsage;
+import org.firstinspires.ftc.teamcode.internals.documentation.ControllerName;
+import org.firstinspires.ftc.teamcode.internals.documentation.ReferableButtonUsage;
 import org.firstinspires.ftc.teamcode.internals.telemetry.Questions;
 import org.firstinspires.ftc.teamcode.internals.telemetry.graphics.MenuManager;
 
+@ButtonUsage(description = "Menu: Navigate up", button = ButtonName.DPAD_UP, controller = ControllerName.CONTROLLER_1)
+@ButtonUsage(description = "Menu: Navigate down", button = ButtonName.DPAD_DOWN, controller = ControllerName.CONTROLLER_1)
+@ButtonUsage(description = "Menu: Select", button = ButtonName.A, controller = ControllerName.CONTROLLER_1)
+@ReferableButtonUsage(referableAs = "AutoAutoCreatorConfig")
 public class AutoAutoCreatorConfig {
     /**
      * The color of the team. 0 is blue, 1 is red.

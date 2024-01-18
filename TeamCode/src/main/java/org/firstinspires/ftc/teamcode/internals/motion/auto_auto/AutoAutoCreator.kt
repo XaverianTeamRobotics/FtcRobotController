@@ -4,6 +4,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import org.firstinspires.ftc.teamcode.features.ArmClaw
 import org.firstinspires.ftc.teamcode.features.VisionProcessingFeature
+import org.firstinspires.ftc.teamcode.internals.documentation.ButtonUsage
+import org.firstinspires.ftc.teamcode.internals.documentation.ReferToButtonUsage
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companion.opMode
 import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline
 import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline
@@ -19,7 +21,9 @@ import org.firstinspires.ftc.teamcode.internals.time.Timer
 import org.firstinspires.ftc.teamcode.opmodes.LasagnaBot
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.math.abs
 
+@ReferToButtonUsage("AutoAutoCreatorConfig")
 class AutoAutoCreator : OperationMode(), AutonomousOperation {
     private var config: AutoAutoCreatorConfig? = null
     lateinit var timer: Timer
@@ -98,36 +102,33 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
         var last = start.vec()
 
         if (config!!.placeSpikeMark) {
-            var rotation = 0.deg
             builder = builder.forward(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)
             builder = builder.completeTrajectory()
                 .appendAction {
                     armClaw!!.closeRightGrabber()
                     armClaw!!.closeLeftGrabber()
 
+                    var rotation = 0.deg
+                    if (spot == 1) rotation = 90.deg
+                    else if (spot == 3) rotation = (-90).deg
                     val p = drivetrain.poseEstimate
-                    with(drivetrain.trajectorySequenceBuilder(p)) {
-                        if (spot == 1) rotation = 90.deg
-                        else if (spot == 3) rotation = 90.deg
-                        turn(rotation.rad)
-
-                        drivetrain.followTrajectorySequenceAsync(completeTrajectory())
+                    val b = drivetrain.trajectorySequenceBuilder(p)
+                    b.turn(Math.toRadians(180.0) + rotation.rad)
+                    try {
+                        drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
                         while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
                             drivetrain.update()
                         }
-                    }
+                    } catch (_: Exception) {}
                 }
-                .appendTrajectory()
-                .turn(Math.toRadians(180.0))
-                .completeTrajectory()
-                .appendAction { armClaw!!.autoRaiseArm(100) }
+                .appendAction { armClaw!!.autoRaiseArm(138) }
                 .appendAction { waitUntil { armClaw!!.isComplete } }
                 .appendAction {
-                    armClaw!!.autoRotateClaw1(3.0)
-                    armClaw!!.autoRotateClaw2(33.0)
+                    armClaw!!.autoRotateClaw1(11.4)
+                    armClaw!!.autoRotateClaw2(25.8)
                     waitFor(0.5)
                 }
-                .appendAction { armClaw!!.autoRaiseArm(-100) }
+                .appendAction { armClaw!!.autoRaiseArm(-307) }
                 .appendAction { waitUntil { armClaw!!.isComplete } }
                 .appendAction {
                     if (config!!.backdropPixelPosition == 0 || !config!!.placeBackdrop) armClaw!!.openRightGrabber()
@@ -140,12 +141,22 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                     armClaw!!.servoPickupPos()
                     waitFor(0.5)
                 }
-                .appendAction { armClaw!!.autoRaiseArm(0) }
-                .appendAction { waitUntil { armClaw!!.isComplete } }
-                .appendTrajectory()
-                .turn(Math.toRadians(180.0))
-                .turn(rotation.rad)
-                .completeTrajectory()
+                .appendAction {
+                    var rotation = 0.deg
+                    if (spot == 1) rotation = 90.deg
+                    else if (spot == 3) rotation = (-90).deg
+                    val p = drivetrain.poseEstimate
+                    val b = drivetrain.trajectorySequenceBuilder(p)
+                    b.forward(6.0)
+                    b.turn(Math.toRadians(180.0) - rotation.rad)
+                    b.lineTo(p.vec())
+                    try {
+                        drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
+                        while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
+                            drivetrain.update()
+                        }
+                    } catch (_: Exception) {}
+                }
                 .appendTrajectory()
             builder = builder.back(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)
             builder = builder.completeTrajectory().appendTrajectory()
@@ -171,41 +182,58 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                     needToScore = false
                     builder = builder.completeTrajectory()
                         .appendAction {
-                            armClaw!!.autoRaiseArm(ArmClaw.KeyPositions.FOUR)
-                            armClaw!!.autoRotateClaw1(1.2)
-                            armClaw!!.autoRotateClaw2(24.5)
+                            armClaw!!.autoRaiseArm(97)
+                            armClaw!!.autoRotateClaw1(4.0)
+                            armClaw!!.autoRotateClaw2(32.0)
                         }
                         .appendAction { waitUntil { armClaw!!.isComplete } }
                         .appendAction {
                             val p = drivetrain.poseEstimate
-                            var b = drivetrain.trajectorySequenceBuilder(p)
-                            if (spot == 1) b.strafeLeft(6.0)
-                            if (spot == 3) b.strafeRight(6.0)
-                            drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
-                            while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
-                                drivetrain.update()
+                            val b = drivetrain.trajectorySequenceBuilder(p)
+                            when (spot) {
+                                1 -> b.strafeLeft(6.0)
+                                3 -> b.strafeRight(6.0)
+                                else -> return@appendAction
                             }
-                            b = drivetrain.trajectorySequenceBuilder(drivetrain.poseEstimate)
+                            try {
+                                drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
+                                while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
+                                    drivetrain.update()
+                                }
+                            } catch (_: Exception) {}
                         }
                         .appendTrajectory()
                         .turn(Math.toRadians(180.0))
                         .back(12.0)
                         .completeTrajectory()
                         .appendAction {
-                            if (config!!.backdropPixelPosition == 1) armClaw!!.openLeftGrabber()
-                            else armClaw!!.openRightGrabber()
+                            if (config!!.backdropPixelPosition == 0) armClaw!!.openRightGrabber()
+                            else armClaw!!.openLeftGrabber()
+                            armClaw!!.autoRaiseArm(300)
+                            waitUntil { armClaw!!.isComplete }
                         }.appendTrajectory()
                         .forward(12.0)
                         .turn(Math.toRadians(180.0))
-                        .lineToLinearHeading(Pose2d(segment.endPosition.x, segment.endPosition.y, 0.0))
-                        .completeTrajectory().appendTrajectory()
+                        .completeTrajectory().appendAction {
+                            armClaw!!.servoPickupPos()
+                            val p = drivetrain.poseEstimate
+                            val b = drivetrain.trajectorySequenceBuilder(p)
+                            try {
+                                b.lineToLinearHeading(Pose2d(segment.endPosition.x, segment.endPosition.y, 0.0))
+                                drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
+                                while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
+                                    drivetrain.update()
+                                }
+                            } catch (_: Exception) {}
+                        }
+                        .appendTrajectory()
                 }
             }
         }
         Logging.log("Calculated path in " + (System.currentTimeMillis() - startT) + "ms")
         Logging.update()
 
-        auto = builder.completeTrajectory().complete()
+        auto = builder.completeTrajectory().appendAction{ while (opModeIsActive()) continue }.complete()
 
         telemetry.isAutoClear = true
 
@@ -213,7 +241,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
     }
 
     override fun run() {
-        if (spot == 0) runner.run()
-        else spot = visionProcessor!!.spot
+        if (spot == 0) spot = visionProcessor!!.spot
+        else runner.run()
     }
 }
