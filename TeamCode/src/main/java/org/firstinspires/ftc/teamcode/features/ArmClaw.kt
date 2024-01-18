@@ -1,102 +1,91 @@
-package org.firstinspires.ftc.teamcode.features;
+package org.firstinspires.ftc.teamcode.features
 
-import org.firstinspires.ftc.teamcode.internals.features.Buildable;
-import org.firstinspires.ftc.teamcode.internals.features.Feature;
-import org.firstinspires.ftc.teamcode.internals.hardware.Devices;//our two devices our the motors for the arm
-import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
-import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
+import org.firstinspires.ftc.teamcode.internals.features.Buildable
+import org.firstinspires.ftc.teamcode.internals.features.Feature
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companion.opMode
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
+import java.util.*
+import kotlin.math.max
+import kotlin.math.min
 
-import java.util.Objects;
-
-import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.*;
-
+//our two devices our the motors for the arm
 /**
  * this runs the grabber, intake, and claw pivot mechanism.  Dpad left is to close the left grabber,
  * Dpad right closes the right grabber, Dpad up opens both grabbers, Dpad down starts/stops the
  * intake, the bumpers rotate the claw mechanism, and the triggers move the arms.
- * <p>
+ *
+ *
  * All controls are in controller 2
- * <p>
+ *
+ *
  * The SHARE/BACK button resets the home position of the arm
- * <p>
+ *
+ *
  * The OPTIONS/START button disables auto claw rotation and the auto lift
  */
-public class ArmClaw extends Feature implements Buildable {
-    public static final int R_OPEN = 10, L_OPEN = 75;
-    public static final int R_CLOSED = 0, L_CLOSED = 60;
-    private double counter = 0;
-    private boolean dpadPressed = false;
-    private double counterLeft = 0; //left servo
-    private double counterRight = 0; //right servo
-    private boolean dpadPressedLeft = false; //left servo
-    private boolean dpadPressedRight = false; //right servo
-    private int encoderHomePosition = 0;
-    private boolean autonomousArmControl = false;
-    private boolean autonomousIntakeControl = false;
-    private boolean autonomousClawRotationControl = false;
-    private boolean autonomousClawReleaseControl = false;
-    private int armTargetHeight;
-    private boolean armLiftingInProgress = false;
+class ArmClaw : Feature(), Buildable {
+    private var counter = 0.0
+    private var dpadPressed = false
+    private var counterLeft = 0.0 //left servo
+    private var counterRight = 0.0 //right servo
+    private var dpadPressedLeft = false //left servo
+    private var dpadPressedRight = false //right servo
+    private var encoderHomePosition = 0
+    private var autonomousArmControl = false
+    private var autonomousIntakeControl = false
+    private var autonomousClawRotationControl = false
+    private var autonomousClawReleaseControl = false
+    private var armTargetHeight = 0
+    private var armLiftingInProgress = false
 
-    public void build(){
-        servo3.setPosition(R_OPEN);
-        servo2.setPosition(L_OPEN);
-        servoPickupPos();
-        motor0.setPower(0);
-        encoderHomePosition = -encoder3.getPosition();
-        setHumanArmControl();
-        setHumanIntakeControl();
-        setHumanClawRotationControl();
-        setHumanClawReleaseControl();
+    override fun build() {
+        Devices.servo3.position = R_OPEN.toDouble()
+        Devices.servo2.position = L_OPEN.toDouble()
+        servoPickupPos()
+        Devices.motor0.power = 0.0
+        encoderHomePosition = -Devices.encoder3.position
+        setHumanArmControl()
+        setHumanIntakeControl()
+        setHumanClawRotationControl()
+        setHumanClawReleaseControl()
     }
 
-    public boolean isComplete() {
-        return !isArmLiftingInProgress();
-    }
+    val isComplete: Boolean
+        get() = !isArmLiftingInProgress()
 
     /**
      * This method contains five key positions for the arm. Home represents the initial position, with the arm stowed.
      * One through five represent five different positions for the arm to be in.
      * The ONE position is also the position used as the threshold for the auto claw rotation.
      */
-    public enum KeyPositions {
+    enum class KeyPositions(val position: Int) {
         HOME(0),
-        ONE(500), // temp
-        TWO(1000), // temp
-        THREE(1500), // temp
-        FOUR(1750), // temp
-        FIVE(2000); // temp
+        ONE(500),  // temp
+        TWO(1000),  // temp
+        THREE(1500),  // temp
+        FOUR(1750),  // temp
+        FIVE(2000) // temp
+    }
 
-        private final int position;
-
-		KeyPositions(int position) {
-			this.position = position;
-		}
-
-        public int getPosition() {
-            return position;
-        }
-	}
-
-    public enum ControlMode {
+    enum class ControlMode {
         HUMAN,
         AUTONOMOUS
     }
 
     /**
-     *this method counts how many times Dpad Down has been pressed so that we can use it to turn the
-     *intake on and off
-     **/
-    private int intakeCount() {
-        if (Devices.controller2.getDpadDown() && !dpadPressed) {
-            counter += 1;
-            dpadPressed = true;
-        } else if (!Devices.controller2.getDpadDown()) dpadPressed = false;
-        if (counter % 2 != 0) {
-            return 100;
+     * this method counts how many times Dpad Down has been pressed so that we can use it to turn the
+     * intake on and off
+     */
+    private fun intakeCount(): Int {
+        if (Devices.controller2.dpadDown && !dpadPressed) {
+            counter += 1.0
+            dpadPressed = true
+        } else if (!Devices.controller2.dpadDown) dpadPressed = false
+        return if (counter % 2 != 0.0) {
+            100
         } else {
-            return 0;
+            0
         }
     }
 
@@ -104,265 +93,307 @@ public class ArmClaw extends Feature implements Buildable {
      * this method counts how many times Dpad Left has been pressed so that we can use it to open
      * and close the left servo (left grabber)
      */
-    private int leftButtonPressedCount() {
-        if (Devices.controller2.getDpadRight() && !dpadPressedLeft) {
-            counterLeft += 1;
-            dpadPressedLeft = true;
+    private fun leftButtonPressedCount(): Int {
+        if (Devices.controller2.dpadRight && !dpadPressedLeft) {
+            counterLeft += 1.0
+            dpadPressedLeft = true
+        } else if (!Devices.controller2.dpadRight) {
+            dpadPressedLeft = false
         }
-        else if (!Devices.controller2.getDpadRight()) {
-            dpadPressedLeft = false;
-        }
-        if (counterLeft % 2 != 0) {
-            return L_CLOSED;
-        }
-        else {
-            return L_OPEN;
+        return if (counterLeft % 2 != 0.0) {
+            L_CLOSED
+        } else {
+            L_OPEN
         }
     }
 
-    public void openLeftGrabber() {
-        servo2.setPosition(R_OPEN);
+    fun openLeftGrabber() {
+        Devices.servo2.position = R_OPEN.toDouble()
     }
 
-    public void closeLeftGrabber() {
-        servo2.setPosition(R_CLOSED);
+    fun closeLeftGrabber() {
+        Devices.servo2.position = R_CLOSED.toDouble()
     }
 
     /**
      * this method counts how many times Dpad Right has been pressed so that we can use it to open
      * and close the right servo (right grabber)
      */
-    private int rightButtonPressedCount() {
-        if (Devices.controller2.getDpadLeft() && !dpadPressedRight) {
-            counterRight += 1;
-            dpadPressedRight = true;
+    private fun rightButtonPressedCount(): Int {
+        if (Devices.controller2.dpadLeft && !dpadPressedRight) {
+            counterRight += 1.0
+            dpadPressedRight = true
+        } else if (!Devices.controller2.dpadLeft) {
+            dpadPressedRight = false
         }
-        else if (!Devices.controller2.getDpadLeft()) {
-            dpadPressedRight = false;
+        return if (counterRight % 2 != 0.0) {
+            R_CLOSED
+        } else {
+            R_OPEN
         }
-        if (counterRight % 2 != 0) {
-            return R_CLOSED;
+    }
+
+    fun openRightGrabber() {
+        Devices.servo3.position = L_OPEN.toDouble()
+    }
+
+    fun closeRightGrabber() {
+        Devices.servo3.position = L_CLOSED.toDouble()
+    }
+
+    fun autoStartIntake() {
+        blockHumanIntakeControl()
+        Devices.motor2.power = (-100).toDouble()
+    }
+
+    fun autoStopIntake() {
+        blockHumanIntakeControl()
+        Devices.motor2.power = 0.0
+    }
+
+    fun setHumanIntakeControl() {
+        autonomousIntakeControl = false
+        Devices.motor2.power = (-intakeCount()).toDouble()
+    }
+
+    fun blockHumanIntakeControl() {
+        autonomousIntakeControl = true
+    }
+
+    fun setHumanClawRotationControl() {
+        autonomousClawRotationControl = false
+    }
+
+    fun blockHumanClawRotationControl() {
+        autonomousClawRotationControl = true
+    }
+
+    fun autoRotateClaw1(i: Double) {
+        blockHumanClawRotationControl()
+        Devices.servo0.position = i
+    }
+
+    fun autoRotateClaw2(i: Double) {
+        blockHumanClawRotationControl()
+        Devices.servo1.position = i
+    }
+
+    fun autoRaiseArm(pos: KeyPositions) {
+        autoRaiseArm(pos.position)
+    }
+
+    fun autoRaiseArm(height: Int) {
+        blockHumanArmControl()
+        armTargetHeight = height
+        armLiftingInProgress = true
+    }
+
+    fun setHumanArmControl() {
+        autonomousArmControl = false
+    }
+
+    fun blockHumanArmControl() {
+        autonomousArmControl = true
+    }
+
+    fun setHumanClawReleaseControl() {
+        autonomousClawReleaseControl = false
+    }
+
+    fun blockHumanClawReleaseControl() {
+        autonomousClawReleaseControl = true
+    }
+
+    fun armEmergencyStop() {
+        Devices.motor0.power = 0.0
+        Devices.motor1.power = 0.0
+    }
+
+    val armControlMode: ControlMode
+        get() = if (autonomousArmControl) {
+            ControlMode.AUTONOMOUS
+        } else {
+            ControlMode.HUMAN
         }
+
+    val intakeControlMode: ControlMode
+        get() = if (autonomousIntakeControl) {
+            ControlMode.AUTONOMOUS
+        } else {
+            ControlMode.HUMAN
+        }
+
+    val clawRotationControlMode: ControlMode
+        get() = if (autonomousClawRotationControl) {
+            ControlMode.AUTONOMOUS
+        } else {
+            ControlMode.HUMAN
+        }
+
+    val clawReleaseControlMode: ControlMode
+        get() = if (autonomousClawReleaseControl) {
+            ControlMode.AUTONOMOUS
+        } else {
+            ControlMode.HUMAN
+        }
+
+    private val armEncoder: Double
+        get() = -Devices.encoder3.position.toDouble()
+
+    private var pixelSelectorServo: Double
+        get() = Devices.servo5.position
+        set(value) {
+            Devices.servo5.position = value
+        }
+
+    var pixelPositionSelector: SelectorPositions
+        get() {
+            if (pixelSelectorServo > 50) return SelectorPositions.LEFT
+            return SelectorPositions.RIGHT
+        }
+        set(value) {
+            pixelSelectorServo =    if (value == SelectorPositions.LEFT)    100.0
+                                    else                                    0.0
+        }
+
+    enum class SelectorPositions {
+        LEFT,
+        RIGHT
+    }
+
+    private var pixelHolderServo: Double
+        get() = Devices.servo4.position
+        set(value) {
+            Devices.servo4.position = value
+        }
+
+    var pixelHolderPosition: HolderPositions
+        get() {
+            if (pixelHolderServo > 50) return HolderPositions.UP
+            return HolderPositions.DOWN
+        }
+        set(value) {
+            pixelHolderServo =  if (value == HolderPositions.UP)    100.0
+                                else                                40.0
+        }
+
+    enum class HolderPositions {
+        UP,
+        DOWN
+    }
+
+    fun isArmLiftingInProgress(): Boolean {
+        val deltaPos = (armTargetHeight + Devices.encoder3.position).toDouble()
+        val motorPower: Int
+        if (deltaPos < -50) motorPower = 50
+        else if (deltaPos > 50) motorPower = -50
         else {
-            return R_OPEN;
+            armLiftingInProgress = false
+            motorPower = 0
+            setHumanArmControl()
         }
+        Devices.motor0.power = motorPower.toDouble()
+        Devices.motor1.power = motorPower.toDouble()
+        return autonomousArmControl && armLiftingInProgress
     }
 
-    public void openRightGrabber() {
-        servo3.setPosition(L_OPEN);
+    val armDistanceSensor: Double
+        get() = Devices.distanceSensor.distance
+
+    fun servoPickupPos() {
+        Devices.servo0.position = 20.0
+        Devices.servo1.position = 9.0
     }
 
-    public void closeRightGrabber() {
-        servo3.setPosition(L_CLOSED);
-    }
-
-    public void autoStartIntake() {
-        blockHumanIntakeControl();
-        motor2.setPower(-100);
-    }
-
-    public void autoStopIntake() {
-        blockHumanIntakeControl();
-        motor2.setPower(0);
-    }
-
-    public void setHumanIntakeControl() {
-        autonomousIntakeControl = false;
-        motor2.setPower(-intakeCount());
-    }
-
-    public void blockHumanIntakeControl() {
-        autonomousIntakeControl = true;
-    }
-
-    public void setHumanClawRotationControl() {
-        autonomousClawRotationControl = false;
-    }
-
-    public void blockHumanClawRotationControl() {
-        autonomousClawRotationControl = true;
-    }
-
-    public void autoRotateClaw1(double i) {
-        blockHumanClawRotationControl();
-        servo0.setPosition(i);
-    }
-
-    public void autoRotateClaw2(double i) {
-        blockHumanClawRotationControl();
-        servo1.setPosition(i);
-    }
-
-    public void autoRaiseArm(KeyPositions pos) {
-        autoRaiseArm(pos.getPosition());
-    }
-
-    public void autoRaiseArm(int height) {
-        blockHumanArmControl();
-        armTargetHeight = height;
-        armLiftingInProgress = true;
-    }
-
-    public void setHumanArmControl() {
-        autonomousArmControl = false;
-    }
-
-    public void blockHumanArmControl() {
-        autonomousArmControl = true;
-    }
-
-    public void setHumanClawReleaseControl() {
-        autonomousClawReleaseControl = false;
-    }
-
-    public void blockHumanClawReleaseControl() {
-        autonomousClawReleaseControl = true;
-    }
-
-    public void armEmergencyStop() {
-        Devices.motor0.setPower(0);
-        Devices.motor1.setPower(0);
-    }
-
-    public ControlMode getArmControlMode() {
-        if (autonomousArmControl) {
-            return ControlMode.AUTONOMOUS;
-        } else {
-            return ControlMode.HUMAN;
-        }
-    }
-
-    public ControlMode getIntakeControlMode() {
-        if (autonomousIntakeControl) {
-            return ControlMode.AUTONOMOUS;
-        } else {
-            return ControlMode.HUMAN;
-        }
-    }
-
-    public ControlMode getClawRotationControlMode() {
-        if (autonomousClawRotationControl) {
-            return ControlMode.AUTONOMOUS;
-        } else {
-            return ControlMode.HUMAN;
-        }
-    }
-
-    public ControlMode getClawReleaseControlMode() {
-        if (autonomousClawReleaseControl) {
-            return ControlMode.AUTONOMOUS;
-        } else {
-            return ControlMode.HUMAN;
-        }
-    }
-
-    public boolean isArmLiftingInProgress() {
-        double deltaPos = armTargetHeight + encoder3.getPosition();
-        int motorPower;
-        if (deltaPos < -50) motorPower = 50;
-        else if (deltaPos > 50) motorPower = -50;
-        else {
-            armLiftingInProgress = false;
-            motorPower = 0;
-            setHumanArmControl();
-        }
-        Devices.motor0.setPower(motorPower);
-        Devices.motor1.setPower(motorPower);
-		return autonomousArmControl && armLiftingInProgress;
-    }
-
-    public double getArmDistanceSensor() {
-        return distanceSensor.getDistance();
-    }
-
-    public void servoPickupPos() {
-        servo0.setPosition(20);
-        servo1.setPosition(9);
-    }
-
-    public void loop() {
-        if (Devices.controller2.getStart()) {
-            setHumanArmControl();
-            armEmergencyStop();
-            setHumanIntakeControl();
-            setHumanClawRotationControl();
-            setHumanClawReleaseControl();
+    override fun loop() {
+        if (Devices.controller2.start) {
+            setHumanArmControl()
+            armEmergencyStop()
+            setHumanIntakeControl()
+            setHumanClawRotationControl()
+            setHumanClawReleaseControl()
         }
 
-        Logging.log("Arm Control Mode", getArmControlMode());
-        Logging.log("Intake Control Mode", getIntakeControlMode());
-        Logging.log("Claw Rotation Control Mode", getClawRotationControlMode());
-        Logging.log("Claw Release Control Mode", getClawReleaseControlMode());
-        Logging.log("Arm Encoder Position", -encoder3.getPosition());
-        Logging.log("Servo0 pos", servo0.getPosition());
-        Logging.log("Servo1 pos", servo1.getPosition());
-        Logging.update();
+        Logging.log("Arm Control Mode", armControlMode)
+        Logging.log("Intake Control Mode", intakeControlMode)
+        Logging.log("Claw Rotation Control Mode", clawRotationControlMode)
+        Logging.log("Claw Release Control Mode", clawReleaseControlMode)
+        Logging.log("Arm Encoder Position", -Devices.encoder3.position)
+        Logging.log("Servo0 pos", Devices.servo0.position)
+        Logging.log("Servo1 pos", Devices.servo1.position)
+        Logging.update()
 
-        double motorPower;
+        val motorPower: Double
         if (!autonomousArmControl) {
-            motorPower = -(Devices.controller2.getRightTrigger() - Devices.controller2.getLeftTrigger()) * 0.75;
+            motorPower = -(Devices.controller2.rightTrigger - Devices.controller2.leftTrigger) * 0.75
 
-            if (controller1.getBack()) {
-                encoderHomePosition = -encoder3.getPosition();
+            if (Devices.controller1.back) {
+                encoderHomePosition = -Devices.encoder3.position
             }
         } else {
-            double deltaPos = armTargetHeight + encoder3.getPosition();
-            if (deltaPos < -50) motorPower = 50;
-            else if (deltaPos > 50) motorPower = -50;
+            val deltaPos = (armTargetHeight + Devices.encoder3.position).toDouble()
+            if (deltaPos < -50) motorPower = 50.0
+            else if (deltaPos > 50) motorPower = -50.0
             else {
-                armLiftingInProgress = false;
-                motorPower = 0;
-                setHumanArmControl();
+                armLiftingInProgress = false
+                motorPower = 0.0
+                setHumanArmControl()
             }
         }
 
-        Devices.motor0.setPower(motorPower);
-        Devices.motor1.setPower(motorPower);
+        Devices.motor0.power = motorPower
+        Devices.motor1.power = motorPower
 
         if (!autonomousClawReleaseControl) {
             //the motors must move in opposite directions
-            servo3.setPosition(leftButtonPressedCount());
-            servo2.setPosition(rightButtonPressedCount());
+            Devices.servo3.position = leftButtonPressedCount().toDouble()
+            Devices.servo2.position = rightButtonPressedCount().toDouble()
         }
 
         if (!autonomousClawRotationControl) {
-            if (controller2.getTriangle()) {
-                servoPickupPos();
-            } else if (controller2.getLeftStickButton()) {
-                servo0.setPosition(18.5);
-                servo1.setPosition(39.7);
-            } else if (controller2.getRightStickButton()) {
-                servo0.setPosition(4);
-                servo1.setPosition(32);
-            }else {
-                double grabber0Pos = servo0.getPosition();
-                grabber0Pos += controller2.getLeftStickX() * 0.00075;
-                grabber0Pos = Math.max(0, Math.min(100, grabber0Pos));
-                servo0.setPosition(grabber0Pos);
+            if (Devices.controller2.triangle) {
+                servoPickupPos()
+            } else if (Devices.controller2.leftStickButton) {
+                Devices.servo0.position = 18.5
+                Devices.servo1.position = 39.7
+            } else if (Devices.controller2.rightStickButton) {
+                Devices.servo0.position = 4.0
+                Devices.servo1.position = 32.0
+            } else {
+                var grabber0Pos = Devices.servo0.position
+                grabber0Pos += Devices.controller2.leftStickX * 0.00075
+                grabber0Pos = max(0.0, min(100.0, grabber0Pos))
+                Devices.servo0.position = grabber0Pos
 
-                double grabber1Pos = servo1.getPosition();
-                grabber1Pos += controller2.getRightStickX() * 0.00075;
-                grabber1Pos = Math.max(0, Math.min(100, grabber1Pos));
-                servo1.setPosition(grabber1Pos);
+                var grabber1Pos = Devices.servo1.position
+                grabber1Pos += Devices.controller2.rightStickX * 0.00075
+                grabber1Pos = max(0.0, min(100.0, grabber1Pos))
+                Devices.servo1.position = grabber1Pos
             }
         }
 
         if (!autonomousIntakeControl) {
-            Devices.motor2.setPower(-intakeCount());
-            if (controller2.getDpadUp()) motor2.setPower(100);
-            if (controller2.getLeftBumper()) {
-                servo5.setPosition(100);
+            Devices.motor2.power = (-intakeCount()).toDouble()
+            if (Devices.controller2.dpadUp) Devices.motor2.power = 100.0
+            if (Devices.controller2.leftBumper) {
+                pixelPositionSelector = SelectorPositions.LEFT
+            } else if (Devices.controller2.rightBumper) {
+                pixelPositionSelector = SelectorPositions.RIGHT
             }
-            else if (controller2.getRightBumper()) {
-                servo5.setPosition(0);
-            }
-            if (controller2.getSquare()) servo4.setPosition(100);
-            else if (controller2.getCircle()) servo4.setPosition(40);
-            if (controller1.getRightStickButton()) {
-                servo8.setPosition(100);
-                Objects.requireNonNull(HardwareGetter.getOpMode()).waitFor(0.5);
-                servo8.setPosition(50);
+            if (Devices.controller2.square) pixelHolderPosition = HolderPositions.UP
+            else if (Devices.controller2.circle) pixelHolderPosition = HolderPositions.DOWN
+            if (Devices.controller1.rightStickButton) {
+                Devices.servo8.position = 100.0
+                opMode!!.waitFor(0.5)
+                Devices.servo8.position = 50.0
             }
         }
+    }
+
+    companion object {
+        const val R_OPEN: Int = 10
+        const val L_OPEN: Int = 75
+        const val R_CLOSED: Int = 0
+        const val L_CLOSED: Int = 60
     }
 }
