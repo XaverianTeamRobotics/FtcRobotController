@@ -37,8 +37,8 @@ import kotlin.math.min
 @ButtonUsage(button = ButtonName.DPAD_DOWN, description = "Toggle intake", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.LEFT_BUMPER, description = "Pixel selector to left", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.RIGHT_BUMPER, description = "Pixel selector to right", controller = ControllerName.CONTROLLER_2)
-@ButtonUsage(button = ButtonName.X, description = "Pixel holder up", controller = ControllerName.CONTROLLER_2)
-@ButtonUsage(button = ButtonName.B, description = "Pixel holder down", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.X, description = "Pixel holder down", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.B, description = "Pixel holder up", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.LEFT_TRIGGER, description = "Lower arm", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.RIGHT_TRIGGER, description = "Raise arm", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.BACK, description = "Emergency stop autonomous features", controller = ControllerName.CONTROLLER_2)
@@ -400,8 +400,8 @@ class ArmClaw : Feature(), Buildable {
             } else if (Devices.controller2.rightBumper) {
                 pixelPositionSelector = SelectorPositions.RIGHT
             }
-            if (Devices.controller2.square) pixelHolderPosition = HolderPositions.UP
-            else if (Devices.controller2.circle) pixelHolderPosition = HolderPositions.DOWN
+            if (Devices.controller2.square) pixelHolderPosition = HolderPositions.DOWN
+            else if (Devices.controller2.circle) pixelHolderPosition = HolderPositions.UP
             if (Devices.controller1.rightStickButton) {
                 Devices.servo8.position = 100.0
                 opMode!!.waitFor(0.5)
