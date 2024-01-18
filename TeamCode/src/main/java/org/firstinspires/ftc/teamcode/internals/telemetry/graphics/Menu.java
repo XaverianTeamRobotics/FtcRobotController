@@ -12,7 +12,7 @@ public class Menu {
     private final ArrayList<Item> ITEMS;
     private final String DESCRIPTION;
     private int selected = 0;
-    private final String SPACER = "——————————————————————————————————————";
+    private final String SPACER = "————————————————————————————————————";
 
     private Menu(MenuBuilder builder) {
         ITEMS = builder.ITEMS;
