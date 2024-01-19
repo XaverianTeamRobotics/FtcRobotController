@@ -131,8 +131,8 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                 .appendAction { armClaw!!.autoRaiseArm(-307) }
                 .appendAction { waitUntil { armClaw!!.isComplete } }
                 .appendAction {
-                    if (config!!.backdropPixelPosition == 0 || !config!!.placeBackdrop) armClaw!!.openRightGrabber()
-                    else if (config!!.backdropPixelPosition == 1) armClaw!!.openLeftGrabber()
+                    if (config!!.backdropPixelPosition == 1 || !config!!.placeBackdrop) armClaw!!.openRightGrabber()
+                    else if (config!!.backdropPixelPosition == 0) armClaw!!.openLeftGrabber()
                     waitFor(0.5)
                 }
                 .appendAction { armClaw!!.autoRaiseArm(100) }
@@ -182,7 +182,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                     needToScore = false
                     builder = builder.completeTrajectory()
                         .appendAction {
-                            armClaw!!.autoRaiseArm(97)
+                            armClaw!!.autoRaiseArm(300)
                             armClaw!!.autoRotateClaw1(4.0)
                             armClaw!!.autoRotateClaw2(32.0)
                         }
@@ -191,8 +191,8 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                             val p = drivetrain.poseEstimate
                             val b = drivetrain.trajectorySequenceBuilder(p)
                             when (spot) {
-                                1 -> b.strafeLeft(6.0)
-                                3 -> b.strafeRight(6.0)
+                                1 -> b.strafeLeft(9.0)
+                                3 -> b.strafeRight(9.0)
                                 else -> return@appendAction
                             }
                             try {
@@ -204,15 +204,13 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                         }
                         .appendTrajectory()
                         .turn(Math.toRadians(180.0))
-                        .back(12.0)
+                        .back(6.0)
                         .completeTrajectory()
                         .appendAction {
                             if (config!!.backdropPixelPosition == 0) armClaw!!.openRightGrabber()
                             else armClaw!!.openLeftGrabber()
-                            armClaw!!.autoRaiseArm(300)
-                            waitUntil { armClaw!!.isComplete }
                         }.appendTrajectory()
-                        .forward(12.0)
+                        .forward(6.0)
                         .turn(Math.toRadians(180.0))
                         .completeTrajectory().appendAction {
                             armClaw!!.servoPickupPos()
