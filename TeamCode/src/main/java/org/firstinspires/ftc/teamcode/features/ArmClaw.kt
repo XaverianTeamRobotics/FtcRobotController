@@ -334,6 +334,9 @@ class ArmClaw : Feature(), Buildable {
             setHumanClawReleaseControl()
         }
 
+        Logging.log("Servo Holder Positiom", pixelHolderPosition)
+        Logging.log("Servo Selector Position", pixelPositionSelector)
+        Logging.log("\n-----------------------------\n")
         Logging.log("Arm Control Mode", armControlMode)
         Logging.log("Intake Control Mode", intakeControlMode)
         Logging.log("Claw Rotation Control Mode", clawRotationControlMode)

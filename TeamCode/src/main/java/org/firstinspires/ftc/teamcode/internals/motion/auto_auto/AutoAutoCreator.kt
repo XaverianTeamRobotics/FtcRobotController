@@ -193,8 +193,9 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                             when (spot) {
                                 1 -> b.strafeLeft(9.0)
                                 3 -> b.strafeRight(9.0)
-                                else -> return@appendAction
                             }
+                            b.turn(180.deg.rad)
+                            b.back(6.0)
                             try {
                                 drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
                                 while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
@@ -202,14 +203,11 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                                 }
                             } catch (_: Exception) {}
                         }
-                        .appendTrajectory()
-                        .turn(Math.toRadians(180.0))
-                        .back(6.0)
-                        .completeTrajectory()
                         .appendAction {
                             if (config!!.backdropPixelPosition == 0) armClaw!!.openRightGrabber()
                             else armClaw!!.openLeftGrabber()
-                        }.appendTrajectory()
+                        }
+                        .appendTrajectory()
                         .forward(6.0)
                         .turn(Math.toRadians(180.0))
                         .completeTrajectory().appendAction {
