@@ -114,6 +114,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                     val p = drivetrain.poseEstimate
                     val b = drivetrain.trajectorySequenceBuilder(p)
                     b.turn(Math.toRadians(180.0) + rotation.rad)
+                    if (spot == 3) b.forward(2.0)
                     try {
                         drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
                         while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
@@ -124,8 +125,8 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                 .appendAction { armClaw!!.autoRaiseArm(138) }
                 .appendAction { waitUntil { armClaw!!.isComplete } }
                 .appendAction {
-                    armClaw!!.autoRotateClaw1(11.4)
-                    armClaw!!.autoRotateClaw2(25.8)
+                    armClaw!!.autoRotateClaw1(14.7)
+                    armClaw!!.autoRotateClaw2(29.4)
                     waitFor(0.5)
                 }
                 .appendAction { armClaw!!.autoRaiseArm(-307) }
@@ -162,67 +163,72 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
             builder = builder.completeTrajectory().appendTrajectory()
         }
 
-        var needToScore = config!!.placeBackdrop
-        for (poi in pois) {
-            val path = BestPathFinder.getFastestPathToPoint(last, poi, 0.0)
-            for (segment in path) {
-                Logging.log("Adding Path Segment " + segment.javaClass.simpleName)
-                Logging.update()
-                try {
-                    builder = segment.addPathSegment(builder)
-                    last = segment.endPosition
-                } catch (ignored: Exception) {
-                    emergencyStop("Failed to add " + segment.javaClass.simpleName)
-                }
+        if (config!!.startingPosition != 3) {
+            var needToScore = config!!.placeBackdrop
+            for (poi in pois) {
+                val path = BestPathFinder.getFastestPathToPoint(last, poi, 0.0)
+                for (segment in path) {
+                    Logging.log("Adding Path Segment " + segment.javaClass.simpleName)
+                    Logging.update()
+                    try {
+                        builder = segment.addPathSegment(builder)
+                        last = segment.endPosition
+                    } catch (ignored: Exception) {
+                        emergencyStop("Failed to add " + segment.javaClass.simpleName)
+                    }
 
-                if ((segment.endPosition.y == 36.00 || segment.endPosition.y == -36.00)
-                    && (segment.endPosition.x == 48.00
-                            ) && needToScore
-                ) {
-                    needToScore = false
-                    builder = builder.completeTrajectory()
-                        .appendAction {
-                            armClaw!!.autoRaiseArm(300)
-                            armClaw!!.autoRotateClaw1(4.0)
-                            armClaw!!.autoRotateClaw2(32.0)
-                        }
-                        .appendAction { waitUntil { armClaw!!.isComplete } }
-                        .appendAction {
-                            val p = drivetrain.poseEstimate
-                            val b = drivetrain.trajectorySequenceBuilder(p)
-                            when (spot) {
-                                1 -> b.strafeLeft(9.0)
-                                3 -> b.strafeRight(9.0)
+                    if ((segment.endPosition.y == 36.00 || segment.endPosition.y == -36.00)
+                        && (segment.endPosition.x == 48.00
+                                ) && needToScore
+                    ) {
+                        needToScore = false
+                        builder = builder.completeTrajectory()
+                            .appendAction {
+                                armClaw!!.autoRaiseArm(300)
+                                armClaw!!.autoRotateClaw1(3.5)
+                                armClaw!!.autoRotateClaw2(20.8)
                             }
-                            b.turn(180.deg.rad)
-                            b.back(6.0)
-                            try {
-                                drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
-                                while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
-                                    drivetrain.update()
+                            .appendAction { waitUntil { armClaw!!.isComplete } }
+                            .appendAction {
+                                val p = drivetrain.poseEstimate
+                                val b = drivetrain.trajectorySequenceBuilder(p)
+                                when (spot) {
+                                    1 -> b.strafeLeft(9.0)
+                                    3 -> b.strafeRight(9.0)
                                 }
-                            } catch (_: Exception) {}
-                        }
-                        .appendAction {
-                            if (config!!.backdropPixelPosition == 0) armClaw!!.openRightGrabber()
-                            else armClaw!!.openLeftGrabber()
-                        }
-                        .appendTrajectory()
-                        .forward(6.0)
-                        .turn(Math.toRadians(180.0))
-                        .completeTrajectory().appendAction {
-                            armClaw!!.servoPickupPos()
-                            val p = drivetrain.poseEstimate
-                            val b = drivetrain.trajectorySequenceBuilder(p)
-                            try {
-                                b.lineToLinearHeading(Pose2d(segment.endPosition.x, segment.endPosition.y, 0.0))
-                                drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
-                                while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
-                                    drivetrain.update()
+                                b.turn(180.deg.rad)
+                                b.back(6.0)
+                                try {
+                                    drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
+                                    while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
+                                        drivetrain.update()
+                                    }
+                                } catch (_: Exception) {
                                 }
-                            } catch (_: Exception) {}
-                        }
-                        .appendTrajectory()
+                            }
+                            .appendAction {
+                                if (config!!.backdropPixelPosition == 0) armClaw!!.openRightGrabber()
+                                else armClaw!!.openLeftGrabber()
+                                waitFor(0.5)
+                            }
+                            .appendTrajectory()
+                            .forward(6.0)
+                            .turn(Math.toRadians(180.0))
+                            .completeTrajectory().appendAction {
+                                armClaw!!.servoPickupPos()
+                                val p = drivetrain.poseEstimate
+                                val b = drivetrain.trajectorySequenceBuilder(p)
+                                try {
+                                    b.lineToLinearHeading(Pose2d(segment.endPosition.x, segment.endPosition.y, 0.0))
+                                    drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
+                                    while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
+                                        drivetrain.update()
+                                    }
+                                } catch (_: Exception) {
+                                }
+                            }
+                            .appendTrajectory()
+                    }
                 }
             }
         }

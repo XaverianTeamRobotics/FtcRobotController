@@ -289,11 +289,11 @@ class ArmClaw : Feature(), Buildable {
 
     var pixelHolderPosition: HolderPositions
         get() {
-            if (pixelHolderServo > 50) return HolderPositions.UP
-            return HolderPositions.DOWN
+            if (pixelHolderServo > 50) return HolderPositions.DOWN
+            return HolderPositions.UP
         }
         set(value) {
-            pixelHolderServo =  if (value == HolderPositions.UP)    100.0
+            pixelHolderServo =  if (value == HolderPositions.DOWN)  100.0
                                 else                                40.0
         }
 
@@ -322,7 +322,7 @@ class ArmClaw : Feature(), Buildable {
 
     fun servoPickupPos() {
         Devices.servo0.position = 20.0
-        Devices.servo1.position = 9.0
+        Devices.servo1.position = 41.5
     }
 
     override fun loop() {
@@ -377,11 +377,11 @@ class ArmClaw : Feature(), Buildable {
             if (Devices.controller2.triangle) {
                 servoPickupPos()
             } else if (Devices.controller2.leftStickButton) {
-                Devices.servo0.position = 18.5
-                Devices.servo1.position = 39.7
+                Devices.servo0.position = 20.0
+                Devices.servo1.position = 13.1
             } else if (Devices.controller2.rightStickButton) {
-                Devices.servo0.position = 4.0
-                Devices.servo1.position = 32.0
+                Devices.servo0.position = 3.5
+                Devices.servo1.position = 20.8
             } else {
                 var grabber0Pos = Devices.servo0.position
                 grabber0Pos += Devices.controller2.leftStickX * 0.00075
