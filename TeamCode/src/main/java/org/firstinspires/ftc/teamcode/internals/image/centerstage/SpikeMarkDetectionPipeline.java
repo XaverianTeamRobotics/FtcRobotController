@@ -15,14 +15,14 @@ import static org.opencv.imgproc.Imgproc.*;
 
 @Config
 public class SpikeMarkDetectionPipeline extends VisionPipeline {
-    public static int ZONE1_X = 0;
+    public static int ZONE1_X = 75;
     public static int ZONE1_Y = 300;
-    public static int ZONE1_WIDTH = 250;
+    public static int ZONE1_WIDTH = 175;
     public static int ZONE1_HEIGHT = 100;
     public static int ZONE2_X = 400;
-    public static int ZONE2_Y = 280;
+    public static int ZONE2_Y = 330;
     public static int ZONE2_WIDTH = 240;
-    public static int ZONE2_HEIGHT = 200;
+    public static int ZONE2_HEIGHT = 140;
     public static boolean isBlueTeam = true;
     public static int BLUE_THRESH = 150;
     public static int RED_THRESH = 150;

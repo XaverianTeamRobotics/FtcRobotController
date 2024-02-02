@@ -59,6 +59,8 @@ class ArmClaw : Feature(), Buildable {
     private var armTargetHeight = 0
     private var armLiftingInProgress = false
 
+    var auto: Boolean = false
+
     override fun build() {
         Devices.servo3.position = R_OPEN.toDouble()
         Devices.servo2.position = L_OPEN.toDouble()
@@ -293,7 +295,7 @@ class ArmClaw : Feature(), Buildable {
             return HolderPositions.UP
         }
         set(value) {
-            pixelHolderServo =  if (value == HolderPositions.DOWN)  100.0
+            pixelHolderServo =  if (value == HolderPositions.DOWN)  65.0
                                 else                                40.0
         }
 
@@ -322,7 +324,7 @@ class ArmClaw : Feature(), Buildable {
 
     fun servoPickupPos() {
         Devices.servo0.position = 20.0
-        Devices.servo1.position = 41.5
+        Devices.servo1.position = 42.5
     }
 
     override fun loop() {
@@ -334,17 +336,19 @@ class ArmClaw : Feature(), Buildable {
             setHumanClawReleaseControl()
         }
 
-        Logging.log("Servo Holder Positiom", pixelHolderPosition)
-        Logging.log("Servo Selector Position", pixelPositionSelector)
-        Logging.log("\n-----------------------------\n")
-        Logging.log("Arm Control Mode", armControlMode)
-        Logging.log("Intake Control Mode", intakeControlMode)
-        Logging.log("Claw Rotation Control Mode", clawRotationControlMode)
-        Logging.log("Claw Release Control Mode", clawReleaseControlMode)
-        Logging.log("Arm Encoder Position", -Devices.encoder3.position)
-        Logging.log("Servo0 pos", Devices.servo0.position)
-        Logging.log("Servo1 pos", Devices.servo1.position)
-        Logging.update()
+        if (!auto) {
+            Logging.log("Servo Holder Positiom", pixelHolderPosition)
+            Logging.log("Servo Selector Position", pixelPositionSelector)
+            Logging.log("\n-----------------------------\n")
+            Logging.log("Arm Control Mode", armControlMode)
+            Logging.log("Intake Control Mode", intakeControlMode)
+            Logging.log("Claw Rotation Control Mode", clawRotationControlMode)
+            Logging.log("Claw Release Control Mode", clawReleaseControlMode)
+            Logging.log("Arm Encoder Position", -Devices.encoder3.position)
+            Logging.log("Servo0 pos", Devices.servo0.position)
+            Logging.log("Servo1 pos", Devices.servo1.position)
+            Logging.update()
+        }
 
         val motorPower: Double
         if (!autonomousArmControl) {
@@ -355,8 +359,8 @@ class ArmClaw : Feature(), Buildable {
             }
         } else {
             val deltaPos = (armTargetHeight + Devices.encoder3.position).toDouble()
-            if (deltaPos < -50) motorPower = 50.0
-            else if (deltaPos > 50) motorPower = -50.0
+            if (deltaPos < -50) motorPower = 75.0
+            else if (deltaPos > 50) motorPower = -75.0
             else {
                 armLiftingInProgress = false
                 motorPower = 0.0
@@ -381,7 +385,7 @@ class ArmClaw : Feature(), Buildable {
                 Devices.servo1.position = 13.1
             } else if (Devices.controller2.rightStickButton) {
                 Devices.servo0.position = 3.5
-                Devices.servo1.position = 20.8
+                Devices.servo1.position = 18.5
             } else {
                 var grabber0Pos = Devices.servo0.position
                 grabber0Pos += Devices.controller2.leftStickX * 0.00075

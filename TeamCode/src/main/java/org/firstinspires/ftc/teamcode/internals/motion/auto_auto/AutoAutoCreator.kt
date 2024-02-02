@@ -54,6 +54,8 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
         armClaw = ArmClaw()
         visionProcessor = VisionProcessingFeature(SpikeMarkDetectionPipeline())
 
+        armClaw!!.auto = true
+
         timer = Clock.make(UUID.randomUUID().toString())
         config = AutoAutoCreatorConfig()
         config!!.askQuestions()
@@ -114,6 +116,12 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                     val p = drivetrain.poseEstimate
                     val b = drivetrain.trajectorySequenceBuilder(p)
                     b.turn(Math.toRadians(180.0) + rotation.rad)
+                    when (spot) {
+                        2 -> b.back(7.0)
+                        1 -> b.back (3.0)
+                        else -> b.back(5.0)
+                    }
+                    b.forward(5.0)
                     if (spot == 3) b.forward(2.0)
                     try {
                         drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
@@ -127,10 +135,8 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                 .appendAction {
                     armClaw!!.autoRotateClaw1(14.7)
                     armClaw!!.autoRotateClaw2(29.4)
-                    waitFor(0.5)
+                    waitFor(1.0)
                 }
-                .appendAction { armClaw!!.autoRaiseArm(-307) }
-                .appendAction { waitUntil { armClaw!!.isComplete } }
                 .appendAction {
                     if (config!!.backdropPixelPosition == 1 || !config!!.placeBackdrop) armClaw!!.openRightGrabber()
                     else if (config!!.backdropPixelPosition == 0) armClaw!!.openLeftGrabber()
@@ -160,10 +166,10 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                 }
                 .appendTrajectory()
             builder = builder.back(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)
-            builder = builder.completeTrajectory().appendTrajectory()
+            if (config!!.parkPlace != 3) builder = builder.completeTrajectory().appendTrajectory()
         }
 
-        if (config!!.startingPosition != 3) {
+        if (config!!.parkPlace != 3) {
             var needToScore = config!!.placeBackdrop
             for (poi in pois) {
                 val path = BestPathFinder.getFastestPathToPoint(last, poi, 0.0)
@@ -186,7 +192,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                             .appendAction {
                                 armClaw!!.autoRaiseArm(300)
                                 armClaw!!.autoRotateClaw1(3.5)
-                                armClaw!!.autoRotateClaw2(20.8)
+                                armClaw!!.autoRotateClaw2(18.5)
                             }
                             .appendAction { waitUntil { armClaw!!.isComplete } }
                             .appendAction {
@@ -194,6 +200,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                                 val b = drivetrain.trajectorySequenceBuilder(p)
                                 when (spot) {
                                     1 -> b.strafeLeft(9.0)
+                                    2 -> b.strafeLeft(1.0)
                                     3 -> b.strafeRight(9.0)
                                 }
                                 b.turn(180.deg.rad)
@@ -210,6 +217,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                                 if (config!!.backdropPixelPosition == 0) armClaw!!.openRightGrabber()
                                 else armClaw!!.openLeftGrabber()
                                 waitFor(0.5)
+                                while (opModeIsActive()) {}
                             }
                             .appendTrajectory()
                             .forward(6.0)
@@ -224,8 +232,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                                     while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
                                         drivetrain.update()
                                     }
-                                } catch (_: Exception) {
-                                }
+                                } catch (_: Exception) { }
                             }
                             .appendTrajectory()
                     }
