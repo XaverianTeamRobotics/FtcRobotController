@@ -115,6 +115,9 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                     else if (spot == 3) rotation = (-90).deg
                     val p = drivetrain.poseEstimate
                     val b = drivetrain.trajectorySequenceBuilder(p)
+                    if (spot == 1 || spot == 3) {
+                        b.forward(4.0)
+                    }
                     b.turn(Math.toRadians(180.0) + rotation.rad)
                     when (spot) {
                         2 -> b.back(7.0)
@@ -154,6 +157,10 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                     else if (spot == 3) rotation = (-90).deg
                     val p = drivetrain.poseEstimate
                     val b = drivetrain.trajectorySequenceBuilder(p)
+                    when (spot) {
+                        1 -> b.strafeRight(4.0)
+                        3 -> b.strafeLeft(4.0)
+                    }
                     b.forward(6.0)
                     b.turn(Math.toRadians(180.0) - rotation.rad)
                     b.lineTo(p.vec())
@@ -198,10 +205,13 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                             .appendAction {
                                 val p = drivetrain.poseEstimate
                                 val b = drivetrain.trajectorySequenceBuilder(p)
+                                var farDist = 9.0
+                                if ((spot == 1 && config!!.teamColor == 1) || (spot == 3 && config!!.teamColor == 0))
+                                    farDist = 6.0
                                 when (spot) {
-                                    1 -> b.strafeLeft(9.0)
+                                    1 -> b.strafeLeft(farDist)
                                     2 -> b.strafeLeft(1.0)
-                                    3 -> b.strafeRight(9.0)
+                                    3 -> b.strafeRight(farDist)
                                 }
                                 b.turn(180.deg.rad)
                                 b.back(6.0)
