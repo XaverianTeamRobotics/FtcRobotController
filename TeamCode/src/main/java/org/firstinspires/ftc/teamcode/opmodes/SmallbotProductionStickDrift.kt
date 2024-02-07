@@ -1,21 +1,17 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes
 
-import org.firstinspires.ftc.teamcode.features.FourMotorArmNoManualLevel;
-import org.firstinspires.ftc.teamcode.features.Hand;
-import org.firstinspires.ftc.teamcode.features.PowerplayMecanumDrivetrain;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
-import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
+import org.firstinspires.ftc.teamcode.features.FourMotorArmNoManualLevel
+import org.firstinspires.ftc.teamcode.features.Hand
+import org.firstinspires.ftc.teamcode.features.PowerplayMecanumDrivetrain
+import org.firstinspires.ftc.teamcode.internals.registration.OperationMode
+import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation
 
-public class SmallbotProductionStickDrift extends OperationMode implements TeleOperation {
-
-    @Override
-    public void construct() {
-        registerFeature(new PowerplayMecanumDrivetrain(false, true));
-        registerFeature(new FourMotorArmNoManualLevel());
-        registerFeature(new Hand());
+class SmallbotProductionStickDrift : OperationMode(), TeleOperation {
+    override fun construct() {
+        registerFeature(PowerplayMecanumDrivetrain(false, true))
+        registerFeature(FourMotorArmNoManualLevel())
+        registerFeature(Hand())
     }
 
-    @Override
-    public void run() {}
-
+    override fun run() {}
 }

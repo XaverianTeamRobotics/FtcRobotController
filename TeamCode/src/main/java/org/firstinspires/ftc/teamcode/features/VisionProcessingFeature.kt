@@ -1,115 +1,100 @@
-package org.firstinspires.ftc.teamcode.features;
+package org.firstinspires.ftc.teamcode.features
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import org.firstinspires.ftc.teamcode.internals.features.Buildable;
-import org.firstinspires.ftc.teamcode.internals.features.Feature;
-import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
-import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter;
-import org.firstinspires.ftc.teamcode.internals.image.MultipleCameraManager;
-import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline;
-import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline;
-import org.firstinspires.ftc.teamcode.internals.telemetry.logging.AdvancedLogging;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
+import com.acmerobotics.dashboard.FtcDashboard
+import org.firstinspires.ftc.teamcode.internals.features.Buildable
+import org.firstinspires.ftc.teamcode.internals.features.Feature
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companion.hardwareMap
+import org.firstinspires.ftc.teamcode.internals.image.MultipleCameraManager
+import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline
+import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline.TeamColor
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.AdvancedLogging.Companion.logData
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.AdvancedLogging.Companion.update
+import org.openftc.easyopencv.OpenCvCamera
+import org.openftc.easyopencv.OpenCvCameraFactory
+import org.openftc.easyopencv.OpenCvCameraRotation
+import java.util.*
 
-import java.util.ArrayList;
-import java.util.Objects;
+class VisionProcessingFeature : Feature, Buildable {
+    private var pipeline: VisionPipeline? = null
 
-public class VisionProcessingFeature extends Feature implements Buildable {
-
-    private VisionPipeline pipeline;
-
-    private int spot = 0;
-    private final ArrayList<Integer> previousSpots = new ArrayList<>();
-    private int averageSpot = 0;
-    private boolean init = false;
-    private boolean indexed = false;
-    private int index = 0;
+    var spot: Int = 0
+        private set
+    private val previousSpots = ArrayList<Int>()
+    var averageSpot: Int = 0
+        private set
+    var isReady: Boolean = false
+        private set
+    private var indexed = false
+    private var index = 0
 
     /**
      * Use this when only using one camera at a time.
      */
-    public VisionProcessingFeature(VisionPipeline pipeline) {
-        this.pipeline = pipeline;
+    constructor(pipeline: VisionPipeline?) {
+        this.pipeline = pipeline
     }
 
     /**
      * Use this when two cameras are streaming concurrently.
      * @param index The index of the camera, either 0 or 1.
      */
-    public VisionProcessingFeature(int index) {
-        indexed = true;
-        this.index = index;
+    constructor(index: Int) {
+        indexed = true
+        this.index = index
     }
 
-    @Override
-    public void build() {
+    override fun build() {
+        val cameraMonitorViewId = hardwareMap!!.appContext.resources.getIdentifier(
+            "cameraMonitorViewId",
+            "id",
+            hardwareMap!!.appContext.packageName
+        )
 
-        int cameraMonitorViewId = Objects.requireNonNull(HardwareGetter.getHardwareMap()).appContext.getResources().getIdentifier("cameraMonitorViewId", "id", HardwareGetter.getHardwareMap().appContext.getPackageName());
-
-        int[] viewportContainerIds = null;
-        if(indexed) {
-            viewportContainerIds = MultipleCameraManager.get(cameraMonitorViewId);
+        var viewportContainerIds: IntArray? = null
+        if (indexed) {
+            viewportContainerIds = MultipleCameraManager.get(cameraMonitorViewId)
         }
 
-        OpenCvCamera camera;
-
-        if(indexed) {
-            camera = OpenCvCameraFactory.getInstance().createWebcam(Devices.camera0, viewportContainerIds[index]);
-        }else{
-            camera = OpenCvCameraFactory.getInstance().createWebcam(Devices.camera0, cameraMonitorViewId);
+        val camera: OpenCvCamera = if (indexed) {
+            OpenCvCameraFactory.getInstance().createWebcam(Devices.camera0, viewportContainerIds!![index])
+        } else {
+            OpenCvCameraFactory.getInstance().createWebcam(Devices.camera0, cameraMonitorViewId)
         }
 
-        camera.setPipeline(pipeline);
-        FtcDashboard.getInstance().startCameraStream(camera, 0);
+        camera.setPipeline(pipeline)
+        FtcDashboard.getInstance().startCameraStream(camera, 0.0)
 
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
-            @Override
-            public void onOpened() {
-                init = true;
-                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT);
+        camera.openCameraDeviceAsync(object : OpenCvCamera.AsyncCameraOpenListener {
+            override fun onOpened() {
+                isReady = true
+                camera.startStreaming(640, 480, OpenCvCameraRotation.UPRIGHT)
             }
-            @Override
-            public void onError(int errorCode)
-            {
+
+            override fun onError(errorCode: Int) {
                 /*
                  * This will be called if the camera could not be opened
                  */
 
-                AdvancedLogging.logData("Camera error", errorCode);
-                AdvancedLogging.update();
+                logData("Camera error", errorCode)
+                update()
             }
-        });
+        })
     }
 
-    @Override
-    public void loop() {
-        spot = pipeline.getPosition();
-        previousSpots.add(spot);
+    override fun loop() {
+        spot = pipeline!!.position
+        previousSpots.add(spot)
         // Get the average spot out of all spots, then round it
-        averageSpot = (int) Math.round(previousSpots.stream().mapToInt(Integer::intValue).average().orElse(0));
+        averageSpot =
+            Math.round(previousSpots.stream().mapToInt { obj: Int -> obj.toInt() }.average().orElse(0.0)).toInt()
     }
 
-    public int getSpot() {
-        return spot;
+    fun setTeamColor(color: TeamColor?) {
+        pipeline!!.teamColor = color
     }
 
-    public int getAverageSpot() {
-        return averageSpot;
+    fun setDebugEnabled(enabled: Boolean) {
+        pipeline!!.isDebugEnabled = enabled
     }
-
-    public boolean isReady() {
-        return init;
-    }
-
-    public void setTeamColor(SpikeMarkDetectionPipeline.TeamColor color) {
-        pipeline.setTeamColor(color);
-    }
-
-    public void setDebugEnabled(boolean enabled) {
-        pipeline.setDebugEnabled(enabled);
-    }
-
 }

@@ -1,34 +1,35 @@
-package org.firstinspires.ftc.teamcode.internals.telemetry.logging;
+package org.firstinspires.ftc.teamcode.internals.telemetry.logging
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import com.acmerobotics.dashboard.FtcDashboard
+import org.firstinspires.ftc.robotcore.external.Telemetry
 
-public class DashboardLogging {
+object DashboardLogging {
+    var TELEMETRY: Telemetry = FtcDashboard.getInstance().telemetry
 
-    public static Telemetry TELEMETRY = FtcDashboard.getInstance().getTelemetry();
-
-    public static void update() {
-        TELEMETRY.update();
+    @JvmStatic
+    fun update() {
+        TELEMETRY.update()
     }
 
-    public static void clear() {
-        TELEMETRY.clear();
+    @JvmStatic
+    fun clear() {
+        TELEMETRY.clear()
     }
 
-    public static void logData(String key, Object value) {
-        TELEMETRY.addData(key, value);
+    fun logData(key: String?, value: Any?) {
+        TELEMETRY.addData(key, value)
     }
 
-    public static void logText(String msg) {
-        TELEMETRY.addLine(msg);
+    fun logText(msg: String?) {
+        TELEMETRY.addLine(msg)
     }
 
-    public static void log(String msg) {
-        logText(msg);
+    fun log(msg: String?) {
+        logText(msg)
     }
 
-    public static void log(String key, Object value) {
-        logData(key, value);
+    @JvmStatic
+    fun log(key: String?, value: Any?) {
+        logData(key, value)
     }
-
 }

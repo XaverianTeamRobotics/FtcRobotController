@@ -1,72 +1,61 @@
-package org.firstinspires.ftc.teamcode.features;
+package org.firstinspires.ftc.teamcode.features
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.internals.features.Buildable;
-import org.firstinspires.ftc.teamcode.internals.features.Feature;
-import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-import java.util.List;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
+import org.firstinspires.ftc.teamcode.internals.features.Buildable
+import org.firstinspires.ftc.teamcode.internals.features.Feature
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices
+import org.firstinspires.ftc.vision.VisionPortal
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor
 
 /**
  * This detects AprilTags and shows them on the FTC dashboard.
- * <p>
+ *
+ *
  * Connections: A camera and a computer connected to the dashboard.
- * <p>
+ *
+ *
  * Controls: Uses the dashboard.
  */
-public class AprilTagDetector extends Feature implements Buildable {
-    public List<AprilTagDetection> currentDetections;
-    AprilTagProcessor aprilTag;
-    VisionPortal vision;
-    CameraName cameraName;
+class AprilTagDetector(var cameraName: CameraName) : Feature(), Buildable {
+    var currentDetections: MutableList<AprilTagDetection>? = null
+    var aprilTag: AprilTagProcessor? = null
+    var vision: VisionPortal? = null
 
-    public AprilTagDetector(CameraName cameraName) {
-        this.cameraName = cameraName;
-    }
-
-    @Override
-    public void build() {
+    override fun build() {
         // Build AprilTag Detector
-        aprilTag = new AprilTagProcessor.Builder()
-                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-                .build();
+        aprilTag = AprilTagProcessor.Builder()
+            .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+            .build()
 
-        vision = new VisionPortal.Builder()
-                .setCamera(Devices.camera0)
-                .addProcessor(aprilTag)
-                .enableLiveView(true)
-                .build();
+        vision = VisionPortal.Builder()
+            .setCamera(Devices.camera0)
+            .addProcessor(aprilTag)
+            .enableLiveView(true)
+            .build()
     }
 
-    @Override
-    public void loop() {
-        currentDetections = aprilTag.getDetections();
+    override fun loop() {
+        currentDetections = aprilTag!!.detections
     }
 
-    public List<AprilTagDetection> getCurrentDetections() {
-        return currentDetections;
+    fun stop() {
+        vision!!.setProcessorEnabled(aprilTag, false)
+        currentDetections!!.clear()
     }
 
-    public void stop() {
-        vision.setProcessorEnabled(aprilTag, false);
-        currentDetections.clear();
+    fun start() {
+        vision!!.setProcessorEnabled(aprilTag, true)
+        currentDetections!!.clear()
     }
 
-    public void start() {
-        vision.setProcessorEnabled(aprilTag, true);
-        currentDetections.clear();
+    fun resumeStreaming() {
+        vision!!.resumeLiveView()
     }
 
-    public void resumeStreaming() {
-        vision.resumeLiveView();
-    }
-
-    public void stopStreaming() {
-        vision.stopLiveView();
+    fun stopStreaming() {
+        vision!!.stopLiveView()
     }
 }

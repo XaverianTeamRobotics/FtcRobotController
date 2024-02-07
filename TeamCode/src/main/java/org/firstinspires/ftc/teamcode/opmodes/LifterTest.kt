@@ -1,22 +1,20 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes
 
-import org.firstinspires.ftc.teamcode.features.Lifter;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
-import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
+import org.firstinspires.ftc.teamcode.features.Lifter
+import org.firstinspires.ftc.teamcode.internals.registration.OperationMode
+import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation
 
 /**
  * This tests the robot screw lifter.
- * <p>
- * Features: {@link org.firstinspires.ftc.teamcode.features.Lifter}
+ *
+ *
+ * Features: [org.firstinspires.ftc.teamcode.features.Lifter]
  */
-public class LifterTest extends OperationMode implements TeleOperation {
-    @Override
-    public void construct() {
-        registerFeature(new Lifter());
+class LifterTest : OperationMode(), TeleOperation {
+    override fun construct() {
+        registerFeature(Lifter())
     }
 
-    @Override
-    public void run() {
-
+    override fun run() {
     }
 }

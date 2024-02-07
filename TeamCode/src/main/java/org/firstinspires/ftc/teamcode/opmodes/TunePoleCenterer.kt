@@ -1,23 +1,19 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes
 
-import org.firstinspires.ftc.teamcode.internals.misc.PoleCenterer;
-import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
-import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
+import org.firstinspires.ftc.teamcode.internals.misc.PoleCenterer
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain
+import org.firstinspires.ftc.teamcode.internals.registration.OperationMode
+import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation
 
-public class TunePoleCenterer extends OperationMode implements TeleOperation {
+class TunePoleCenterer : OperationMode(), TeleOperation {
+    var centerer: PoleCenterer? = null
 
-    PoleCenterer centerer;
-
-    @Override
-    public void construct() {
-        centerer = new PoleCenterer();
-        centerer.setDrivetrain(new AutonomousDrivetrain());
+    override fun construct() {
+        centerer = PoleCenterer()
+        centerer!!.setDrivetrain(AutonomousDrivetrain())
     }
 
-    @Override
-    public void run() {
-        centerer.center();
+    override fun run() {
+        centerer!!.center()
     }
-
 }

@@ -1,47 +1,48 @@
-package org.firstinspires.ftc.teamcode.features;
+package org.firstinspires.ftc.teamcode.features
 
-import org.firstinspires.ftc.teamcode.internals.features.Buildable;
-import org.firstinspires.ftc.teamcode.internals.features.Feature;
-import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
+import org.firstinspires.ftc.teamcode.internals.features.Buildable
+import org.firstinspires.ftc.teamcode.internals.features.Feature
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices
 
 /**
  * <blockquote>
- *     No. We are not naming them the I and J cameras. No one will understand.<br>
- *     <cite>&ndash; Braden</cite>
- * </blockquote>
+ * No. We are not naming them the I and J cameras. No one will understand.<br></br>
+ * <cite> Braden</cite>
+</blockquote> *
  */
-public class JCam extends Feature implements Buildable {
-
-    private static boolean down = false;
-
-    private static long time;
-
-    @Override
-    public void build() {
-        Devices.servo2.setPosition(100);
-        time = System.currentTimeMillis();
+class JCam : Feature(), Buildable {
+    override fun build() {
+        Devices.servo2.position = 100.0
+        time = System.currentTimeMillis()
     }
 
-    @Override
-    public void loop() {
-        if(down) {
-            Devices.servo2.setPosition(0);
-        }else{
-            Devices.servo2.setPosition(100);
+    override fun loop() {
+        if (down) {
+            Devices.servo2.position = 0.0
+        } else {
+            Devices.servo2.position = 100.0
         }
     }
 
-    public static void toggle() {
-        down = !down;
-        time = System.currentTimeMillis() + 1000;
-    }
+    companion object {
+        private var down = false
 
-    public static boolean complete() {
-        return System.currentTimeMillis() > time;
-    }
+        private var time: Long = 0
 
-    public static boolean down() {
-        return down;
-    }
+        @JvmStatic
+        fun toggle() {
+            down = !down
+            time = System.currentTimeMillis() + 1000
+        }
 
+        @JvmStatic
+        fun complete(): Boolean {
+            return System.currentTimeMillis() > time
+        }
+
+        @JvmStatic
+        fun down(): Boolean {
+            return down
+        }
+    }
 }

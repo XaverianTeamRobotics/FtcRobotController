@@ -1,90 +1,84 @@
-package org.firstinspires.ftc.teamcode.features;
+package org.firstinspires.ftc.teamcode.features
 
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.internals.features.Buildable;
-import org.firstinspires.ftc.teamcode.internals.features.Feature;
-import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
-import org.firstinspires.ftc.teamcode.internals.misc.RatelimitCalc;
-import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain;
-import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.Compressor;
-import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.PoseBucket;
-import org.firstinspires.ftc.teamcode.internals.motion.pid.constrained.SlewRateLimiter;
-import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DashboardLogging;
-import org.jetbrains.annotations.NotNull;
+import com.acmerobotics.dashboard.config.Config
+import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.acmerobotics.roadrunner.geometry.Vector2d
+import com.qualcomm.robotcore.hardware.DcMotor
+import org.firstinspires.ftc.teamcode.internals.features.Buildable
+import org.firstinspires.ftc.teamcode.internals.features.Feature
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.Compressor
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.PoseBucket
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DashboardLogging
 
 /**
- * A mecanum drivetrain. This relies on odometry. Use {@link NativeMecanumDrivetrain} if you don't have odometry.
+ * A mecanum drivetrain. This relies on odometry. Use [NativeMecanumDrivetrain] if you don't have odometry.
  */
 @Config
-public class MecanumDrivetrain extends Feature implements Buildable {
+class MecanumDrivetrain(private val FIELD_CENTRIC: Boolean) : Feature(), Buildable {
+    private var drivetrain: AutonomousDrivetrain? = null
 
-    private final boolean FIELD_CENTRIC;
-    private AutonomousDrivetrain drivetrain;
-    public static double xMult = 1, yMult = 1, rMult = 1;
-    public static double xYMin = 7, xYMax = 1;
-    public static double yYMin = 7, yYMax = 1;
-    public static boolean simulated = false;
-
-    public MecanumDrivetrain(boolean fieldCentric) {
-        FIELD_CENTRIC = fieldCentric;
+    override fun build() {
+        drivetrain = AutonomousDrivetrain()
+        drivetrain!!.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)
+        drivetrain!!.poseEstimate = PoseBucket.getPose()
     }
 
-    @Override
-    public void build() {
-        drivetrain = new AutonomousDrivetrain();
-        drivetrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        drivetrain.setPoseEstimate(PoseBucket.getPose());
-    }
-
-    @Override
-    public void loop() {
+    override fun loop() {
         // Read current pose
-        Pose2d poseEstimate = drivetrain.getPoseEstimate();
+        val poseEstimate = drivetrain!!.poseEstimate
         // Get gamepad inputs
-        double x = Devices.controller1.getLeftStickX() * xMult;
-        double y = Devices.controller1.getLeftStickY() * yMult;
-        double r = Devices.controller1.getRightStickX() * rMult;
-        DashboardLogging.logData("iX", x);
-        DashboardLogging.logData("iY", y);
-        DashboardLogging.logData("iR", r);
-        boolean reset = Devices.controller1.getTouchpad();
-        if(reset) {
-            drivetrain.setPoseEstimate(new Pose2d(0, 0, 0));
+        val x = Devices.controller1.leftStickX * xMult
+        val y = Devices.controller1.leftStickY * yMult
+        val r = Devices.controller1.rightStickX * rMult
+        DashboardLogging.logData("iX", x)
+        DashboardLogging.logData("iY", y)
+        DashboardLogging.logData("iR", r)
+        val reset = Devices.controller1.touchpad
+        if (reset) {
+            drivetrain!!.poseEstimate = Pose2d(0.0, 0.0, 0.0)
         }
-        if(!simulated) {
+        if (!simulated) {
             // Create a vector from the gamepad x/y inputs
             // Then, rotate that vector by the inverse of that heading if we're using field centric--otherwise we'll just assume the heading is 0
-            Vector2d input;
-            if(FIELD_CENTRIC) {
-                input = new Vector2d(
+            val input = if (FIELD_CENTRIC) {
+                Vector2d(
                     -Compressor.compress(y),
                     -Compressor.compress(x)
-                ).rotated(-poseEstimate.getHeading());
-            }else{
-                input = new Vector2d(
+                ).rotated(-poseEstimate.heading)
+            } else {
+                Vector2d(
                     -Compressor.compress(y),
                     -Compressor.compress(x)
-                );
+                )
             }
             // Pass in the rotated input + right stick value for rotation
             // Rotation is not part of the rotated input thus must be passed in separately
-            drivetrain.setWeightedDrivePower(
-                new Pose2d(
-                    input.getX(),
-                    input.getY(),
+            drivetrain!!.setWeightedDrivePower(
+                Pose2d(
+                    input.x,
+                    input.y,
                     -Compressor.compress(r)
                 )
-            );
+            )
         }
         // Update everything. Odometry. Etc.
-        DashboardLogging.logData("oX", x);
-        DashboardLogging.logData("oY", y);
-        DashboardLogging.logData("oR", r);
-        DashboardLogging.update();
-        drivetrain.update();
+        DashboardLogging.logData("oX", x)
+        DashboardLogging.logData("oY", y)
+        DashboardLogging.logData("oR", r)
+        DashboardLogging.update()
+        drivetrain!!.update()
+    }
+
+    companion object {
+        var xMult: Double = 1.0
+        var yMult: Double = 1.0
+        var rMult: Double = 1.0
+        var xYMin: Double = 7.0
+        var xYMax: Double = 1.0
+        var yYMin: Double = 7.0
+        var yYMax: Double = 1.0
+        var simulated: Boolean = false
     }
 }

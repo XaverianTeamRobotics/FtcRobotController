@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.internals.data;
+package org.firstinspires.ftc.teamcode.internals.data
 
-public enum ArmCommand {
+enum class ArmCommand {
     JNCT_GND,
     JNCT_LOW,
     JNCT_MED,

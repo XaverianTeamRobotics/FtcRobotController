@@ -1,61 +1,55 @@
-package org.firstinspires.ftc.teamcode.internals.misc;
+package org.firstinspires.ftc.teamcode.internals.misc
 
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.Range
+import kotlin.math.exp
+import kotlin.math.ln
 
 /**
- * Calculates a limit of a <a href="https://en.wikipedia.org/wiki/Slew_rate">slew rate</a> such that <kbd>limit = ln(weight)</kbd> where the logarithm is within a certain area. Check this <a href="https://www.desmos.com/calculator/rziziaen6n">visualization</a> for more details.
+ * Calculates a limit of a [slew rate](https://en.wikipedia.org/wiki/Slew_rate) such that <kbd>limit = ln(weight)</kbd> where the logarithm is within a certain area. Check this [visualization](https://www.desmos.com/calculator/rziziaen6n) for more details.
  */
-public class RatelimitCalc {
+class RatelimitCalc(private val y1: Double, private val y2: Double, private val min: Double, private val max: Double) {
+    private val x1 = 1.0
+    private val x2 = 101.0
 
-    private final double x1 = 1, y1, x2 = 101, y2;
-    private final double min, max;
-
-    public RatelimitCalc(double y1, double y2, double minWeight, double maxWeight) {
-        this.y1 = y1;
-        this.y2 = y2;
-        min = minWeight;
-        max = maxWeight;
+    fun calculate(position: Int): Double {
+        val pos = normalizePosition(position)
+        return internalCalc(pos)
     }
 
-    public double calculate(int position) {
-        double pos = normalizePosition(position);
-        return internalCalc(pos);
+    private fun normalizePosition(p: Int): Double {
+        var p = p
+        p = Range.clip(p, min.toInt(), max.toInt())
+        return Range.scale(p.toDouble(), min, max, 1.0, 101.0)
     }
 
-    private double normalizePosition(int p) {
-        p = Range.clip(p, (int) min, (int) max);
-        return Range.scale(p, min, max, 1, 101);
+    private fun internalCalc(p: Double): Double {
+        return f(p)
     }
 
-    private double internalCalc(double p) {
-        return f(p);
-    }
-
-    private double a() {
+    private fun a(): Double {
         //       numerator of m
         // a = ------------------
         //      ln of denom of m
-        return (y1 - y2) / Math.log(x1 / x2);
+        return (y1 - y2) / ln(x1 / x2)
     }
 
-    private double b() {
+    private fun b(): Double {
         //      y2 * ln of x1 - y1 * ln of x2
         // b = -------------------------------
         //                 y1 - y2
-        return Math.exp((y2 * Math.log(x1) - y1 * Math.log(x2)) / (y1 - y2));
+        return exp((y2 * ln(x1) - y1 * ln(x2)) / (y1 - y2))
     }
 
-    private double f(double x) {
+    private fun f(x: Double): Double {
         //
         // f = a * ln of (b * x) as long as its on [x1, x2], otherwise its y1 or y2
         //
-        if(x < x1) {
-            return y1;
-        }else if(x <= x2) {
-            return a() * Math.log(b() * x);
-        }else{
-            return y2;
+        return if (x < x1) {
+            y1
+        } else if (x <= x2) {
+            a() * ln(b() * x)
+        } else {
+            y2
         }
     }
-
 }

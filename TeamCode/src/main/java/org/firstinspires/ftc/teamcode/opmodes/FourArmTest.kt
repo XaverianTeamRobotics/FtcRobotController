@@ -1,24 +1,20 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes
 
-import org.firstinspires.ftc.teamcode.features.PowerplayFourMotorArm;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
-import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
+import org.firstinspires.ftc.teamcode.features.PowerplayFourMotorArm
+import org.firstinspires.ftc.teamcode.internals.registration.OperationMode
+import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation
 
 /**
  * This tests the double reverse four-bar linkage system.
- * <p>
- * Features: {@link org.firstinspires.ftc.teamcode.features.PowerplayFourMotorArm}
+ *
+ *
+ * Features: [org.firstinspires.ftc.teamcode.features.PowerplayFourMotorArm]
  */
-public class FourArmTest extends OperationMode implements TeleOperation {
-
-    @Override
-    public void construct() {
-        registerFeature(new PowerplayFourMotorArm());
+class FourArmTest : OperationMode(), TeleOperation {
+    override fun construct() {
+        registerFeature(PowerplayFourMotorArm())
     }
 
-    @Override
-    public void run() {
-
+    override fun run() {
     }
-
 }

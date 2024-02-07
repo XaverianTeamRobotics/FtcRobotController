@@ -1,46 +1,49 @@
-package org.firstinspires.ftc.teamcode.internals.telemetry.logging;
+package org.firstinspires.ftc.teamcode.internals.telemetry.logging
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import kotlinx.serialization.descriptors.PrimitiveKind;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import com.acmerobotics.dashboard.FtcDashboard
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
+import org.firstinspires.ftc.robotcore.external.Telemetry
 
-public class Logging {
+object Logging {
+    var TELEMETRY: MultipleTelemetry? = null
+    private var telemetry: Telemetry? = null
 
-    public static MultipleTelemetry TELEMETRY;
-    private static Telemetry telemetry;
-
-    public static void setTelemetry(Telemetry driver) {
-        TELEMETRY = new MultipleTelemetry(driver, FtcDashboard.getInstance().getTelemetry());
-        telemetry = driver;
+    fun setTelemetry(driver: Telemetry?) {
+        TELEMETRY = MultipleTelemetry(driver, FtcDashboard.getInstance().telemetry)
+        telemetry = driver
     }
 
-    public static void update() {
-        TELEMETRY.update();
+    @JvmStatic
+    fun update() {
+        TELEMETRY!!.update()
     }
 
-    public static void clear() {
-        TELEMETRY.clear();
+    @JvmStatic
+    fun clear() {
+        TELEMETRY!!.clear()
     }
 
-    public static void logData(String key, Object value) {
-        TELEMETRY.addData(key, value);
+    @JvmStatic
+    fun logData(key: String?, value: Any?) {
+        TELEMETRY!!.addData(key, value)
     }
 
-    public static void logText(String msg) {
-        TELEMETRY.addLine(msg);
+    fun logText(msg: String?) {
+        TELEMETRY!!.addLine(msg)
     }
 
-    public static void log(String msg) {
-        logText(msg);
+    @JvmStatic
+    fun log(msg: String?) {
+        logText(msg)
     }
 
-    public static void log(String key, Object value) {
-        logData(key, value);
+    @JvmStatic
+    fun log(key: String?, value: Any?) {
+        logData(key, value)
     }
 
-    public static void setAutoClear(boolean autoClear) {
-        telemetry.setAutoClear(autoClear);
+    @JvmStatic
+    fun setAutoClear(autoClear: Boolean) {
+        telemetry!!.isAutoClear = autoClear
     }
-
 }

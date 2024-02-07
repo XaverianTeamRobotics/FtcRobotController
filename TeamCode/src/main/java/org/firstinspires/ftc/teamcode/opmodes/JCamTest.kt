@@ -1,24 +1,23 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes
 
-import org.firstinspires.ftc.teamcode.features.JCam;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
-import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
-import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DSLogging;
+import org.firstinspires.ftc.teamcode.features.JCam
+import org.firstinspires.ftc.teamcode.features.JCam.Companion.complete
+import org.firstinspires.ftc.teamcode.features.JCam.Companion.down
+import org.firstinspires.ftc.teamcode.features.JCam.Companion.toggle
+import org.firstinspires.ftc.teamcode.internals.registration.OperationMode
+import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DSLogging
 
-public class JCamTest extends OperationMode implements TeleOperation {
-
-    @Override
-    public void construct() {
-        registerFeature(new JCam());
+class JCamTest : OperationMode(), TeleOperation {
+    override fun construct() {
+        registerFeature(JCam())
     }
 
-    @Override
-    public void run() {
-        if(JCam.complete()) {
-            DSLogging.log(JCam.down() ? "down" : "up");
-            DSLogging.update();
-            JCam.toggle();
+    override fun run() {
+        if (complete()) {
+            DSLogging.log(if (down()) "down" else "up")
+            DSLogging.update()
+            toggle()
         }
     }
-
 }

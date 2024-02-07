@@ -1,18 +1,14 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes
 
-import org.firstinspires.ftc.teamcode.features.ArmClaw;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
-import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
+import org.firstinspires.ftc.teamcode.features.ArmClaw
+import org.firstinspires.ftc.teamcode.internals.registration.OperationMode
+import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation
 
-public class ArmClawTest extends OperationMode implements TeleOperation {
-
-    @Override
-    public void construct() {
-        registerFeature(new ArmClaw());
+class ArmClawTest : OperationMode(), TeleOperation {
+    override fun construct() {
+        registerFeature(ArmClaw())
     }
 
-    @Override
-    public void run() {
-
+    override fun run() {
     }
 }

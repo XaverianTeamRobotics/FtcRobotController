@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companio
 
 class AdvancedLogging {
     companion object {
-
         @JvmStatic
         lateinit var driverTelemetry: Telemetry
         var dashboardPacket = TelemetryPacket()

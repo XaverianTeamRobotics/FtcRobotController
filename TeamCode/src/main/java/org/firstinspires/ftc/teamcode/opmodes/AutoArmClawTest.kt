@@ -1,22 +1,18 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes
 
-import org.checkerframework.checker.units.qual.A;
-import org.firstinspires.ftc.teamcode.features.ArmClaw;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
-import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
-import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
+import org.firstinspires.ftc.teamcode.features.ArmClaw
+import org.firstinspires.ftc.teamcode.internals.registration.OperationMode
+import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation
 
-public class AutoArmClawTest extends OperationMode implements TeleOperation {
-    ArmClaw claw;
+class AutoArmClawTest : OperationMode(), TeleOperation {
+    var claw: ArmClaw? = null
 
-    @Override
-    public void construct() {
-        claw = new ArmClaw();
-        registerFeature(claw);
+    override fun construct() {
+        claw = ArmClaw()
+        registerFeature(claw!!)
     }
 
-    @Override
-    public void run() {
-        claw.autoRaiseArm(ArmClaw.KeyPositions.FOUR);
+    override fun run() {
+        claw!!.autoRaiseArm(ArmClaw.KeyPositions.FOUR)
     }
 }

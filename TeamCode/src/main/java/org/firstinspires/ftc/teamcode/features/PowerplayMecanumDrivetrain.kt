@@ -1,126 +1,123 @@
-package org.firstinspires.ftc.teamcode.features;
+package org.firstinspires.ftc.teamcode.features
 
-import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.internals.features.Buildable;
-import org.firstinspires.ftc.teamcode.internals.features.Feature;
-import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
-import org.firstinspires.ftc.teamcode.internals.misc.RatelimitCalc;
-import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain;
-import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.Compressor;
-import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.PoseBucket;
-import org.firstinspires.ftc.teamcode.internals.motion.pid.constrained.SlewRateLimiter;
-import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DashboardLogging;
-import org.jetbrains.annotations.NotNull;
+import com.acmerobotics.dashboard.config.Config
+import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.acmerobotics.roadrunner.geometry.Vector2d
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.util.Range
+import org.firstinspires.ftc.teamcode.internals.features.Buildable
+import org.firstinspires.ftc.teamcode.internals.features.Feature
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices
+import org.firstinspires.ftc.teamcode.internals.misc.RatelimitCalc
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.Compressor
+import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.PoseBucket
+import org.firstinspires.ftc.teamcode.internals.motion.pid.constrained.SlewRateLimiter
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.DashboardLogging
 
 /**
- * A mecanum drivetrain. This relies on odometry. Use {@link NativeMecanumDrivetrain} if you don't have odometry.
+ * A mecanum drivetrain. This relies on odometry. Use [NativeMecanumDrivetrain] if you don't have odometry.
  */
 @Config
-public class PowerplayMecanumDrivetrain extends Feature implements Buildable {
+class PowerplayMecanumDrivetrain(private val FIELD_CENTRIC: Boolean, private val DRIVER_ASSIST: Boolean) : Feature(),
+    Buildable {
+    private var drivetrain: AutonomousDrivetrain? = null
+    private val rlX = SlewRateLimiter(1.0)
+    private val rlY = SlewRateLimiter(1.0)
+    private val rcX = RatelimitCalc(xYMin, xYMax, pMin, pMax)
+    private val rcY = RatelimitCalc(yYMin, yYMax, pMin, pMax)
 
-    private final boolean FIELD_CENTRIC;
-    private final boolean DRIVER_ASSIST;
-    private AutonomousDrivetrain drivetrain;
-    public static double xMult = 0.6, yMult = 0.6, rMult = 0.6;
-    public static double xYMin = 7, xYMax = 1;
-    public static double yYMin = 7, yYMax = 1;
-    public static double pMin = PowerplayFourMotorArm.ArmPosition.RESET.getHeight(), pMax = PowerplayFourMotorArm.ArmPosition.JNCT_HIGH.getHeight();
-    public static boolean simulated = false;
-    private final SlewRateLimiter rlX = new SlewRateLimiter(1);
-    private final SlewRateLimiter rlY = new SlewRateLimiter(1);
-    private final RatelimitCalc rcX = new RatelimitCalc(xYMin, xYMax, pMin, pMax);
-    private final RatelimitCalc rcY = new RatelimitCalc(yYMin, yYMax, pMin, pMax);
-
-    public PowerplayMecanumDrivetrain(boolean fieldCentric, boolean driverAssist) {
-        FIELD_CENTRIC = fieldCentric;
-        DRIVER_ASSIST = driverAssist;
+    override fun build() {
+        drivetrain = AutonomousDrivetrain()
+        drivetrain!!.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)
+        drivetrain!!.poseEstimate = PoseBucket.getPose()
     }
 
-    @Override
-    public void build() {
-
-        drivetrain = new AutonomousDrivetrain();
-        drivetrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        drivetrain.setPoseEstimate(PoseBucket.getPose());
-    }
-
-    @Override
-    public void loop() {
+    override fun loop() {
         // Read current pose
-        Pose2d poseEstimate = drivetrain.getPoseEstimate();
+        val poseEstimate = drivetrain!!.poseEstimate
         // Get gamepad inputs
-        double x = Devices.controller1.getLeftStickX() * xMult;
-        double y = Devices.controller1.getLeftStickY() * yMult;
-        double r = Devices.controller1.getRightStickX() * rMult;
-        DashboardLogging.logData("iX", x);
-        DashboardLogging.logData("iY", y);
-        DashboardLogging.logData("iR", r);
-        boolean reset = Devices.controller1.getTouchpad();
-        if(reset) {
-            drivetrain.setPoseEstimate(new Pose2d(0, 0, 0));
+        var x = Devices.controller1.leftStickX * xMult
+        var y = Devices.controller1.leftStickY * yMult
+        val r = Devices.controller1.rightStickX * rMult
+        DashboardLogging.logData("iX", x)
+        DashboardLogging.logData("iY", y)
+        DashboardLogging.logData("iR", r)
+        val reset = Devices.controller1.touchpad
+        if (reset) {
+            drivetrain!!.poseEstimate = Pose2d(0.0, 0.0, 0.0)
         }
         // dampen if assist is enabled
-        if(DRIVER_ASSIST) {
-            double[] v = dampen(x / 100, y / 100);
-            x = Range.clip(v[0] * 100, -100, 100);
-            y = Range.clip(v[1] * 100, -100, 100);
+        if (DRIVER_ASSIST) {
+            val v = dampen(x / 100, y / 100)
+            x = Range.clip(v[0] * 100, -100.0, 100.0)
+            y = Range.clip(v[1] * 100, -100.0, 100.0)
         }
-        if(!simulated) {
+        if (!simulated) {
             // Create a vector from the gamepad x/y inputs
             // Then, rotate that vector by the inverse of that heading if we're using field centric--otherwise we'll just assume the heading is 0
-            Vector2d input;
-            if(FIELD_CENTRIC) {
-                input = new Vector2d(
+            val input = if (FIELD_CENTRIC) {
+                Vector2d(
                     -Compressor.compress(y),
                     -Compressor.compress(x)
-                ).rotated(-poseEstimate.getHeading());
-            }else{
-                input = new Vector2d(
+                ).rotated(-poseEstimate.heading)
+            } else {
+                Vector2d(
                     -Compressor.compress(y),
                     -Compressor.compress(x)
-                );
+                )
             }
             // Pass in the rotated input + right stick value for rotation
             // Rotation is not part of the rotated input thus must be passed in separately
-            drivetrain.setWeightedDrivePower(
-                new Pose2d(
-                    input.getX(),
-                    input.getY(),
+            drivetrain!!.setWeightedDrivePower(
+                Pose2d(
+                    input.x,
+                    input.y,
                     -Compressor.compress(r)
                 )
-            );
+            )
         }
         // Update everything. Odometry. Etc.
-        DashboardLogging.logData("oX", x);
-        DashboardLogging.logData("oY", y);
-        DashboardLogging.logData("oR", r);
-        DashboardLogging.update();
-        drivetrain.update();
+        DashboardLogging.logData("oX", x)
+        DashboardLogging.logData("oY", y)
+        DashboardLogging.logData("oR", r)
+        DashboardLogging.update()
+        drivetrain!!.update()
     }
 
-    private double @NotNull [] dampen(double x, double y) {
-        int pos = Devices.encoder5.getPosition();
-        return new double[] { limit(x, pos, rlX, rcX), limit(y, pos, rlY, rcY) };
-    }
-
-    private double limit(double vel, int pos, SlewRateLimiter limiter, RatelimitCalc calculator) {
-        return limit(vel, pos, limiter, calculator, null);
+    private fun dampen(x: Double, y: Double): DoubleArray {
+        val pos = Devices.encoder5.position
+        return doubleArrayOf(limit(x, pos, rlX, rcX), limit(y, pos, rlY, rcY))
     }
 
     /**
      * Allows debug logging to both DS and Dashboard via Logging.log($logger, $rate) where $logger is the logger argument (the caption of the data) and $rate is the rate double calculated in the method.
      */
-    private double limit(double vel, int pos, SlewRateLimiter limiter, RatelimitCalc calculator, String logger) {
-        double rate = calculator.calculate(pos);
-        if(logger != null) {
-            DashboardLogging.log(logger, rate);
+    private fun limit(
+        vel: Double,
+        pos: Int,
+        limiter: SlewRateLimiter,
+        calculator: RatelimitCalc,
+        logger: String? = null
+    ): Double {
+        val rate = calculator.calculate(pos)
+        if (logger != null) {
+            DashboardLogging.log(logger, rate)
         }
-        limiter.setRateLimit(rate);
-        return limiter.calculate(vel);
+        limiter.setRateLimit(rate)
+        return limiter.calculate(vel)
     }
 
+    companion object {
+        var xMult: Double = 0.6
+        var yMult: Double = 0.6
+        var rMult: Double = 0.6
+        var xYMin: Double = 7.0
+        var xYMax: Double = 1.0
+        var yYMin: Double = 7.0
+        var yYMax: Double = 1.0
+        var pMin: Double = PowerplayFourMotorArm.ArmPosition.RESET.height
+        var pMax: Double = PowerplayFourMotorArm.ArmPosition.JNCT_HIGH.height
+        var simulated: Boolean = false
+    }
 }

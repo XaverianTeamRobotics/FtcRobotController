@@ -1,12 +1,9 @@
-package org.firstinspires.ftc.teamcode.internals.misc;
-
-import org.firstinspires.ftc.teamcode.internals.features.Conditional;
-import org.firstinspires.ftc.teamcode.internals.features.Feature;
+package org.firstinspires.ftc.teamcode.internals.misc
 
 /**
- * An {@link Affair} is a way to track when things happen. For example, in a {@link Conditional} {@link Feature}, you could keep track of when a feature is to be activated.
+ * An [Affair] is a way to track when things happen. For example, in a [Conditional] [Feature], you could keep track of when a feature is to be activated.
  */
-public enum Affair {
+enum class Affair {
     PAST,
     PRESENT,
     FUTURE

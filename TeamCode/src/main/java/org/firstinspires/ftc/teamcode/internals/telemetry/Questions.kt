@@ -1,24 +1,23 @@
-package org.firstinspires.ftc.teamcode.internals.telemetry;
+package org.firstinspires.ftc.teamcode.internals.telemetry
 
-import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
-import org.firstinspires.ftc.teamcode.internals.hardware.accessors.Gamepad;
-import org.firstinspires.ftc.teamcode.internals.telemetry.graphics.Item;
-import org.firstinspires.ftc.teamcode.internals.telemetry.graphics.Menu;
-import org.firstinspires.ftc.teamcode.internals.telemetry.graphics.MenuManager;
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices
+import org.firstinspires.ftc.teamcode.internals.hardware.accessors.Gamepad
+import org.firstinspires.ftc.teamcode.internals.telemetry.graphics.Item
+import org.firstinspires.ftc.teamcode.internals.telemetry.graphics.Menu
+import org.firstinspires.ftc.teamcode.internals.telemetry.graphics.MenuManager
 
 /**
  * The Questions framework allows a human driver to answer multiple-choice questions prompted by the robot via an interface on the DS.
  */
-public class Questions {
-
+object Questions {
     /**
      * Asks the driver a question, which is displayed on the telemetry window on the DS. The driver can choose an answer with the D-Pad and the A (or cross) button. This method is blocking.
      * @param prompt The question itself.
      * @param input The gamepad which will be used to let the driver answer this question.
      * @return The answer of the question.
      */
-    public static Item ask(Menu prompt, Gamepad input) {
-        return new MenuManager(prompt, input).run();
+    fun ask(prompt: Menu?, input: Gamepad?): Item? {
+        return MenuManager(prompt!!, input!!).run()
     }
 
     /**
@@ -28,12 +27,12 @@ public class Questions {
      * @param options The options the user can choose.
      * @return The answer of the question.
      */
-    public static Item ask(Gamepad input, String question, String... options) {
-        Menu.MenuBuilder menuBuilder = new Menu.MenuBuilder().setDescription(question);
-        for(String option : options) {
-            menuBuilder.addItem(option);
+    fun ask(input: Gamepad?, question: String?, vararg options: String?): Item? {
+        val menuBuilder = Menu.MenuBuilder().setDescription(question)
+        for (option in options) {
+            menuBuilder.addItem(option)
         }
-        return new MenuManager(menuBuilder.build(), input).run();
+        return MenuManager(menuBuilder.build(), input!!).run()
     }
 
     /**
@@ -41,8 +40,8 @@ public class Questions {
      * @param prompt The question itself.
      * @return The answer of the question.
      */
-    public static Item askC1(Menu prompt) {
-        return new MenuManager(prompt, Devices.controller1).run();
+    fun askC1(prompt: Menu?): Item {
+        return MenuManager(prompt!!, Devices.controller1).run()!!
     }
 
     /**
@@ -51,12 +50,13 @@ public class Questions {
      * @param options The options the user can choose.
      * @return The answer of the question.
      */
-    public static Item askC1(String question, String... options) {
-        Menu.MenuBuilder menuBuilder = new Menu.MenuBuilder().setDescription(question);
-        for(String option : options) {
-            menuBuilder.addItem(option);
+    @JvmStatic
+    fun askC1(question: String?, vararg options: String?): Item {
+        val menuBuilder = Menu.MenuBuilder().setDescription(question)
+        for (option in options) {
+            menuBuilder.addItem(option)
         }
-        return new MenuManager(menuBuilder.build(), Devices.controller1).run();
+        return MenuManager(menuBuilder.build(), Devices.controller1).run()!!
     }
 
     /**
@@ -64,8 +64,8 @@ public class Questions {
      * @param prompt The question itself.
      * @return The answer of the question.
      */
-    public static Item askC2(Menu prompt) {
-        return new MenuManager(prompt, Devices.controller2).run();
+    fun askC2(prompt: Menu): Item {
+        return MenuManager(prompt, Devices.controller2).run()!!
     }
 
     /**
@@ -74,12 +74,12 @@ public class Questions {
      * @param options The options the user can choose.
      * @return The answer of the question.
      */
-    public static Item askC2(String question, String... options) {
-        Menu.MenuBuilder menuBuilder = new Menu.MenuBuilder().setDescription(question);
-        for(String option : options) {
-            menuBuilder.addItem(option);
+    fun askC2(question: String?, vararg options: String?): Item? {
+        val menuBuilder = Menu.MenuBuilder().setDescription(question)
+        for (option in options) {
+            menuBuilder.addItem(option)
         }
-        return new MenuManager(menuBuilder.build(), Devices.controller2).run();
+        return MenuManager(menuBuilder.build(), Devices.controller2).run()
     }
 
     /**
@@ -88,8 +88,8 @@ public class Questions {
      * @param input The gamepad which will be used to let the driver answer this question.
      * @return The answer of the question.
      */
-    public static MenuManager askAsync(Menu prompt, Gamepad input) {
-        return new MenuManager(prompt, input);
+    fun askAsync(prompt: Menu, input: Gamepad): MenuManager {
+        return MenuManager(prompt, input)
     }
 
     /**
@@ -99,12 +99,13 @@ public class Questions {
      * @param options The options the user can choose.
      * @return The answer of the question.
      */
-    public static MenuManager askAsync(Gamepad input, String question, String... options) {
-        Menu.MenuBuilder menuBuilder = new Menu.MenuBuilder().setDescription(question);
-        for(String option : options) {
-            menuBuilder.addItem(option);
+    @JvmStatic
+    fun askAsync(input: Gamepad, question: String?, vararg options: String?): MenuManager {
+        val menuBuilder = Menu.MenuBuilder().setDescription(question)
+        for (option in options) {
+            menuBuilder.addItem(option)
         }
-        return new MenuManager(menuBuilder.build(), input);
+        return MenuManager(menuBuilder.build(), input)
     }
 
     /**
@@ -112,8 +113,8 @@ public class Questions {
      * @param prompt The question itself.
      * @return The answer of the question.
      */
-    public static MenuManager askAsyncC1(Menu prompt) {
-        return new MenuManager(prompt, Devices.controller1);
+    fun askAsyncC1(prompt: Menu): MenuManager {
+        return MenuManager(prompt, Devices.controller1)
     }
 
     /**
@@ -122,12 +123,13 @@ public class Questions {
      * @param options The options the user can choose.
      * @return The answer of the question.
      */
-    public static MenuManager askAsyncC1(String question, String... options) {
-        Menu.MenuBuilder menuBuilder = new Menu.MenuBuilder().setDescription(question);
-        for(String option : options) {
-            menuBuilder.addItem(option);
+    @JvmStatic
+    fun askAsyncC1(question: String?, vararg options: String?): MenuManager {
+        val menuBuilder = Menu.MenuBuilder().setDescription(question)
+        for (option in options) {
+            menuBuilder.addItem(option)
         }
-        return new MenuManager(menuBuilder.build(), Devices.controller1);
+        return MenuManager(menuBuilder.build(), Devices.controller1)
     }
 
     /**
@@ -135,8 +137,8 @@ public class Questions {
      * @param prompt The question itself.
      * @return The answer of the question.
      */
-    public static MenuManager askAsyncC2(Menu prompt) {
-        return new MenuManager(prompt, Devices.controller2);
+    fun askAsyncC2(prompt: Menu): MenuManager {
+        return MenuManager(prompt, Devices.controller2)
     }
 
     /**
@@ -145,12 +147,11 @@ public class Questions {
      * @param options The options the user can choose.
      * @return The answer of the question.
      */
-    public static MenuManager askAsyncC2(String question, String... options) {
-        Menu.MenuBuilder menuBuilder = new Menu.MenuBuilder().setDescription(question);
-        for(String option : options) {
-            menuBuilder.addItem(option);
+    fun askAsyncC2(question: String?, vararg options: String?): MenuManager {
+        val menuBuilder = Menu.MenuBuilder().setDescription(question)
+        for (option in options) {
+            menuBuilder.addItem(option)
         }
-        return new MenuManager(menuBuilder.build(), Devices.controller2);
+        return MenuManager(menuBuilder.build(), Devices.controller2)
     }
-
 }

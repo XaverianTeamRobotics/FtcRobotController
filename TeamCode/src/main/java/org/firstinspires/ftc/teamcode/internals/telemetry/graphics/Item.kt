@@ -1,51 +1,32 @@
-package org.firstinspires.ftc.teamcode.internals.telemetry.graphics;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import org.jetbrains.annotations.NotNull;
+package org.firstinspires.ftc.teamcode.internals.telemetry.graphics
 
 /**
- * An Item is a choice in a {@link Menu}.
+ * An Item is a choice in a [Menu].
  */
-public class Item {
-
-    private final String NAME;
-
-    /**
-     * Creates an item.
-     * @param name The name of the item, or what will be displayed on the menu for this item.
-     */
-    public Item(String name) {
-        NAME = name;
-    }
-
-    public String getName() {
-        return NAME;
-    }
-
-    @NonNull
-    @NotNull
-    @Override
-    public String toString() {
-        return getName() != null ? getName() : "NULL";
+class Item
+/**
+ * Creates an item.
+ * @param name The name of the item, or what will be displayed on the menu for this item.
+ */(val name: String) {
+    override fun toString(): String {
+        return name ?: "NULL"
     }
 
     /**
      * Returns true if the object specified is equal to this object.
-     * <br>
-     * <br>
-     * Note that if the object passed to this method is a {@link String}, the value of the object will be compared to {@link #getName()}, while all other types will be compared by the {@link Object#equals(Object)} method.
+     * <br></br>
+     * <br></br>
+     * Note that if the object passed to this method is a [String], the value of the object will be compared to [.getName], while all other types will be compared by the [Object.equals] method.
      */
-    @Override
-    public boolean equals(@Nullable @org.jetbrains.annotations.Nullable Object obj) {
-        if(obj != null) {
-            if(String.class.isAssignableFrom(obj.getClass())) {
-                return obj.equals(getName());
-            }else{
-                return super.equals(obj);
+    override fun equals(obj: Any?): Boolean {
+        return if (obj != null) {
+            if (String::class.java.isAssignableFrom(obj.javaClass)) {
+                obj == name
+            } else {
+                super.equals(obj)
             }
-        }else{
-            return false;
+        } else {
+            false
         }
     }
 }

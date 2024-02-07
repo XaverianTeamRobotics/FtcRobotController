@@ -1,48 +1,54 @@
-package org.firstinspires.ftc.teamcode.opmodes;
+package org.firstinspires.ftc.teamcode.opmodes
 
-import org.firstinspires.ftc.teamcode.features.*;
-import org.firstinspires.ftc.teamcode.internals.misc.DrivetrainMapMode;
-import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
-import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
+import org.firstinspires.ftc.teamcode.features.*
+import org.firstinspires.ftc.teamcode.internals.misc.DrivetrainMapMode
+import org.firstinspires.ftc.teamcode.internals.registration.OperationMode
+import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation
 
 /**
  * grabberR = 0, grabberL = 1, grabberLift = 2, cam = 3, launcher = 4
  * slide = 4
  * slide rotation = 5
- * <p>
+ *
+ *
  * Square = Lower grabber
- * <p>
+ *
+ *
  * Cross = Raise grabber
- * <p>
+ *
+ *
  * Left stick - move
- * <p>
+ *
+ *
  * Right stick - turn
- * <p>
+ *
+ *
  * Right bumper - close grabber
- * <p>
+ *
+ *
  * Left bumper - open grabber
- * <p>
+ *
+ *
  * Right trigger - raise slide
- * <p>
+ *
+ *
  * Left trigger - lower slide
- * <p>
+ *
+ *
  * Dpad up - Launch plane
- * <p>
+ *
+ *
  * Right Stick Y - tilt arm
  */
-public class Waterbot extends OperationMode implements TeleOperation {
-    @Override
-    public void construct() {
-        registerFeature(new NativeMecanumDrivetrain(DrivetrainMapMode.BL_FL_BR_FR, false, false, false));
-        registerFeature(new PixelGrabber());
-        registerFeature(new ActuatorFeature());
-        registerFeature(new TiltableLinearSlide());
-        registerFeature(new AirplaneLauncher());
-
+class Waterbot : OperationMode(), TeleOperation {
+    override fun construct() {
+        registerFeature(NativeMecanumDrivetrain(DrivetrainMapMode.BL_FL_BR_FR, false, false, false))
+        registerFeature(PixelGrabber())
+        registerFeature(ActuatorFeature())
+        registerFeature(TiltableLinearSlide())
+        registerFeature(AirplaneLauncher())
     }
 
-    @Override
-    public void run() {
-
+    override fun run() {
     }
 }

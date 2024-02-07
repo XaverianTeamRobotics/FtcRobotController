@@ -1,21 +1,11 @@
-package org.firstinspires.ftc.teamcode.internals.misc;
+package org.firstinspires.ftc.teamcode.internals.misc
 
-public class RobotRebootException extends RuntimeException {
+class RobotRebootException : RuntimeException {
+    constructor() : super()
 
-    public RobotRebootException() {
-        super();
-    }
+    constructor(message: String?) : super(message)
 
-    public RobotRebootException(String message) {
-        super(message);
-    }
+    constructor(message: String?, cause: Throwable?) : super(message, cause)
 
-    public RobotRebootException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public RobotRebootException(Throwable cause) {
-        super(cause);
-    }
-    
+    constructor(cause: Throwable?) : super(cause)
 }

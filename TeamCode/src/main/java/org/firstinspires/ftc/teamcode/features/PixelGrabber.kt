@@ -1,45 +1,44 @@
-package org.firstinspires.ftc.teamcode.features;
+package org.firstinspires.ftc.teamcode.features
 
-import org.firstinspires.ftc.teamcode.internals.features.Buildable;
-import org.firstinspires.ftc.teamcode.internals.features.Feature;
-import org.firstinspires.ftc.teamcode.internals.hardware.Devices;
+import org.firstinspires.ftc.teamcode.internals.features.Buildable
+import org.firstinspires.ftc.teamcode.internals.features.Feature
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices
 
 /**
  * This controls the pixel grabber.
- * <p>
+ *
+ *
  * Connections: Uses the right servo in port 0, the left servo in port 1, and a controller.
- * <p>
+ *
+ *
  * Controls: Use the right bumper to close the grabber or the left bumper to open it.
  */
-public class PixelGrabber extends Feature implements Buildable {
+class PixelGrabber : Feature(), Buildable {
+    var homePos0: Double = 70.0
+    var homePos1: Double = 30.0
+    var closePos0: Double = 62.5
+    var closePos1: Double = 41.5
 
-    double homePos0 = 70, homePos1 = 30.0;
-    double closePos0 = 62.5, closePos1 = 41.5;
-
-    @Override
-    public void build() {
-        manualClose();
+    override fun build() {
+        manualClose()
     }
 
-    @Override
-    public void loop() {
-        if (Devices.controller1.getRightBumper()) {
-            manualClose();
+    override fun loop() {
+        if (Devices.controller1.rightBumper) {
+            manualClose()
         }
-        if (Devices.controller1.getLeftBumper()) {
-            manualOpen();
+        if (Devices.controller1.leftBumper) {
+            manualOpen()
         }
-
-
     }
 
-    private void manualOpen() {
-        Devices.servo1.setPosition(homePos1);
-        Devices.servo0.setPosition(homePos0);
+    private fun manualOpen() {
+        Devices.servo1.position = homePos1
+        Devices.servo0.position = homePos0
     }
 
-    private void manualClose() {
-        Devices.servo1.setPosition(closePos1);
-        Devices.servo0.setPosition(closePos0);
+    private fun manualClose() {
+        Devices.servo1.position = closePos1
+        Devices.servo0.position = closePos0
     }
 }
