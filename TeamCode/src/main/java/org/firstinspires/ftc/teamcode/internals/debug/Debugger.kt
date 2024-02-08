@@ -10,7 +10,7 @@ class Debugger: Feature(), Buildable {
     val webServer: RDWebSocketServer = RDWebSocketServer.initializeWebsocketServer()
 
     override fun build() {
-        DSLogging.TELEMETRY.isAutoClear = false
+        DSLogging.TELEMETRY!!.isAutoClear = false
     }
 
     override fun loop() {

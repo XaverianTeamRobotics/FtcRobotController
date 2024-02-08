@@ -23,7 +23,7 @@ fun autoConfigMenu(): AutoConfigResults {
     startingCodeMenuBuilder.addItem(redRightItem)
     startingCodeMenuBuilder.setDescription("Starting Code")
 
-    when (MenuManager(startingCodeMenuBuilder.build(), controller1).run().name) {
+    when (MenuManager(startingCodeMenuBuilder.build(), controller1).run()!!.name) {
         blueLeftItem.name -> startingCode = 1
         blueRightItem.name -> startingCode = 2
         redLeftItem.name -> startingCode = 3
@@ -36,7 +36,7 @@ fun autoConfigMenu(): AutoConfigResults {
     showTeleOpObjectiveReminderMenuBuilder.addItem(yesItem)
     showTeleOpObjectiveReminderMenuBuilder.addItem(noItem)
     showTeleOpObjectiveReminderMenuBuilder.setDescription("Show TeleOp Objective Reminder")
-    showTeleOpObjectiveReminder = MenuManager(showTeleOpObjectiveReminderMenuBuilder.build(), controller1).run().name == yesItem.name
+    showTeleOpObjectiveReminder = MenuManager(showTeleOpObjectiveReminderMenuBuilder.build(), controller1).run()!!.name == yesItem.name
 
     return AutoConfigResults(startingCode, showTeleOpObjectiveReminder)
 }
