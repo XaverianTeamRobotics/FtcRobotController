@@ -210,7 +210,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                                     farDist = 6.0
                                 when (spot) {
                                     1 -> b.strafeLeft(farDist)
-                                    2 -> b.strafeLeft(1.0)
+                                    2 -> b.strafeLeft(2.0)
                                     3 -> b.strafeRight(farDist)
                                 }
                                 b.turn(180.deg.rad)
@@ -227,16 +227,11 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                                 if (config!!.backdropPixelPosition == 0) armClaw!!.openRightGrabber()
                                 else armClaw!!.openLeftGrabber()
                                 waitFor(0.5)
-                                while (opModeIsActive()) {}
-                            }
-                            .appendTrajectory()
-                            .forward(6.0)
-                            .turn(Math.toRadians(180.0))
-                            .completeTrajectory().appendAction {
                                 armClaw!!.servoPickupPos()
                                 val p = drivetrain.poseEstimate
                                 val b = drivetrain.trajectorySequenceBuilder(p)
                                 try {
+                                    b.forward(6.0)
                                     b.lineToLinearHeading(Pose2d(segment.endPosition.x, segment.endPosition.y, 0.0))
                                     drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
                                     while (drivetrain.isBusy && opMode!!.opModeIsActive()) {
