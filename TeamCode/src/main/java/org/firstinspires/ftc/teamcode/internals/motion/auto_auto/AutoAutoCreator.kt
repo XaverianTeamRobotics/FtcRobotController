@@ -115,8 +115,10 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                     else if (spot == 3) rotation = (-90).deg
                     val p = drivetrain.poseEstimate
                     val b = drivetrain.trajectorySequenceBuilder(p)
-                    if (spot == 1 || spot == 3) {
+                    if (spot == 1) {
                         b.forward(4.0)
+                    } else if (spot == 3) {
+                        b.forward(7.0)
                     }
                     b.turn(Math.toRadians(180.0) + rotation.rad)
                     when (spot) {
@@ -140,17 +142,16 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                     armClaw!!.autoRotateClaw2(29.4)
                     waitFor(1.0)
                 }
+                .appendAction { armClaw!!.autoRaiseArm(-50) }
+                .appendAction { waitUntil { armClaw!!.isComplete } }
                 .appendAction {
                     if (config!!.backdropPixelPosition == 1 || !config!!.placeBackdrop) armClaw!!.openRightGrabber()
                     else if (config!!.backdropPixelPosition == 0) armClaw!!.openLeftGrabber()
-                    waitFor(0.5)
+                    waitFor(1.0)
+                    armClaw!!.servoPickupPos()
                 }
                 .appendAction { armClaw!!.autoRaiseArm(100) }
                 .appendAction { waitUntil { armClaw!!.isComplete } }
-                .appendAction {
-                    armClaw!!.servoPickupPos()
-                    waitFor(0.5)
-                }
                 .appendAction {
                     var rotation = 0.deg
                     if (spot == 1) rotation = 90.deg
@@ -206,7 +207,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                                 val p = drivetrain.poseEstimate
                                 val b = drivetrain.trajectorySequenceBuilder(p)
                                 var farDist = 9.0
-                                if ((spot == 1 && config!!.teamColor == 1) || (spot == 3 && config!!.teamColor == 0))
+                                if ((spot == 1 && config!!.teamColor == 1) || (spot == 3 && config!!.teamColor == 0) || (spot == 3 && config!!.teamColor == 1) || (spot == 1 && config!!.teamColor == 0))
                                     farDist = 6.0
                                 when (spot) {
                                     1 -> b.strafeLeft(farDist)
@@ -227,7 +228,6 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                                 if (config!!.backdropPixelPosition == 0) armClaw!!.openRightGrabber()
                                 else armClaw!!.openLeftGrabber()
                                 waitFor(0.5)
-                                armClaw!!.servoPickupPos()
                                 val p = drivetrain.poseEstimate
                                 val b = drivetrain.trajectorySequenceBuilder(p)
                                 try {
@@ -238,6 +238,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                                         drivetrain.update()
                                     }
                                 } catch (_: Exception) { }
+                                armClaw!!.servoPickupPos()
                             }
                             .appendTrajectory()
                     }
@@ -247,7 +248,20 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
         Logging.log("Calculated path in " + (System.currentTimeMillis() - startT) + "ms")
         Logging.update()
 
-        auto = builder.completeTrajectory().appendAction{ while (opModeIsActive()) continue }.complete()
+        auto = builder.completeTrajectory().appendAction {
+            while (opModeIsActive()) {
+                Logging.log("Config Properties")
+                Logging.log("Team Color: ${if (config!!.teamColor == 0) "Blue" else "Red"}")
+                Logging.log("Starting Position: ${if (config!!.startingPosition == 0) "Left" else "Right"}")
+                Logging.log("Place Spike Mark: ${if (config!!.placeSpikeMark) "Yes" else "No"}")
+                Logging.log("Place Backdrop: ${if (config!!.placeBackdrop) "Yes" else "No"}")
+                Logging.log("Backdrop Position: ${if (config!!.backdropPixelPosition == 0) "Left" else if (config!!.backdropPixelPosition == 1) "Middle" else "Right"}")
+                Logging.log("Park Place: ${if (config!!.parkPlace == 0) "Left" else if (config!!.parkPlace == 1) "Middle" else "Right"}")
+                Logging.log("--------------------------------")
+                Logging.log("Spot: $spot")
+                Logging.update()
+            }
+        }.complete()
 
         telemetry.isAutoClear = true
 
