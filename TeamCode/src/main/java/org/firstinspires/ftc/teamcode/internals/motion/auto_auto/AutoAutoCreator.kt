@@ -162,7 +162,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                         1 -> b.strafeRight(4.0)
                         3 -> b.strafeLeft(4.0)
                     }
-                if (spot == 2 && config!!.teamColor == 0) b.strafeLeft(2.0)
+                    if (spot == 2 && config!!.teamColor == 0) b.strafeLeft(2.0)
                     b.forward(6.0)
                     b.turn(Math.toRadians(180.0) - rotation.rad)
                     b.lineTo(p.vec())
