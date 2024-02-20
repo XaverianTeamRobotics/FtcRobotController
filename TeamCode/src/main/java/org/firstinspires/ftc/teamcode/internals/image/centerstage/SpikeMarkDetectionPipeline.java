@@ -109,8 +109,17 @@ public class SpikeMarkDetectionPipeline extends VisionPipeline {
         }
 
         // add the number of the color to the image
-        Imgproc.putText(channel, String.valueOf(position), new Point(10, 50), FONT_HERSHEY_SIMPLEX, 1, new Scalar(255), 2);
         cvtColor(channel, input, COLOR_GRAY2RGB);
+        Scalar textColor;
+        if (isBlueTeam) {
+            textColor = new Scalar(0, 0, 255);
+        } else {
+            textColor = new Scalar(255, 0, 0);
+        }
+        Imgproc.putText(channel, String.valueOf(position), new Point(10, 50), FONT_HERSHEY_SIMPLEX, 1, textColor, 2);
+        // Draw the rectangles
+        rectangle(input, zone1Rect, new Scalar(0, 255, 0), 2);
+        rectangle(input, zone2Rect, new Scalar(0, 255, 0), 2);
         return input;
     }
 
