@@ -5,7 +5,6 @@ import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
@@ -33,6 +32,7 @@ public class SpikeMarkDetectionPipeline extends VisionPipeline {
     private ArrayList<Mat> YCrCbChannels = new ArrayList<>();
     private Mat zone1;
     private Mat zone2;
+    private Mat regionToThresh;
 
     @Override
     public void init(Mat mat) {
@@ -41,6 +41,7 @@ public class SpikeMarkDetectionPipeline extends VisionPipeline {
         channel = new Mat();
         zone1 = new Mat();
         zone2 = new Mat();
+        regionToThresh = new Mat();
     }
 
     @Override
@@ -60,32 +61,33 @@ public class SpikeMarkDetectionPipeline extends VisionPipeline {
         // Get the channel of interest (Cb for blue team, Cr for red team)
         int channelOfInterest = isBlueTeam ? 2 : 1;
 		channel = YCrCbChannels.get(channelOfInterest);
+        regionToThresh = channel.submat(ZONE1_Y, 480, 0, 640);
 
-		/*
+        blur(channel, channel, new Size(5, 5));
+
+        int thresh;
+        if (isBlueTeam) thresh = BLUE_THRESH;
+        else thresh = RED_THRESH;
+        threshold(regionToThresh, regionToThresh, thresh, 255, THRESH_OTSU+THRESH_BINARY);
+
+        /*
          * Define the box surrounding where each position is
          * Zone 1: x1 = 100, x2 = 200, y1 = 240, y2 = 370
          * Zone 2: x1 = 400, x2 = 560, y1 = 230, y2 = 430
          */
+
         // Zone 1
         Rect zone1Rect = new Rect(ZONE1_X, ZONE1_Y, ZONE1_WIDTH, ZONE1_HEIGHT);
-
-		zone1 = new Mat(channel, zone1Rect);
+		zone1 = channel.submat(zone1Rect);
 
 		// Zone 2
         Rect zone2Rect = new Rect(ZONE2_X, ZONE2_Y, ZONE2_WIDTH, ZONE2_HEIGHT);
-		zone2 = new Mat(channel, zone2Rect);
-
-		// Draw the rectangles
-        rectangle(input, zone1Rect, new Scalar(255, 0, 0), 2);
-        rectangle(input, zone2Rect, new Scalar(255, 0, 0), 2);
+		zone2 = channel.submat(zone2Rect);
 
         // Threshold each zone
-        int thresh;
-        if (isBlueTeam) thresh = BLUE_THRESH;
-        else thresh = RED_THRESH;
-
-        inRange(zone1, new Scalar(thresh), new Scalar(255), zone1);
-        inRange(zone2, new Scalar(thresh), new Scalar(255), zone2);
+//
+//        inRange(zone1, new Scalar(thresh), new Scalar(255), zone1);
+//        inRange(zone2, new Scalar(thresh), new Scalar(255), zone2);
 
         // Get the average value of each zone
         Scalar zone1Avg = mean(zone1);
@@ -107,7 +109,17 @@ public class SpikeMarkDetectionPipeline extends VisionPipeline {
         }
 
         // add the number of the color to the image
-        Imgproc.putText(input, String.valueOf(position), new Point(10, 50), FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 255, 255), 2);
+        cvtColor(channel, input, COLOR_GRAY2RGB);
+        Scalar textColor;
+        if (isBlueTeam) {
+            textColor = new Scalar(0, 0, 255);
+        } else {
+            textColor = new Scalar(255, 0, 0);
+        }
+        Imgproc.putText(channel, String.valueOf(position), new Point(10, 50), FONT_HERSHEY_SIMPLEX, 1, textColor, 2);
+        // Draw the rectangles
+        rectangle(input, zone1Rect, new Scalar(0, 255, 0), 2);
+        rectangle(input, zone2Rect, new Scalar(0, 255, 0), 2);
         return input;
     }
 
