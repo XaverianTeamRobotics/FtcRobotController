@@ -344,6 +344,4 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
             executeSequence(this)
         }
     }
-
-
 }

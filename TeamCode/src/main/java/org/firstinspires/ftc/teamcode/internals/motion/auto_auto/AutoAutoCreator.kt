@@ -121,11 +121,10 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                         b.forward(7.0)
                     }
                     b.turn(Math.toRadians(180.0) + rotation.rad)
-                    when (spot) {
-                        2 -> b.back(7.0)
-                        1 -> b.back (5.0)
-                        else -> b.back(5.0)
-                    }
+                    if (spot == 3 && config!!.teamColor == 1) b.back(4.0)
+                    else if (spot == 2) b.back(7.0)
+                    else if (spot == 1) b.back (5.0)
+                    else b.back(5.0)
                     b.forward(5.0)
                     if (spot == 3 || spot == 1) b.forward(2.0)
                     try {
