@@ -270,12 +270,12 @@ class ArmClaw : Feature(), Buildable {
 
     var pixelPositionSelector: SelectorPositions
         get() {
-            if (pixelSelectorServo > 50) return SelectorPositions.LEFT
+            if (pixelSelectorServo < 25.0) return SelectorPositions.LEFT
             return SelectorPositions.RIGHT
         }
         set(value) {
-            pixelSelectorServo =    if (value == SelectorPositions.LEFT)    100.0
-                                    else                                    0.0
+            pixelSelectorServo =    if (value == SelectorPositions.LEFT)    0.0
+                                    else                                    50.0
         }
 
     enum class SelectorPositions {
