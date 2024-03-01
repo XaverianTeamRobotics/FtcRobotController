@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.internals.documentation.ReferableButtonUsa
 import org.firstinspires.ftc.teamcode.internals.features.Buildable
 import org.firstinspires.ftc.teamcode.internals.features.Feature
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo0
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo1
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companion.opMode
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
 import java.util.*
@@ -31,6 +33,7 @@ import kotlin.math.min
 @ButtonUsage(button = ButtonName.Y, description = "Rotate claw to pickup position", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.LEFT_STICK_BUTTON, description = "Rotate claw to flat position", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.RIGHT_STICK_BUTTON, description = "Rotate claw to scoring position", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.A, description = "Rotate claw to direct pickup position", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.DPAD_LEFT, description = "Toggle left grabber", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.DPAD_RIGHT, description = "Toggle right grabber", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.DPAD_UP, description = "Reverse intake (hold)", controller = ControllerName.CONTROLLER_2)
@@ -104,11 +107,9 @@ class ArmClaw : Feature(), Buildable {
             counter += 1.0
             dpadPressed = true
         } else if (!Devices.controller2.dpadDown) dpadPressed = false
-        return if (counter % 2 != 0.0) {
-            100
-        } else {
-            0
-        }
+
+        return  if (counter % 2 != 0.0) 100
+                else 0
     }
 
     /**
@@ -122,11 +123,9 @@ class ArmClaw : Feature(), Buildable {
         } else if (!Devices.controller2.dpadRight) {
             dpadPressedLeft = false
         }
-        return if (counterLeft % 2 != 0.0) {
-            L_CLOSED
-        } else {
-            L_OPEN
-        }
+        return  if (counterLeft % 2 != 0.0) L_CLOSED
+                else L_OPEN
+
     }
 
     fun openLeftGrabber() {
@@ -148,11 +147,8 @@ class ArmClaw : Feature(), Buildable {
         } else if (!Devices.controller2.dpadLeft) {
             dpadPressedRight = false
         }
-        return if (counterRight % 2 != 0.0) {
-            R_CLOSED
-        } else {
-            R_OPEN
-        }
+        return  if (counterRight % 2 != 0.0) R_CLOSED
+                else R_OPEN
     }
 
     fun openRightGrabber() {
@@ -274,8 +270,8 @@ class ArmClaw : Feature(), Buildable {
             return SelectorPositions.RIGHT
         }
         set(value) {
-            pixelSelectorServo =    if (value == SelectorPositions.LEFT)    0.0
-                                    else                                    50.0
+            pixelSelectorServo =    if (value == SelectorPositions.LEFT)    5.0
+                                    else                                    22.5
         }
 
     enum class SelectorPositions {
@@ -406,6 +402,9 @@ class ArmClaw : Feature(), Buildable {
                 pixelPositionSelector = SelectorPositions.LEFT
             } else if (Devices.controller2.rightBumper) {
                 pixelPositionSelector = SelectorPositions.RIGHT
+            } else if (Devices.controller2.a) {
+                servo0.position = 0.77;
+                servo1.position = 32.27;
             }
             if (Devices.controller2.square) pixelHolderPosition = HolderPositions.DOWN
             else if (Devices.controller2.circle) pixelHolderPosition = HolderPositions.UP
