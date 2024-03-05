@@ -198,7 +198,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                         needToScore = false
                         builder = builder.completeTrajectory()
                             .appendAction {
-                                armClaw!!.autoRaiseArm(300)
+                                armClaw!!.autoRaiseArm(150)
                                 armClaw!!.autoRotateClaw1(3.5)
                                 armClaw!!.autoRotateClaw2(18.5)
                             }
