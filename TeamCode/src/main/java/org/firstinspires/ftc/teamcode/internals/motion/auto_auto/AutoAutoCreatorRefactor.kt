@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.features.ArmClaw
 import org.firstinspires.ftc.teamcode.features.VisionProcessingFeature
+import org.firstinspires.ftc.teamcode.internals.documentation.ReferToButtonUsage
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companion.opMode
 import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline
 import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline
@@ -23,7 +24,7 @@ import java.lang.IllegalStateException
 import java.util.*
 import kotlin.math.absoluteValue
 
-@Disabled() // WIP
+@ReferToButtonUsage("AutoAutoCreatorConfigREFACTOR")
 class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
     private lateinit var config: AutoAutoCreatorConfig //changed this to lateinit
     lateinit var timer: Timer
@@ -63,6 +64,14 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
             ?: throw RuntimeException("Invalid auto auto config")
         AutoNoNavigationZones.addCenterstageDefaults()
 
+        /* Possible Configurations */
+        // Colors: Blue, Red
+        // Starting Position: Left, Right
+        // Place Spike Mark: Yes
+        // Place Backdrop: Yes, No
+        // Backdrop Position: Left, Middle, Right
+        // Park Place: Left, Middle, Right, Start
+
         visionProcessor.setTeamColor(
             if (config.teamColor == 0) VisionPipeline.TeamColor.BLUE
             else VisionPipeline.TeamColor.RED
@@ -81,6 +90,8 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
             0 -> arrayOf(this.backdrop, this.leftPark, this.rightPark, this.middlePark)
             else -> arrayOf(redBackdrop, redLeftPark, redRightPark, redMiddlePark)
         }
+
+
 
         if (config.placeBackdrop) pois.add(backdrop)
 
@@ -113,8 +124,8 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
         if (config.placeSpikeMark) {
             builder = builder.forward(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)
             builder = builder.completeTrajectory()
-                .appendAction(placeSpikeMark)
-                .appendAction { //adjust arm/claw for drop I think
+                .appendAction(positionForPlaceSpikeMark)
+                .appendAction { //drop spike mark
                     armClaw.apply {
                         autoRaiseArm(138)
                         waitUntil { isComplete }
@@ -128,42 +139,52 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
                 .appendAction(dropPixel)
                 .appendAction(resetPos)
                 .appendTrajectory()
-            builder = builder.back(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)
+            /* if(config.parkPlace == 3) */ builder = builder.back(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)
         }
-        if (config.parkPlace != 3) {
-            builder = builder.completeTrajectory().appendTrajectory()
 
-            for (poi in pois) {
-                val path = BestPathFinder.getFastestPathToPoint(lastPose, poi, 0.0)
-                var placeBackdrop = config.placeBackdrop
+        if (config.parkPlace == 3) { completeLogging(startTime, auto, builder); return }
 
-                for (segment in path) {
-                    Logging.log("Adding Path Segment ${segment.javaClass.simpleName}")
-                    Logging.update()
+        builder = builder.completeTrajectory().appendTrajectory()
 
-                    //Add path
-                    try {
-                        builder = segment.addPathSegment(builder)
-                        lastPose = segment.endPosition
-                    } catch (ignored: Exception) {
-                        emergencyStop("Failed to add ${segment.javaClass.simpleName}")
-                    }
+        for (poi in pois) {
+            val path = BestPathFinder.getFastestPathToPoint(drivetrain.poseEstimate.vec(), poi, -90.0)
+            var doPlaceBackdrop = config.placeBackdrop
 
-                    when (segment.endPosition.y.absoluteValue to segment.endPosition.x to placeBackdrop) {
-                        36.0 to 48.0 to true -> {
-                            placeBackdrop = false
-                            builder = buildBackdropAndParkSeq(builder, segment)
-                        }
+            for (segment in path) {
+                Logging.log("Adding Path Segment ${segment.javaClass.simpleName}")
+                Logging.update()
+
+                //Add path
+                try {
+                    builder = segment.addPathSegment(builder) //get to board
+                    lastPose = segment.endPosition
+                } catch (ignored: Exception) {
+                    emergencyStop("Failed to add ${segment.javaClass.simpleName}")
+                }
+
+                when (segment.endPosition.y.absoluteValue to segment.endPosition.x to doPlaceBackdrop) {
+                    36.0 to 48.0 to true -> {
+                        doPlaceBackdrop = false
+                        builder = buildBackdropAndParkSeq(builder, segment)
                     }
                 }
             }
         }
+        completeLogging(startTime, auto, builder)
+    }
+
+    private fun completeLogging(
+        startTime: Long,
+        auto: Auto,
+        builder: TrajectorySequenceBuilder
+    ) {
+        var auto1 = auto
         Logging.log("Calculated path in ${System.currentTimeMillis() - startTime} ms")
         Logging.update()
 
-        auto = builder.completeTrajectory().appendAction {
+        auto1 = builder.completeTrajectory().appendAction {
             while (opModeIsActive()) {
-                config.run{
+                config.run {
                     Logging.log("Config Properties")
                     Logging.log("Team Color: ${if (teamColor == 0) "Blue" else "Red"}")
                     Logging.log("Starting Position: ${if (startingPosition == 0) "Left" else "Right"}")
@@ -180,7 +201,7 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
 
         telemetry.isAutoClear = true
 
-        runner = AutoRunner(auto, drivetrain, null, null, null)
+        runner = AutoRunner(auto1, drivetrain, null, null, null)
     }
 
     override fun run() {
@@ -188,7 +209,7 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
         else runner.run()
     }
 
-    private fun buildBackdropAndParkSeq(builder: TrajectorySequenceBuilder, TEMP_NAME: AutoAutoPathSegment): TrajectorySequenceBuilder {
+    private fun buildBackdropAndParkSeq(builder: TrajectorySequenceBuilder, currentSegment: AutoAutoPathSegment): TrajectorySequenceBuilder {
         return builder.completeTrajectory()
             .appendAction {
                 armClaw.apply {
@@ -198,35 +219,26 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
                     waitUntil { isComplete }
                 }
             }
-            .appendAction(positionToBackdrop)
-            .appendAction(dropAndPark(TEMP_NAME))
+            .appendAction(dropPixelOnBackdrop)
+            .appendAction(park(currentSegment))
             .appendTrajectory()
     }
 
-    private fun dropAndPark(TEMP_NAME: AutoAutoPathSegment) = Runnable {
-        //drop
-        armClaw.apply {
-            when (config.backdropPixelPosition) {
-                0 -> openRightGrabber()
-                1 -> openLeftGrabber()
-            }
-            waitFor(0.5)
-        }
-
+    private fun park(currentSegment: AutoAutoPathSegment) = Runnable {
         //park
         val pose = drivetrain.poseEstimate
         val drivetrainSeq = drivetrain.trajectorySequenceBuilder(pose)
 
         drivetrainSeq.apply {
             forward(6.0)
-            val OTHER_TEMP_NAME = Pose2d(TEMP_NAME.endPosition.x, TEMP_NAME.endPosition.y, 0.0)
-            lineToLinearHeading(OTHER_TEMP_NAME)
+            val endPose = Pose2d(currentSegment.endPosition.x, currentSegment.endPosition.y, 0.0)
+            lineToLinearHeading(endPose)
             executeSequence(this)
         }
         armClaw.servoPickupPos()
     }
 
-    private val positionToBackdrop = Runnable {
+    private val dropPixelOnBackdrop = Runnable {
         val pose = drivetrain.poseEstimate
         val drivetrainSeq = drivetrain.trajectorySequenceBuilder(pose)
         var farDist = 9.0
@@ -238,6 +250,7 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
             3 to 1 -> farDist = 9.0
         }
 
+        //position
         drivetrainSeq.apply {
             when (spot) {
                 1 -> strafeLeft(farDist)
@@ -247,6 +260,15 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
             turn(180.deg.rad)
             back(6.0)
             executeSequence(this)
+        }
+
+        //drop
+        armClaw.apply {
+            when (config.backdropPixelPosition) {
+                0 -> openRightGrabber()
+                else -> openLeftGrabber()
+            }
+            waitFor(0.5)
         }
     }
 
@@ -272,8 +294,7 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
         }
     }
 
-    private val placeSpikeMark = Runnable {
-
+    private val positionForPlaceSpikeMark = Runnable {
         armClaw.closeRightGrabber()
         armClaw.closeLeftGrabber()
 
@@ -284,6 +305,7 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
 
             val rotation = when (spot) {
                 1 -> 90.deg
+                2 -> 0.deg
                 3 -> (-90).deg
                 else -> 0.deg
             }
@@ -317,7 +339,7 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
             0 -> armClaw.openLeftGrabber()
         }
         waitFor(1.0)
-        armClaw.servoPickupPos()
+        armClaw.servoPickupPos() //reset arm position
     }
 
     //not sure if this is named correctly
@@ -329,21 +351,21 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
             val rotation = when (spot) {
                 1 -> 90.deg
                 3 -> (-90).deg
+                2 -> (-270).deg
                 else -> 0.deg
             }
 
             when (spot) {
                 1 -> strafeRight(4.0)
-                2 -> if (config.teamColor == 0) strafeLeft(2.0)
+                2 -> if (config.teamColor == 0) strafeRight(2.0)
                 3 -> strafeLeft(4.0)
             }
             forward(6.0)
             turn(180.deg.rad - rotation.rad)
+            //if(config.parkPlace == 3) lineTo(pose.vec()) //no need to return to where we dropped the pixel from
             lineTo(pose.vec())
 
             executeSequence(this)
         }
     }
-
-
 }

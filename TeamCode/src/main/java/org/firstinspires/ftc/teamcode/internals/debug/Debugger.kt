@@ -18,7 +18,7 @@ class Debugger: Feature(), Buildable {
 
         if (HardwareGetter.opMode?.isStopRequested == true) {
             try {
-                webServer.stop(5000)
+                webServer.stop(500)
             } catch (e: InterruptedException) {
                 return
             }
