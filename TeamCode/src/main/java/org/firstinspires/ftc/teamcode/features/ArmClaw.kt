@@ -333,8 +333,26 @@ class ArmClaw : Feature(), Buildable {
         }
 
         if (!auto) {
-            Logging.log("Servo Holder Positiom", pixelHolderPosition)
-            Logging.log("Servo Selector Position", pixelPositionSelector)
+            Logging.log("Grabbers")
+            if (!autonomousClawReleaseControl) {
+                var text = ""
+                if (counterRight % 2 != 0.0) {
+                    text += "GRABBED"
+                } else {
+                    text += " ".repeat("GRABBED".length)
+                }
+                text += " : Left | Right : "
+                if (counterLeft % 2 != 0.0) {
+                    text += "GRABBED"
+                } else {
+                    text += " ".repeat("GRABBED".length)
+                }
+                Logging.log(text)
+            } else {
+                Logging.log("NOT PERMITTED")
+            }
+            Logging.log("Pixel Selector Position", pixelPositionSelector)
+            Logging.log("Servo Holder Position", pixelHolderPosition)
             Logging.log("\n-----------------------------\n")
             Logging.log("Arm Control Mode", armControlMode)
             Logging.log("Intake Control Mode", intakeControlMode)
@@ -382,6 +400,9 @@ class ArmClaw : Feature(), Buildable {
             } else if (Devices.controller2.rightStickButton) {
                 Devices.servo0.position = 3.5
                 Devices.servo1.position = 18.5
+            }  else if (Devices.controller2.a) {
+                servo0.position = 0.0;
+                servo1.position = 29.66;
             } else {
                 var grabber0Pos = Devices.servo0.position
                 grabber0Pos += Devices.controller2.leftStickX * 0.00075
@@ -402,9 +423,6 @@ class ArmClaw : Feature(), Buildable {
                 pixelPositionSelector = SelectorPositions.LEFT
             } else if (Devices.controller2.rightBumper) {
                 pixelPositionSelector = SelectorPositions.RIGHT
-            } else if (Devices.controller2.a) {
-                servo0.position = 0.77;
-                servo1.position = 32.27;
             }
             if (Devices.controller2.square) pixelHolderPosition = HolderPositions.DOWN
             else if (Devices.controller2.circle) pixelHolderPosition = HolderPositions.UP

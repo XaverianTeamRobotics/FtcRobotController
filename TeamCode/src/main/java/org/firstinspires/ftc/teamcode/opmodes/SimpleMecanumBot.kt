@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation
  */
 class SimpleMecanumBot : OperationMode(), TeleOperation {
     override fun construct() {
-        registerFeature(NativeMecanumDrivetrain(false))
+        registerFeature(NativeMecanumDrivetrain(true))
     }
 
     override fun run() {
