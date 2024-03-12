@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.internals.documentation.ReferableButtonUsa
 import org.firstinspires.ftc.teamcode.internals.telemetry.Questions;
 import org.firstinspires.ftc.teamcode.internals.telemetry.graphics.MenuManager;
 
+import static org.firstinspires.ftc.teamcode.internals.hardware.Devices.controller2;
+
 @ButtonUsage(description = "Menu: Navigate up", button = ButtonName.DPAD_UP, controller = ControllerName.CONTROLLER_1)
 @ButtonUsage(description = "Menu: Navigate down", button = ButtonName.DPAD_DOWN, controller = ControllerName.CONTROLLER_1)
 @ButtonUsage(description = "Menu: Select", button = ButtonName.A, controller = ControllerName.CONTROLLER_1)
@@ -67,17 +69,17 @@ public class AutoAutoCreatorConfig {
     }
 
     public void askQuestions() {
-        MenuManager teamColorMenu = Questions.askAsyncC1("What is your team color?", "Blue", "Red");
-        MenuManager startingPositionMenu = Questions.askAsyncC1("Where is your bot starting?", "Left", "Right");
+        MenuManager teamColorMenu = Questions.askAsync(controller2, "What is your team color?", "Blue", "Red");
+        MenuManager startingPositionMenu = Questions.askAsync(controller2, "Where is your bot starting?", "Left", "Right");
         String purpleAnswer = "Purple (spike mark)"; // Declare these two to prevent spelling errors later
         String yellowAnswer = "Yellow (backdrop)";
-        MenuManager pixelPlaceLocationsMenu = Questions.askAsyncC1("What pixels are loaded onto the bot?", "Neither", purpleAnswer, yellowAnswer, "Both");
-        MenuManager yellowPixelPositionMenu = Questions.askAsyncC1("Which grabber is the yellow pixel loaded in?", "Left", "Right");
+        MenuManager pixelPlaceLocationsMenu = Questions.askAsync(controller2, "What pixels are loaded onto the bot?", "Neither", purpleAnswer, yellowAnswer, "Both");
+        MenuManager yellowPixelPositionMenu = Questions.askAsync(controller2, "Which grabber is the yellow pixel loaded in?", "Left", "Right");
         String leftAnswer = "Left of Backdrop";
         String middleAnswer = "Middle of Backdrop";
         String rightAnswer = "Right of Backdrop";
         String startingPositionAnswer = "Starting Position";
-        MenuManager parkPlaceMenu = Questions.askAsyncC1("Where should the bot park?", leftAnswer, middleAnswer, rightAnswer, startingPositionAnswer);
+        MenuManager parkPlaceMenu = Questions.askAsync(controller2, "Where should the bot park?", leftAnswer, middleAnswer, rightAnswer, startingPositionAnswer);
 
         teamColor = teamColorMenu.run().toString().equals("Blue") ? 0 : 1;
         startingPosition = startingPositionMenu.run().toString().equals("Left") ? 0 : 1;
