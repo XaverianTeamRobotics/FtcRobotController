@@ -71,8 +71,8 @@ class RDWebSocketServer(address: InetSocketAddress?) :
 
     @Throws(IllegalArgumentException::class)
     fun enableServo(number: Int) {
-        if (number > 5 || 0 > number) {
-            throw IllegalArgumentException("enableServo must be between 0 and 5")
+        if (number > 10 || 0 > number) {
+            throw IllegalArgumentException("enableServo must be between 0 and 10")
         }
 
         broadcast(servoEnableMessage(number))
@@ -104,12 +104,12 @@ class RDWebSocketServer(address: InetSocketAddress?) :
         }
 
         // Update all enabled servos
-        for (i in 0..5) {
+        for (i in 0..10) {
             broadcast(servoEnableMessage(i, enabledServos[i]))
         }
 
         // Update all servo positions
-        for (i in 0..5) {
+        for (i in 0..10) {
             broadcast(servoPositionMessage(i, servoPositions[i]))
         }
     }
@@ -119,8 +119,8 @@ class RDWebSocketServer(address: InetSocketAddress?) :
         private val initBroadcasts: MutableList<String> = mutableListOf()
         val motorPowers = Array(8) { 0.0 }
         val enabledMotors = Array(8) { false }
-        val servoPositions = Array(6) { 0.0 }
-        val enabledServos = Array(6) { false }
+        val servoPositions = Array(10) { 0.0 }
+        val enabledServos = Array(10) { false }
 
         @JvmStatic
         fun initializeWebsocketServer(): RDWebSocketServer {
@@ -179,7 +179,7 @@ class RDWebSocketServer(address: InetSocketAddress?) :
         @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun enableServoStatic(number: Int) {
-            if (number > 5 || 0 > number) {
+            if (number > 10 || 0 > number) {
                 throw IllegalArgumentException("enableServo must be between 0 and 5")
             }
 
@@ -232,8 +232,8 @@ class RDWebSocketServer(address: InetSocketAddress?) :
         @JvmStatic
         @Throws(IllegalArgumentException::class)
         fun setServoPositionStatic(number: Int, position: Double) {
-            if (number > 5 || 0 > number) {
-                throw IllegalArgumentException("number must be between 0 and 5")
+            if (number > 10 || 0 > number) {
+                throw IllegalArgumentException("number must be between 0 and 10")
             }
 
             servoPositions[number] = position

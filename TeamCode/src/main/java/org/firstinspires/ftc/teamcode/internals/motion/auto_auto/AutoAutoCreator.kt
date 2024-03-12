@@ -121,9 +121,8 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                         b.forward(7.0)
                     }
                     b.turn(Math.toRadians(180.0) + rotation.rad)
-                    if (spot == 3 && config!!.teamColor == 1) b.back(4.0)
-                    else if (spot == 2) b.back(7.0)
-                    else if (spot == 1) b.back (5.0)
+                    if (spot == 3 && config!!.teamColor == 1) b.back(5.0)
+                    else if (spot == 2) b.back(5.5)
                     else b.back(5.0)
                     b.forward(5.0)
                     if (spot == 3 || spot == 1) b.forward(2.0)
@@ -137,8 +136,8 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                 .appendAction { armClaw!!.autoRaiseArm(138) }
                 .appendAction { waitUntil { armClaw!!.isComplete } }
                 .appendAction {
-                    armClaw!!.autoRotateClaw1(14.7)
-                    armClaw!!.autoRotateClaw2(29.4)
+                    armClaw!!.autoRotateClaw1(6.0)
+                    armClaw!!.autoRotateClaw2(17.0)
                     waitFor(1.0)
                 }
                 .appendAction { armClaw!!.autoRaiseArm(-50) }
@@ -161,7 +160,8 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                         1 -> b.strafeRight(4.0)
                         3 -> b.strafeLeft(4.0)
                     }
-                    if (spot == 2 && config!!.teamColor == 0) b.strafeLeft(2.0)
+                    if (spot == 2 && config!!.teamColor == 0) b.strafeRight(2.0)
+                    else if (spot ==2 && config!!.teamColor == 1) b.strafeLeft(2.0)
                     b.forward(6.0)
                     b.turn(Math.toRadians(180.0) - rotation.rad)
                     b.lineTo(p.vec())
