@@ -142,49 +142,42 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
             /* if(config.parkPlace == 3) */ builder = builder.back(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)
         }
 
-        if (config.parkPlace == 3) { completeLogging(startTime, auto, builder); return }
+        if (config.parkPlace != 3) {
 
-        builder = builder.completeTrajectory().appendTrajectory()
+            builder = builder.completeTrajectory().appendTrajectory()
 
-        for (poi in pois) {
-            val path = BestPathFinder.getFastestPathToPoint(drivetrain.poseEstimate.vec(), poi, -90.0)
-            var doPlaceBackdrop = config.placeBackdrop
+            for (poi in pois) {
+                val path = BestPathFinder.getFastestPathToPoint(drivetrain.poseEstimate.vec(), poi, -90.0)
+                var doPlaceBackdrop = config.placeBackdrop
 
-            for (segment in path) {
-                Logging.log("Adding Path Segment ${segment.javaClass.simpleName}")
-                Logging.update()
+                for (segment in path) {
+                    Logging.log("Adding Path Segment ${segment.javaClass.simpleName}")
+                    Logging.update()
 
-                //Add path
-                try {
-                    builder = segment.addPathSegment(builder) //get to board
-                    lastPose = segment.endPosition
-                } catch (ignored: Exception) {
-                    emergencyStop("Failed to add ${segment.javaClass.simpleName}")
-                }
+                    //Add path
+                    try {
+                        builder = segment.addPathSegment(builder) //get to board
+                        lastPose = segment.endPosition
+                    } catch (ignored: Exception) {
+                        emergencyStop("Failed to add ${segment.javaClass.simpleName}")
+                    }
 
-                when (segment.endPosition.y.absoluteValue to segment.endPosition.x to doPlaceBackdrop) {
-                    36.0 to 48.0 to true -> {
-                        doPlaceBackdrop = false
-                        builder = buildBackdropAndParkSeq(builder, segment)
+                    when (segment.endPosition.y.absoluteValue to segment.endPosition.x to doPlaceBackdrop) {
+                        36.0 to 48.0 to true -> {
+                            doPlaceBackdrop = false
+                            builder = buildBackdropAndParkSeq(builder, segment)
+                        }
                     }
                 }
             }
         }
-        completeLogging(startTime, auto, builder)
-    }
 
-    private fun completeLogging(
-        startTime: Long,
-        auto: Auto,
-        builder: TrajectorySequenceBuilder
-    ) {
-        var auto1 = auto
         Logging.log("Calculated path in ${System.currentTimeMillis() - startTime} ms")
         Logging.update()
 
-        auto1 = builder.completeTrajectory().appendAction {
+        auto = builder.completeTrajectory().appendAction {
             while (opModeIsActive()) {
-                config.run {
+                config.run{
                     Logging.log("Config Properties")
                     Logging.log("Team Color: ${if (teamColor == 0) "Blue" else "Red"}")
                     Logging.log("Starting Position: ${if (startingPosition == 0) "Left" else "Right"}")
@@ -201,8 +194,10 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
 
         telemetry.isAutoClear = true
 
-        runner = AutoRunner(auto1, drivetrain, null, null, null)
+        runner = AutoRunner(auto, drivetrain, null, null, null)
     }
+
+
 
     override fun run() {
         if (spot == 0) spot = visionProcessor.spot
