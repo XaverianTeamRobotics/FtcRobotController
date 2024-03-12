@@ -18,7 +18,7 @@ public class AutoAutoCreatorConfigTest extends OperationMode implements Autonomo
         DSLogging.log("Team color", config.getTeamColor());
         DSLogging.log("Starting position", config.getStartingPosition());
         DSLogging.log("Place backdrop", config.getPlaceBackdrop());
-        DSLogging.log("Backdrop pixel position", config.getBackdropPixelPosition());
+        DSLogging.log("Yellow Pixel Position", config.getYellowPixelPosition());
         DSLogging.log("Place spike mark", config.getPlaceSpikeMark());
         DSLogging.log("Park place", config.getParkPlace());
         DSLogging.update();

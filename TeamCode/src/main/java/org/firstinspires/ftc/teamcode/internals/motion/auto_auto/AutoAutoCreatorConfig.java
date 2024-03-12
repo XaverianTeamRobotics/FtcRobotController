@@ -34,7 +34,15 @@ public class AutoAutoCreatorConfig {
      * 0 for left, 1 for right.
      * -1 is invalid.
      */
+    @Deprecated
     private int backdropPixelPosition = -1;
+
+    /**
+     * Which grabber is the yellow pixel loaded in?
+     * 0 for left, 1 for right.
+     * -1 is invalid.
+     */
+    private int yellowPixelPosition = -1;
 
     /**
      * Whether to place a pixel on the spike mark
@@ -64,7 +72,7 @@ public class AutoAutoCreatorConfig {
         String purpleAnswer = "Purple (spike mark)"; // Declare these two to prevent spelling errors later
         String yellowAnswer = "Yellow (backdrop)";
         MenuManager pixelPlaceLocationsMenu = Questions.askAsyncC1("What pixels are loaded onto the bot?", "Neither", purpleAnswer, yellowAnswer, "Both");
-        MenuManager backdropPixelPositionMenu = Questions.askAsyncC1("Where would you like to place the backdrop pixel within the place designated by the team prop?", "Left", "Right");
+        MenuManager yellowPixelPositionMenu = Questions.askAsyncC1("Which grabber is the yellow pixel loaded in?", "Left", "Right");
         String leftAnswer = "Left of Backdrop";
         String middleAnswer = "Middle of Backdrop";
         String rightAnswer = "Right of Backdrop";
@@ -79,7 +87,7 @@ public class AutoAutoCreatorConfig {
         if (pixelPlaceLocationsAnswer.equals(yellowAnswer) || pixelPlaceLocationsAnswer.equals("Both")) placeBackdrop = true;
 
         if (placeBackdrop)
-            backdropPixelPosition = backdropPixelPositionMenu.run().toString().equals("Left") ? 0 : 1;
+            yellowPixelPosition = yellowPixelPositionMenu.run().toString().equals("Left") ? 0 : 1;
 
         String parkPlaceAnswer = parkPlaceMenu.run().toString();
         if (parkPlaceAnswer.equals(leftAnswer)) parkPlace = 0;
@@ -100,8 +108,13 @@ public class AutoAutoCreatorConfig {
         return placeBackdrop;
     }
 
+    @Deprecated
     public int getBackdropPixelPosition() {
-        return backdropPixelPosition;
+        return getYellowPixelPosition() == 0 ? 1 : 0;
+    }
+
+    public int getYellowPixelPosition() {
+        return yellowPixelPosition;
     }
 
     public boolean getPlaceSpikeMark() {

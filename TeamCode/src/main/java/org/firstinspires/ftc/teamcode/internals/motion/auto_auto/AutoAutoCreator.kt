@@ -146,7 +146,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                 Logging.log("Starting Position: ${if (config!!.startingPosition == 0) "Left" else "Right"}")
                 Logging.log("Place Spike Mark: ${if (config!!.placeSpikeMark) "Yes" else "No"}")
                 Logging.log("Place Backdrop: ${if (config!!.placeBackdrop) "Yes" else "No"}")
-                Logging.log("Backdrop Position: ${if (config!!.backdropPixelPosition == 0) "Left" else if (config!!.backdropPixelPosition == 1) "Middle" else "Right"}")
+                Logging.log("Yellow Pixel Position: ${if (config!!.yellowPixelPosition == 0) "Left" else if (config!!.yellowPixelPosition == 1) "Middle" else "Right"}")
                 Logging.log("Park Place: ${if (config!!.parkPlace == 0) "Left" else if (config!!.parkPlace == 1) "Middle" else "Right"}")
                 Logging.log("--------------------------------")
                 Logging.log("Spot: $spot")
@@ -201,8 +201,8 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
             .appendAction { armClaw!!.autoRaiseArm(-50) }
             .appendAction { waitUntil { armClaw!!.isComplete } }
             .appendAction {
-                if (config!!.backdropPixelPosition == 1 || !config!!.placeBackdrop) armClaw!!.openRightGrabber()
-                else if (config!!.backdropPixelPosition == 0) armClaw!!.openLeftGrabber()
+                if (config!!.yellowPixelPosition == 0 || !config!!.placeBackdrop) armClaw!!.openRightGrabber()
+                else if (config!!.yellowPixelPosition == 1) armClaw!!.openLeftGrabber()
                 waitFor(1.0)
                 armClaw!!.servoPickupPos()
             }
@@ -267,7 +267,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
                 }
             }
             .appendAction {
-                if (config!!.backdropPixelPosition == 0) armClaw!!.openRightGrabber()
+                if (config!!.yellowPixelPosition == 1) armClaw!!.openRightGrabber()
                 else armClaw!!.openLeftGrabber()
                 waitFor(0.5)
                 val p = drivetrain.poseEstimate
