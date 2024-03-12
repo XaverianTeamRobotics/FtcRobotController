@@ -32,14 +32,6 @@ public class AutoAutoCreatorConfig {
     private boolean placeBackdrop = false;
 
     /**
-     * On the backdrop, which pixel position are we going to score on?
-     * 0 for left, 1 for right.
-     * -1 is invalid.
-     */
-    @Deprecated
-    private int backdropPixelPosition = -1;
-
-    /**
      * Which grabber is the yellow pixel loaded in?
      * 0 for left, 1 for right.
      * -1 is invalid.
@@ -59,11 +51,11 @@ public class AutoAutoCreatorConfig {
 
     public AutoAutoCreatorConfig() {}
 
-    public AutoAutoCreatorConfig(int teamColor, int startingPosition, boolean placeBackdrop, int backdropPixelPosition, boolean placeSpikeMark, int parkPlace) {
+    public AutoAutoCreatorConfig(int teamColor, int startingPosition, boolean placeBackdrop, int yellowPixelPosition, boolean placeSpikeMark, int parkPlace) {
         this.teamColor = teamColor;
         this.startingPosition = startingPosition;
         this.placeBackdrop = placeBackdrop;
-        this.backdropPixelPosition = backdropPixelPosition;
+        this.yellowPixelPosition = yellowPixelPosition;
         this.placeSpikeMark = placeSpikeMark;
         this.parkPlace = parkPlace;
     }
@@ -128,6 +120,6 @@ public class AutoAutoCreatorConfig {
     }
 
     public boolean isValid() {
-        return teamColor != -1 && startingPosition != -1 && parkPlace != -1 && (!placeBackdrop || backdropPixelPosition != -1);
+        return teamColor != -1 && startingPosition != -1 && parkPlace != -1 && (!placeBackdrop || yellowPixelPosition != -1);
     }
 }
