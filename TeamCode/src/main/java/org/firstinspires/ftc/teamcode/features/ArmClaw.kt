@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo1
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companion.opMode
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
-import java.util.*
 import kotlin.math.max
 import kotlin.math.min
 
@@ -59,6 +58,7 @@ class ArmClaw : Feature(), Buildable {
     private var autonomousIntakeControl = false
     private var autonomousClawRotationControl = false
     private var autonomousClawReleaseControl = false
+    private var forceDisableHumanArmControl = false
     private var armTargetHeight = 0
     private var armLiftingInProgress = false
 
@@ -207,11 +207,21 @@ class ArmClaw : Feature(), Buildable {
     }
 
     fun setHumanArmControl() {
-        autonomousArmControl = false
+        if (!forceDisableHumanArmControl) autonomousArmControl = false
     }
 
     fun blockHumanArmControl() {
         autonomousArmControl = true
+    }
+
+    fun blockHumanArmControlForced() {
+        autonomousArmControl = true
+        forceDisableHumanArmControl = true
+    }
+
+    fun unblockHumanArmControlForced() {
+        forceDisableHumanArmControl = false
+        autonomousArmControl = false
     }
 
     fun setHumanClawReleaseControl() {
@@ -325,6 +335,7 @@ class ArmClaw : Feature(), Buildable {
 
     override fun loop() {
         if (Devices.controller2.start) {
+            unblockHumanArmControlForced()
             setHumanArmControl()
             armEmergencyStop()
             setHumanIntakeControl()
