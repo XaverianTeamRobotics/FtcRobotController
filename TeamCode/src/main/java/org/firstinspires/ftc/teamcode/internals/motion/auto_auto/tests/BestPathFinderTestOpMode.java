@@ -1,14 +1,10 @@
 package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.tests;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoAutoPathSegment;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoNoNavigationZones;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.BestPathFinder;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.BestPathFinder;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
 import org.firstinspires.ftc.teamcode.internals.registration.TeleOperation;
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging;
-
-import java.util.ArrayList;
 
 import static org.firstinspires.ftc.teamcode.internals.motion.InitializeAutoAutoKt.initializeAutoAuto;
 

@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.internals.motion.auto_auto
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
-import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.features.ArmClaw
 import org.firstinspires.ftc.teamcode.features.VisionProcessingFeature
 import org.firstinspires.ftc.teamcode.internals.documentation.ReferToButtonUsage
@@ -9,6 +8,10 @@ import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companio
 import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline
 import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline
 import org.firstinspires.ftc.teamcode.internals.math.units.deg
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.config.AutoAutoCreatorConfig
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.AutoAutoPathSegment
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.AutoNoNavigationZones
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.BestPathFinder
 import org.firstinspires.ftc.teamcode.internals.motion.initializeAutoAuto
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto
@@ -60,7 +63,8 @@ class AutoAutoCreatorRefactor : OperationMode(), AutonomousOperation {
         visionProcessor = VisionProcessingFeature(SpikeMarkDetectionPipeline()) //does this need to be defined before config?
 
         timer = Clock.make(UUID.randomUUID().toString())
-        config = AutoAutoCreatorConfig().apply { this.askQuestions() }.takeIf { it.isValid }
+        config = AutoAutoCreatorConfig()
+            .apply { this.askQuestions() }.takeIf { it.isValid }
             ?: throw RuntimeException("Invalid auto auto config")
         AutoNoNavigationZones.addCenterstageDefaults()
 

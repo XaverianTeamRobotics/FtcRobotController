@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
+package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;

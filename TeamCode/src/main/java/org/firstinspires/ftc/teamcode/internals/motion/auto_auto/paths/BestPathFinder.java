@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
+package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths;
 
 import android.util.Log;
 import com.acmerobotics.roadrunner.geometry.Pose2d;

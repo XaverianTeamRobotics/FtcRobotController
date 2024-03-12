@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals.motion.auto_auto
+package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.config
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
@@ -9,6 +9,9 @@ import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companio
 import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline
 import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline
 import org.firstinspires.ftc.teamcode.internals.math.units.deg
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.AutoAutoPathSegment
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.AutoNoNavigationZones
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.BestPathFinder
 import org.firstinspires.ftc.teamcode.internals.motion.initializeAutoAuto
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto
@@ -56,7 +59,8 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
         armClaw!!.auto = true
 
         timer = Clock.make(UUID.randomUUID().toString())
-        config = AutoAutoCreatorConfig()
+        config =
+            AutoAutoCreatorConfig()
         config!!.askQuestions()
         if (!config!!.isValid) throw RuntimeException("Invalid auto auto config")
         AutoNoNavigationZones.addCenterstageDefaults()

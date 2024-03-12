@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.internals.motion.odometry.tuning.rrqs;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoAutoPathSegment;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.AutoAutoPathSegment;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.drivers.AutonomousDrivetrain;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.SettingLoader;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.utils.SettingLoaderFailureException;

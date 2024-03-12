@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.red;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoAutoPathSegment;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.AutoAutoPathSegment;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
 
 public class MiddleToRedBackdrop extends AutoAutoPathSegment {

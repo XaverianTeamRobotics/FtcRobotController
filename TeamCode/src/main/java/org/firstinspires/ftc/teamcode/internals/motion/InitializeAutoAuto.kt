@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.internals.motion
 
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.AutoNoNavigationZones
-import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.BestPathFinder
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.AutoNoNavigationZones
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.BestPathFinder
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
 fun initializeAutoAuto() {
     Logging.setAutoClear(false)

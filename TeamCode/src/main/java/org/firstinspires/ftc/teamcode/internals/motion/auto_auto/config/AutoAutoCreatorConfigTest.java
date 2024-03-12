@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals.motion.auto_auto;
+package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.config;
 
 import org.firstinspires.ftc.teamcode.internals.registration.AutonomousOperation;
 import org.firstinspires.ftc.teamcode.internals.registration.OperationMode;
