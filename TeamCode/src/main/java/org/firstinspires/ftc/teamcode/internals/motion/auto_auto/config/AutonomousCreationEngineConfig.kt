@@ -4,6 +4,14 @@ import org.firstinspires.ftc.teamcode.internals.telemetry.Questions
 import java.util.*
 
 class AutonomousCreationEngineConfig {
+    companion object {
+        const val CONFIG_FILE_NAME = "ace-c-preconfigured.json"
+
+        @JvmStatic
+        fun getPreconfiguredConfig(): AutonomousCreationEngineConfig {
+            TODO("Not yet implemented")
+        }
+    }
     enum class TeamColor(i: Int) {
         RED(1), BLUE(0)
     }
@@ -47,11 +55,53 @@ class AutonomousCreationEngineConfig {
     }
 
     fun askAllQuestions() {
+        if (isPreConfigured()) {
+            var isPreConfigDesired: Boolean
+            var preconfiguredConfig = getPreconfiguredConfig()
+            val isPreConfiguredMenu = Questions.askAsyncC2(
+                buildString {
+                    append("Do you want to use the preconfigured config?")
+                    appendLine()
+                    append(preconfiguredConfig.toString())
+                },
+                "Yes", "No"
+            )
+            isPreConfigDesired = isPreConfiguredMenu.run()!!.name == "Yes"
+            if (isPreConfigDesired) {
+                copyFrom(preconfiguredConfig)
+                return
+            }
+        }
         askBasicInfo()
         askAutonomousActions()
     }
 
+    private fun copyFrom(preconfiguredConfig: AutonomousCreationEngineConfig) {
+        teamColor = preconfiguredConfig.teamColor
+        startPosition = preconfiguredConfig.startPosition
+    }
+
+    private fun isPreConfigured(): Boolean {
+        TODO("Not yet implemented")
+    }
+
     private fun askAutonomousActions() {
         TODO("Not yet implemented")
+    }
+
+    fun saveAsPreconfigured() {
+        TODO("Not yet implemented")
+    }
+
+    override fun toString(): String {
+        return buildString {
+            append("Autonomous Creation Engine Config")
+            appendLine()
+            append("Team Color=")
+            append(teamColor)
+            appendLine()
+            append("Start Position=")
+            append(startPosition)
+        }
     }
 }
