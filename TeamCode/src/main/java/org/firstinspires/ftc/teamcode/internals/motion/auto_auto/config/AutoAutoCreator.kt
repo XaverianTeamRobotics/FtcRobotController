@@ -47,57 +47,21 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
     private var spot = 0
 
     private val pois = ArrayList<Vector2d>()
+    private lateinit var start: Pose2d
 
     override fun getNext(): Class<out OperationMode> {
         return LasagnaBot::class.java
     }
 
     override fun construct() {
-        armClaw = ArmClaw()
-        visionProcessor = VisionProcessingFeature(SpikeMarkDetectionPipeline())
+        getConfig()
+        setupFeatures()
+        setupPOIs()
+        getStartPosition()
+        buildPath()
+    }
 
-        armClaw!!.auto = true
-
-        timer = Clock.make(UUID.randomUUID().toString())
-        config =
-            AutoAutoCreatorConfig()
-        config!!.askQuestions()
-        if (!config!!.isValid) throw RuntimeException("Invalid auto auto config")
-        AutoNoNavigationZones.addCenterstageDefaults()
-
-        visionProcessor!!.setTeamColor(if (config!!.teamColor == 0) VisionPipeline.TeamColor.BLUE else VisionPipeline.TeamColor.RED)
-        registerFeature(armClaw!!)
-        registerFeature(visionProcessor!!)
-        with (armClaw!!) {
-            blockHumanClawReleaseControl()
-            blockHumanClawRotationControl()
-            blockHumanArmControlForced()
-            blockHumanIntakeControl()
-            closeLeftGrabber()
-            closeRightGrabber()
-        }
-
-        // Change the values based on the team color
-        val backdrop = if (config!!.teamColor == 0) this.backdrop else redBackdrop
-        val leftPark = if (config!!.teamColor == 0) this.leftPark else redLeftPark
-        val rightPark = if (config!!.teamColor == 0) this.rightPark else redRightPark
-        val middlePark = if (config!!.teamColor == 0) this.middlePark else redMiddlePark
-
-        if (config!!.placeBackdrop) pois.add(backdrop)
-
-        when (config!!.parkPlace) {
-            0 -> pois.add(leftPark)
-            2 -> pois.add(rightPark)
-            1 -> pois.add(middlePark)
-        }
-
-        val y = (if (config!!.teamColor == 0) 1 else -1) * AutoAutoPathSegment.START_L_Y
-        val rot = if (config!!.teamColor == 0) Math.toRadians(-90.00) else Math.toRadians(90.00)
-        var xStartingPos = config!!.startingPosition == 0
-        if (config!!.teamColor == 1) xStartingPos = !xStartingPos
-        val x = if (xStartingPos) AutoAutoPathSegment.START_L_X else -36.0
-        val start = Pose2d(x, y, rot)
-
+    internal fun buildPath() {
         telemetry.isAutoClear = false
 
         var auto = Auto(start)
@@ -163,7 +127,59 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
         runner = AutoRunner(auto, drivetrain, null, null, null)
     }
 
-    private fun buildSpikeMark(builder: TrajectorySequenceBuilder, drivetrain: AutonomousDrivetrain): TrajectorySequenceBuilder {
+    internal fun getStartPosition() {
+        val y = (if (config!!.teamColor == 0) 1 else -1) * AutoAutoPathSegment.START_L_Y
+        val rot = if (config!!.teamColor == 0) Math.toRadians(-90.00) else Math.toRadians(90.00)
+        var xStartingPos = config!!.startingPosition == 0
+        if (config!!.teamColor == 1) xStartingPos = !xStartingPos
+        val x = if (xStartingPos) AutoAutoPathSegment.START_L_X else -36.0
+        start = Pose2d(x, y, rot)
+    }
+
+    internal fun setupPOIs() {
+        // Change the values based on the team color
+        val backdrop = if (config!!.teamColor == 0) this.backdrop else redBackdrop
+        val leftPark = if (config!!.teamColor == 0) this.leftPark else redLeftPark
+        val rightPark = if (config!!.teamColor == 0) this.rightPark else redRightPark
+        val middlePark = if (config!!.teamColor == 0) this.middlePark else redMiddlePark
+
+        if (config!!.placeBackdrop) pois.add(backdrop)
+
+        when (config!!.parkPlace) {
+            0 -> pois.add(leftPark)
+            2 -> pois.add(rightPark)
+            1 -> pois.add(middlePark)
+        }
+    }
+
+    internal fun getConfig() {
+        timer = Clock.make(UUID.randomUUID().toString())
+        config =
+            AutoAutoCreatorConfig()
+        config!!.askQuestions()
+        if (!config!!.isValid) throw RuntimeException("Invalid auto auto config")
+        AutoNoNavigationZones.addCenterstageDefaults()
+    }
+
+    internal fun setupFeatures() {
+        armClaw = ArmClaw()
+        visionProcessor = VisionProcessingFeature(SpikeMarkDetectionPipeline())
+        armClaw!!.auto = true
+
+        visionProcessor!!.setTeamColor(if (config!!.teamColor == 0) VisionPipeline.TeamColor.BLUE else VisionPipeline.TeamColor.RED)
+        registerFeature(armClaw!!)
+        registerFeature(visionProcessor!!)
+        with(armClaw!!) {
+            blockHumanClawReleaseControl()
+            blockHumanClawRotationControl()
+            blockHumanArmControlForced()
+            blockHumanIntakeControl()
+            closeLeftGrabber()
+            closeRightGrabber()
+        }
+    }
+
+    internal fun buildSpikeMark(builder: TrajectorySequenceBuilder, drivetrain: AutonomousDrivetrain): TrajectorySequenceBuilder {
         var builder1 = builder
         builder1 = builder1.forward(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)
         builder1 = builder1.completeTrajectory()
@@ -240,7 +256,7 @@ class AutoAutoCreator : OperationMode(), AutonomousOperation {
         return builder1
     }
 
-    private fun buildBackdrop(builder: TrajectorySequenceBuilder, drivetrain: AutonomousDrivetrain, segment: AutoAutoPathSegment): TrajectorySequenceBuilder {
+    internal fun buildBackdrop(builder: TrajectorySequenceBuilder, drivetrain: AutonomousDrivetrain, segment: AutoAutoPathSegment): TrajectorySequenceBuilder {
         var builder1 = builder
         builder1 = builder1.completeTrajectory()
             .appendAction {
