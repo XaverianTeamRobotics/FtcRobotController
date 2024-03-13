@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.config
+package org.firstinspires.ftc.teamcode.internals.motion.auto_auto
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companio
 import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline
 import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline
 import org.firstinspires.ftc.teamcode.internals.math.units.deg
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.config.AutoAutoCreatorConfig
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.AutoAutoPathSegment
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.AutoNoNavigationZones
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.BestPathFinder
@@ -26,7 +27,7 @@ import org.firstinspires.ftc.teamcode.opmodes.LasagnaBot
 import java.util.*
 
 @ReferToButtonUsage("AutoAutoCreatorConfig")
-class AutoAutoCreator : OperationMode(), AutonomousOperation {
+open class AutoAutoCreator : OperationMode(), AutonomousOperation {
     private var config: AutoAutoCreatorConfig? = null
     lateinit var timer: Timer
     lateinit var runner: AutoRunner
