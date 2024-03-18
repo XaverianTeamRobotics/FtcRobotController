@@ -93,9 +93,11 @@ public class SpikeMarkDetectionPipeline extends VisionPipeline {
         Scalar zone1Avg = mean(zone1);
         Scalar zone2Avg = mean(zone2);
 
-        Logging.log("Zone 1", zone1Avg.val[0]);
-        Logging.log("Zone 2", zone2Avg.val[0]);
-        Logging.update();
+        if (debugEnabled) {
+            Logging.log("Zone 1", zone1Avg.val[0]);
+            Logging.log("Zone 2", zone2Avg.val[0]);
+            Logging.update();
+        }
 
         // Determine the position based on the average value of each zone
         if (zone1Avg.val[0] < MIN_AVG_AREA && zone2Avg.val[0] < MIN_AVG_AREA) {
