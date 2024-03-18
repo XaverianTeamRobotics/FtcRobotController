@@ -21,4 +21,9 @@ public class MiddleToBlueBackdrop extends AutoAutoPathSegment {
     public Vector2d getEndPosition() {
         return new Vector2d(48.00, 36.00);
     }
+
+    @Override
+    public int getFlags() {
+        return Flags.ARM_LOWERED;
+    }
 }

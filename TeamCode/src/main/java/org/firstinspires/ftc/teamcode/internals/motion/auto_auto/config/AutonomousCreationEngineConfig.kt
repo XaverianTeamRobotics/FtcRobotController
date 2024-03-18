@@ -1,13 +1,17 @@
 package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.config
 
 import com.google.gson.Gson
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companion.opMode
 import org.firstinspires.ftc.teamcode.internals.telemetry.Questions
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging.log
+import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging.update
 import java.io.File
 import java.util.*
 
 class AutonomousCreationEngineConfig {
     companion object {
-        const val CONFIG_FILE_NAME = "ace-c-preconfigured.json"
+        val CONFIG_FILE_NAME = File(AppUtil.FIRST_FOLDER, "ace-c-config.json").absolutePath
 
         @JvmStatic
         fun getPreconfiguredConfig(): AutonomousCreationEngineConfig {
@@ -17,9 +21,10 @@ class AutonomousCreationEngineConfig {
             }
             val gson = Gson()
             val map = gson.fromJson(file.readText(), Map::class.java)
-            val teamColor = map["teamColor"] as TeamColor
-            val startPosition = map["startPosition"] as StartPosition
-            val autoActions = map["autoActions"] as List<AutonomousActions>
+            val teamColor = TeamColor.valueOf(map["teamColor"].toString())
+            val startPosition = StartPosition.valueOf(map["startPosition"].toString())
+            val autoActionsUncasted = map["autoActions"] as List<*>
+            val autoActions = autoActionsUncasted.map { AutonomousAction.valueOf(it.toString()) }
             return AutonomousCreationEngineConfig().apply {
                 this.teamColor = teamColor
                 this.startPosition = startPosition
@@ -27,32 +32,32 @@ class AutonomousCreationEngineConfig {
             }
         }
     }
-    enum class TeamColor(i: Int) {
-        RED(1), BLUE(0)
+    enum class TeamColor {
+        BLUE, RED;
     }
 
-    enum class StartPosition(i: Int) {
-        LEFT(0), RIGHT(1)
+    enum class StartPosition {
+        LEFT, RIGHT;
     }
 
-    enum class AutonomousActions {
-        PARK_LEFT, PARK_CENTER, PARK_RIGHT, BACKDROP_SCORE, SPIKE_MARK_SCORE
+    enum class AutonomousAction {
+        PARK_LEFT, PARK_CENTER, PARK_RIGHT, BACKDROP_SCORE, SPIKE_MARK_SCORE, DELAY_1S, DELAY_5S
     }
 
     var teamColor: TeamColor? = null
         internal set
     var startPosition: StartPosition? = null
         internal set
-    var autoActions: List<AutonomousActions>? = null
+    var autoActions: List<AutonomousAction>? = null
         internal set
 
-    private val autoEndActions = listOf(AutonomousActions.PARK_LEFT, AutonomousActions.PARK_CENTER, AutonomousActions.PARK_RIGHT)
+    private val autoEndActions = listOf(AutonomousAction.PARK_LEFT, AutonomousAction.PARK_CENTER, AutonomousAction.PARK_RIGHT)
 
     private fun enumToName(enumName: String): String {
         return enumName.lowercase(Locale.ROOT).replace("_", " ")
     }
 
-    private fun autoActionToName(autoAction: AutonomousActions): String {
+    private fun autoActionToName(autoAction: AutonomousAction): String {
         return enumToName(autoAction.name)
     }
 
@@ -73,15 +78,13 @@ class AutonomousCreationEngineConfig {
         }
     }
 
-    fun askAllQuestions() {
+    fun askQuestions() {
         if (isPreConfigured()) {
             var isPreConfigDesired: Boolean
             var preconfiguredConfig = getPreconfiguredConfig()
             val isPreConfiguredMenu = Questions.askAsyncC2(
                 buildString {
                     append("Do you want to use the preconfigured config?")
-                    appendLine()
-                    append(preconfiguredConfig.toString())
                 },
                 "Yes", "No"
             )
@@ -103,24 +106,41 @@ class AutonomousCreationEngineConfig {
     }
 
     private fun isPreConfigured(): Boolean {
-        TODO("Not yet implemented")
+        if (File(CONFIG_FILE_NAME).exists()) {
+            try {
+                getPreconfiguredConfig()
+                return true
+            } catch (e: Exception) {
+                log("Preconfigured config file exists but is not valid")
+                log(e.message)
+                update()
+                opMode!!.waitFor(3.0)
+                return false
+            }
+        } else {
+            return false
+        }
     }
 
     private fun askAutonomousActions() {
         val autoActionsMenu = Questions.askAsyncC2(
             "What actions do you want to perform in autonomous?",
-            autoActionToName(AutonomousActions.PARK_LEFT),
-            autoActionToName(AutonomousActions.PARK_CENTER),
-            autoActionToName(AutonomousActions.PARK_RIGHT),
-            autoActionToName(AutonomousActions.BACKDROP_SCORE),
-            autoActionToName(AutonomousActions.SPIKE_MARK_SCORE)
+            autoActionToName(AutonomousAction.PARK_LEFT),
+            autoActionToName(AutonomousAction.PARK_CENTER),
+            autoActionToName(AutonomousAction.PARK_RIGHT),
+            autoActionToName(AutonomousAction.BACKDROP_SCORE),
+            autoActionToName(AutonomousAction.SPIKE_MARK_SCORE),
+            autoActionToName(AutonomousAction.DELAY_1S),
+            autoActionToName(AutonomousAction.DELAY_5S)
         )
         when (autoActionsMenu.run()!!.name) {
-            autoActionToName(AutonomousActions.PARK_LEFT) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousActions.PARK_LEFT) }.toList()
-            autoActionToName(AutonomousActions.PARK_CENTER) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousActions.PARK_CENTER) }.toList()
-            autoActionToName(AutonomousActions.PARK_RIGHT) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousActions.PARK_RIGHT) }.toList()
-            autoActionToName(AutonomousActions.BACKDROP_SCORE) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousActions.BACKDROP_SCORE) }.toList()
-            autoActionToName(AutonomousActions.SPIKE_MARK_SCORE) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousActions.SPIKE_MARK_SCORE) }.toList()
+            autoActionToName(AutonomousAction.PARK_LEFT) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousAction.PARK_LEFT) }.toList()
+            autoActionToName(AutonomousAction.PARK_CENTER) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousAction.PARK_CENTER) }.toList()
+            autoActionToName(AutonomousAction.PARK_RIGHT) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousAction.PARK_RIGHT) }.toList()
+            autoActionToName(AutonomousAction.BACKDROP_SCORE) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousAction.BACKDROP_SCORE) }.toList()
+            autoActionToName(AutonomousAction.SPIKE_MARK_SCORE) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousAction.SPIKE_MARK_SCORE) }.toList()
+            autoActionToName(AutonomousAction.DELAY_1S) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousAction.DELAY_1S) }.toList()
+            autoActionToName(AutonomousAction.DELAY_5S) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousAction.DELAY_5S) }.toList()
         }
         if (!autoEndActions.contains(autoActions!!.last())) {
             askAutonomousActions()
@@ -128,6 +148,9 @@ class AutonomousCreationEngineConfig {
     }
 
     fun saveConfiguration() {
+        if (!isValid()) {
+            throw IllegalStateException("Config is not valid")
+        }
         val file = File(CONFIG_FILE_NAME)
         if (file.exists()) {
             file.delete()
@@ -159,5 +182,25 @@ class AutonomousCreationEngineConfig {
             "autoActions" to autoActions
         )
         return gson.toJson(map)
+    }
+
+    fun isValid(): Boolean {
+        return teamColor != null && startPosition != null && autoActions != null
+    }
+
+    fun asAutoAutoCreatorConfig(): AutoAutoCreatorConfig {
+        return AutoAutoCreatorConfig(
+            teamColor!!.ordinal,
+            startPosition!!.ordinal,
+            autoActions!!.contains(AutonomousAction.BACKDROP_SCORE),
+            1,
+            autoActions!!.contains(AutonomousAction.SPIKE_MARK_SCORE),
+            when (autoActions!!.last()) {
+                AutonomousAction.PARK_LEFT -> 0
+                AutonomousAction.PARK_CENTER -> 1
+                AutonomousAction.PARK_RIGHT -> 2
+                else -> 0
+            },
+        )
     }
 }

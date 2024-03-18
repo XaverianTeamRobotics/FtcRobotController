@@ -24,4 +24,9 @@ public class RedLeftToMiddle extends AutoAutoPathSegment {
     public Vector2d getEndPosition() {
         return new Vector2d(0, -12);
     }
+
+    @Override
+    public int getFlags() {
+        return Flags.ARM_LOWERED;
+    }
 }
