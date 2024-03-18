@@ -162,6 +162,7 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
         armClaw.auto = true
 
         visionProcessor.setTeamColor(teamColor)
+        visionProcessor.setDebugEnabled(false)
         registerFeature(armClaw)
         registerFeature(visionProcessor)
         with(armClaw) {
