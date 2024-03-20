@@ -31,4 +31,6 @@ public class Timer {
         return nanoTime / 1e+9D < nanoTime / 1e+9D + seconds;
     }
 
+    public double getTime() { return nanoTime / 1e+9D; }
+
 }
