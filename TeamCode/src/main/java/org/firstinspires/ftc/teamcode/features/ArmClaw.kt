@@ -284,6 +284,13 @@ class ArmClaw : Feature(), Buildable {
                                     else                                    22.5
         }
 
+    var intakeRunning: Boolean
+        get() = Devices.motor2.power != 0.0
+        set(value) {
+            if (value)  Devices.motor2.power = -100.0
+            else        Devices.motor2.power = 0.0
+        }
+
     enum class SelectorPositions {
         LEFT,
         RIGHT

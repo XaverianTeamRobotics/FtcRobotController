@@ -11,7 +11,7 @@ import java.util.*
 
 class AutonomousCreationEngineConfig {
     companion object {
-        val CONFIG_FILE_NAME = File(AppUtil.FIRST_FOLDER, "ace-c-config.json").absolutePath
+        val CONFIG_FILE_NAME: String = File(AppUtil.FIRST_FOLDER, "ace-c-config.json").absolutePath
 
         @JvmStatic
         fun getPreconfiguredConfig(): AutonomousCreationEngineConfig {
@@ -52,6 +52,9 @@ class AutonomousCreationEngineConfig {
         internal set
 
     private val autoEndActions = listOf(AutonomousAction.PARK_LEFT, AutonomousAction.PARK_CENTER, AutonomousAction.PARK_RIGHT)
+    private val questionFilters: Array<(AutonomousAction) -> Boolean> = arrayOf(
+        { it != AutonomousAction.SPIKE_MARK_SCORE || autoActions!!.isEmpty() }
+    )
 
     private fun enumToName(enumName: String): String {
         return enumName.lowercase(Locale.ROOT).replace("_", " ")
@@ -61,7 +64,7 @@ class AutonomousCreationEngineConfig {
         return enumToName(autoAction.name)
     }
 
-    fun askBasicInfo() {
+    private fun askBasicInfo() {
         val teamColorMenu = Questions.askAsyncC2("What is your team color?", TeamColor.RED.name, TeamColor.BLUE.name)
         val startPositionMenu = Questions.askAsyncC2("What is your starting position?", StartPosition.LEFT.name, StartPosition.RIGHT.name)
 
@@ -123,17 +126,17 @@ class AutonomousCreationEngineConfig {
     }
 
     private fun askAutonomousActions() {
+        val actionsToPrompt = AutonomousAction.entries.toTypedArray().filter {
+            for (filter in questionFilters) {
+                if (!filter.invoke(it)) return@filter false
+            }
+            return@filter true
+        }
         val autoActionsMenu = Questions.askAsyncC2(
             "What actions do you want to perform in autonomous?",
-            autoActionToName(AutonomousAction.PARK_LEFT),
-            autoActionToName(AutonomousAction.PARK_CENTER),
-            autoActionToName(AutonomousAction.PARK_RIGHT),
-            autoActionToName(AutonomousAction.BACKDROP_SCORE),
-            autoActionToName(AutonomousAction.SPIKE_MARK_SCORE),
-            autoActionToName(AutonomousAction.DELAY_1S),
-            autoActionToName(AutonomousAction.DELAY_5S)
+            *(actionsToPrompt.map { autoActionToName(it) }.toTypedArray()),
         )
-        when (autoActionsMenu.run()!!.name) {
+        when (autoActionsMenu.run()?.name) {
             autoActionToName(AutonomousAction.PARK_LEFT) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousAction.PARK_LEFT) }.toList()
             autoActionToName(AutonomousAction.PARK_CENTER) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousAction.PARK_CENTER) }.toList()
             autoActionToName(AutonomousAction.PARK_RIGHT) -> autoActions = autoActions!!.toMutableList().apply { add(AutonomousAction.PARK_RIGHT) }.toList()

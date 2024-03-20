@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.internals.motion.auto_auto
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import org.firstinspires.ftc.teamcode.internals.documentation.ReferToButtonUsage
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.config.AutoAutoCreatorConfig
@@ -20,22 +19,8 @@ import java.util.*
 @ReferToButtonUsage("AutoAutoCreatorConfig")
 class AutoAutoCreator : CenterstageAutonomous() {
     private var config: AutoAutoCreatorConfig? = null
-    lateinit var timer: Timer
-
-    private val backdrop = Vector2d(48.00, 36.00)
-    private val spikeMark = Vector2d(12.00, 36.00)
-    private val spikeMark2 = Vector2d(-36.00, 36.00)
-    private val leftPark = Vector2d(60.00, 60.00)
-    private val rightPark = Vector2d(60.00, 12.00)
-    private val middlePark = Vector2d(48.00, 36.00)
-
-    private val redBackdrop = Vector2d(backdrop.x, -backdrop.y)
-    private val redLeftPark = Vector2d(rightPark.x, -rightPark.y)
-    private val redRightPark = Vector2d(leftPark.x, -leftPark.y)
-    private val redMiddlePark = Vector2d(middlePark.x, -middlePark.y)
-
+    private lateinit var timer: Timer
     private val pois = ArrayList<Vector2d>()
-    private lateinit var start: Pose2d
 
     override fun getNext(): Class<out OperationMode> {
         return LasagnaBot::class.java
@@ -45,7 +30,7 @@ class AutoAutoCreator : CenterstageAutonomous() {
         getConfig()
         setupFeatures(config!!.teamColor)
         setupPOIs()
-        getStartPosition()
+        getStartPosition(config!!.teamColor, config!!.startingPosition)
         buildPath()
     }
 
@@ -65,7 +50,7 @@ class AutoAutoCreator : CenterstageAutonomous() {
 
         if (config!!.placeSpikeMark) {
             builder.forward(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)
-            builder = buildSpikeMark(builder, drivetrain, config!!.teamColor, 0)
+            builder = buildSpikeMarkArmMethod(builder, drivetrain, config!!.teamColor, 0)
             builder.back(AutoAutoPathSegment.DISTANCE_TO_SPIKE_MARK)
             if (config!!.parkPlace != 3) builder = builder.completeTrajectory().appendTrajectory()
         }
@@ -90,7 +75,7 @@ class AutoAutoCreator : CenterstageAutonomous() {
                                 ) && needToScore
                     ) {
                         needToScore = false
-                        builder = buildBackdrop(builder, drivetrain, segment,)
+                        builder = buildBackdrop(builder, drivetrain, segment.endPosition)
                     }
                 }
             }
@@ -116,15 +101,6 @@ class AutoAutoCreator : CenterstageAutonomous() {
         telemetry.isAutoClear = true
 
         runner = AutoRunner(auto, drivetrain, null, null, null)
-    }
-
-    private fun getStartPosition() {
-        val y = (if (config!!.teamColor == 0) 1 else -1) * AutoAutoPathSegment.START_L_Y
-        val rot = if (config!!.teamColor == 0) Math.toRadians(-90.00) else Math.toRadians(90.00)
-        var xStartingPos = config!!.startingPosition == 0
-        if (config!!.teamColor == 1) xStartingPos = !xStartingPos
-        val x = if (xStartingPos) AutoAutoPathSegment.START_L_X else -36.0
-        start = Pose2d(x, y, rot)
     }
 
     private fun setupPOIs() {
