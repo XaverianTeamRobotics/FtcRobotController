@@ -8,12 +8,22 @@ class AutonomousReportGenerator(private val timerName: String) {
         get() {
             return Clock.get(timerName)
         }
+    val actions: List<TimedMessage>
+        get() = mutableActions.toList()
+    private val mutableActions = mutableListOf<TimedMessage>()
 
     fun generateReport(): String {
-        TODO("Should return a string containing a breakdown of the times for each action in the autonomous routine.")
+        return buildString {
+            for (msg in mutableActions) {
+                appendLine(msg.toString())
+            }
+        }.trim('\n')
     }
 
     fun markTime(action: String) {
-        TODO("Should mark that the action has been completed at the current time.")
+        val msg = TimedMessage(action, timer.time)
+        mutableActions.add(msg)
     }
 }
+
+data class TimedMessage(val action: String, val time: Double)

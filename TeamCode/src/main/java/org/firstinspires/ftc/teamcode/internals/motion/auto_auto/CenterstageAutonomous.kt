@@ -123,11 +123,13 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
         builder: TrajectorySequenceBuilder,
         drivetrain: AutonomousDrivetrain,
         teamColor: Int,
+        reportGenerator: AutonomousReportGenerator? = null
     ): TrajectorySequenceBuilder {
         lateinit var startPose: Pose2d
         var rotation = 0.deg
         val builder1 = builder.completeTrajectory()
             .appendAction {
+                reportGenerator?.markTime("Started Spikemark")
                 if (spot == 1) rotation = (-270).deg
                 else if (spot == 3) rotation = (-90).deg
                 val p = drivetrain.poseEstimate
@@ -169,6 +171,9 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
                 } catch (_: Exception) {
                 }
             }
+            .appendAction {
+                reportGenerator?.markTime("Ended Spikemark")
+            }
             .appendTrajectory()
         return builder1
     }
@@ -177,11 +182,13 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
         builder: TrajectorySequenceBuilder,
         drivetrain: AutonomousDrivetrain,
         endPosition: Vector2d,
+        reportGenerator: AutonomousReportGenerator? = null,
         yellowPixelPosition: Int = 1
     ): TrajectorySequenceBuilder {
         var builder1 = builder
         builder1 = builder1.completeTrajectory()
             .appendAction {
+                reportGenerator?.markTime("Started Backdrop")
                 armClaw.autoRaiseArm(175)
                 armClaw.autoRotateClaw1(3.5)
                 armClaw.autoRotateClaw2(18.5)
@@ -221,6 +228,7 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
                 } catch (_: Exception) {
                 }
                 armClaw.servoPickupPos()
+                reportGenerator?.markTime("Ended Backdrop")
             }
             .appendTrajectory()
         return builder1

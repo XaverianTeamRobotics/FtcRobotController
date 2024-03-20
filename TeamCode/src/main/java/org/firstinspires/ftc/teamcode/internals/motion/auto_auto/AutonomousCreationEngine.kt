@@ -129,11 +129,16 @@ class AutonomousCreationEngine : CenterstageAutonomous() {
         Logging.log("Calculated path in " + (System.currentTimeMillis() - startT) + "ms")
         Logging.update()
 
-        auto = builder.completeTrajectory().appendAction { while (opModeIsActive()) {
-            if (timer.elapsed(30.0))  {
-
+        auto = builder.completeTrajectory().appendAction {
+            reportGenerator.markTime("End Autonomous")
+            while (opModeIsActive()) {
+                if (timer.elapsed(30.0))  {
+                    Logging.log(reportGenerator.generateReport())
+                    Logging.log(config.toString())
+                    Logging.update()
+                }
             }
-        } }.complete()
+        }.complete()
         telemetry.isAutoClear = true
 
         runner = AutoRunner(auto, drivetrain, null, null, null)
