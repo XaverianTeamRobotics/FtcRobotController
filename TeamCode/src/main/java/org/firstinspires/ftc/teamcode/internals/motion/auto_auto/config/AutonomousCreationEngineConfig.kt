@@ -54,7 +54,7 @@ class AutonomousCreationEngineConfig {
     private val autoEndActions = listOf(AutonomousAction.PARK_LEFT, AutonomousAction.PARK_CENTER, AutonomousAction.PARK_RIGHT)
     private val questionFilters: Array<(AutonomousAction) -> Boolean> = arrayOf(
         { it != AutonomousAction.SPIKE_MARK_SCORE || autoActions!!.isEmpty() },
-        { !(it == AutonomousAction.PARK_CENTER && autoActions!!.last() == AutonomousAction.BACKDROP_SCORE) },
+        { !(it == AutonomousAction.PARK_CENTER && autoActions!!.isEmpty() && autoActions!!.last() == AutonomousAction.BACKDROP_SCORE) },
     )
 
     private fun enumToName(enumName: String): String {
