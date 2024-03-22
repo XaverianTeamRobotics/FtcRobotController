@@ -115,7 +115,7 @@ class AutonomousCreationEngine : CenterstageAutonomous() {
                             builder = builder.completeTrajectory().appendTrajectory()
                         }
                         AutonomousAction.BACKDROP_SCORE -> {
-                            builder = buildBackdrop(builder, drivetrain, poi)
+                            builder = buildBackdrop(builder , drivetrain, poi)
                         }
                         AutonomousAction.DELAY_1S -> delay += 1
                         AutonomousAction.DELAY_5S -> delay += 5

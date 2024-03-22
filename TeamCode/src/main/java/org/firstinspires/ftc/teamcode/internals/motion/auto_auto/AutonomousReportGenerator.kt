@@ -23,7 +23,7 @@ class AutonomousReportGenerator(private val timerName: String) {
     fun markTime(action: String) {
         val msg = TimedMessage(action, timer.time)
         mutableActions.add(msg)
-    }
+    }                                                                      
 }
 
 data class TimedMessage(val action: String, val time: Double)

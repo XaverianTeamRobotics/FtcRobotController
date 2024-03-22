@@ -136,11 +136,16 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
                 val b = drivetrain.trajectorySequenceBuilder(p)
                 startPose = p
                 if (spot == 1 || spot == 3) {
-                    b.forward(6.0)
+                    b.forward(6.0) // Move forward if on side
                 }
                 b.turn(Math.toRadians(180.0) + rotation.rad)
+                // Position over spike mark
                 b.back(8.0)
-                b.forward(3.0)
+                // Increase if pixel is long
+                // Decrease if pixel is short
+                if (spot == 1) b.forward(7.0)
+                else if (spot == 2) b.forward(3.0)
+                else if (spot == 3) b.forward(7.0)
                 try {
                     drivetrain.followTrajectorySequenceAsync(b.completeTrajectory())
                     while (drivetrain.isBusy && opModeIsActive()) {
@@ -158,8 +163,13 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
 
                 val p2 = drivetrain.poseEstimate
                 val b2 = drivetrain.trajectorySequenceBuilder(p2)
-                b2.lineTo(startPose.vec())
+                // Reset
+                b2.forward(5.0) // Increase if wheel hits pixel, decrease if robot hits truss
+                if ((spot == 1) && (teamColor == 0) && (p.x < 0)) {
+                    b2.forward(5.0)
+                }
                 b2.turn(-(rotation.rad + 180.0.deg.rad))
+                b2.lineTo(startPose.vec())
                 b2.addTemporalMarker(0.5) {
                     armClaw.servoPickupPos()
                 }

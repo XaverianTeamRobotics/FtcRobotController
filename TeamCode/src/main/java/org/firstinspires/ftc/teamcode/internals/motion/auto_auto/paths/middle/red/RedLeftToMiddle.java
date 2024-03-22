@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.middle.red;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.AutoAutoPathSegment;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
@@ -8,11 +9,10 @@ public class RedLeftToMiddle extends AutoAutoPathSegment {
     @Override
     public TrajectorySequenceBuilder addPathSegment(TrajectorySequenceBuilder builder) {
         return builder
-                .splineTo(new Vector2d(-52.07, -51.02), Math.toRadians(96.63))
-                .splineTo(new Vector2d(-57.38, -42.86), Math.toRadians(105.44))
-                .splineTo(new Vector2d(-57.86, -31.56), Math.toRadians(90.0))
-                .splineTo(new Vector2d(-49.50, -8.40), Math.toRadians(0.88))
-                .splineTo(getEndPosition(), Math.toRadians(0));
+                .splineToSplineHeading(new Pose2d(-57.76, -35.03, Math.toRadians(450.00)), Math.toRadians(450.00))
+                .splineToSplineHeading(new Pose2d(-58.77, -14.39, Math.toRadians(450.00)), Math.toRadians(450.00))
+                .splineToSplineHeading(new Pose2d(-48.26, -12.00, Math.toRadians(360.00)), Math.toRadians(360.00))
+                .lineTo(getEndPosition());
     }
 
     @Override
