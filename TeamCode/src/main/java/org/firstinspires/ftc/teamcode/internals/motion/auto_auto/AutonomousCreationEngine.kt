@@ -59,12 +59,14 @@ class AutonomousCreationEngine : CenterstageAutonomous() {
                 put(AutonomousAction.PARK_RIGHT, rightPark)
                 put(AutonomousAction.SPIKE_MARK_SCORE, start.vec())
                 put(AutonomousAction.BACKDROP_SCORE, backdrop)
+                put(AutonomousAction.PICKUP_FROM_STACK, stack)
             } else {
                 put(AutonomousAction.PARK_LEFT, redLeftPark)
                 put(AutonomousAction.PARK_CENTER, redMiddlePark)
                 put(AutonomousAction.PARK_RIGHT, redRightPark)
                 put(AutonomousAction.SPIKE_MARK_SCORE, start.vec())
                 put(AutonomousAction.BACKDROP_SCORE, redBackdrop)
+                put(AutonomousAction.PICKUP_FROM_STACK, redStack)
             }
         }
 
@@ -117,6 +119,9 @@ class AutonomousCreationEngine : CenterstageAutonomous() {
                         AutonomousAction.BACKDROP_SCORE -> {
                             builder = buildBackdrop(builder , drivetrain, poi)
                         }
+                        AutonomousAction.PICKUP_FROM_STACK -> {
+                            builder = buildIntakeFromStack(builder, drivetrain, poi, pixelsToCollect = LEFT_PIXEL) // TODO: Figure out which pixel to collect
+                        }
                         AutonomousAction.DELAY_1S -> delay += 1
                         AutonomousAction.DELAY_5S -> delay += 5
                         else -> continue
@@ -129,7 +134,7 @@ class AutonomousCreationEngine : CenterstageAutonomous() {
         Logging.log("Calculated path in " + (System.currentTimeMillis() - startT) + "ms")
         Logging.update()
 
-        auto = builder.completeTrajectory().appendAction {
+        auto = builder.strafeLeft(0.01).completeTrajectory().appendAction {
             reportGenerator.markTime("End Autonomous")
             while (opModeIsActive()) {
                 if (timer.elapsed(30.0))  {

@@ -9,8 +9,10 @@ import org.firstinspires.ftc.teamcode.internals.features.Feature
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo0
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo1
+import org.firstinspires.ftc.teamcode.internals.hardware.Devices.Companion.servo8
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companion.opMode
 import org.firstinspires.ftc.teamcode.internals.telemetry.logging.Logging
+import kotlin.math.absoluteValue
 import kotlin.math.max
 import kotlin.math.min
 
@@ -39,14 +41,15 @@ import kotlin.math.min
 @ButtonUsage(button = ButtonName.DPAD_DOWN, description = "Toggle intake", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.LEFT_BUMPER, description = "Pixel selector to left", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.RIGHT_BUMPER, description = "Pixel selector to right", controller = ControllerName.CONTROLLER_2)
-@ButtonUsage(button = ButtonName.X, description = "Pixel holder down", controller = ControllerName.CONTROLLER_2)
-@ButtonUsage(button = ButtonName.B, description = "Pixel holder up", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.X, description = "Intake Up", controller = ControllerName.CONTROLLER_2)
+@ButtonUsage(button = ButtonName.B, description = "Intake Down", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.LEFT_TRIGGER, description = "Lower arm", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.RIGHT_TRIGGER, description = "Raise arm", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.BACK, description = "Emergency stop autonomous features", controller = ControllerName.CONTROLLER_2)
 @ButtonUsage(button = ButtonName.RIGHT_STICK_BUTTON, description = "Windshield wiper :)", controller = ControllerName.CONTROLLER_1)
 @ReferableButtonUsage(referableAs = "ArmClaw")
 class ArmClaw : Feature(), Buildable {
+    private var xPressed = false
     private var counter = 0.0
     private var dpadPressed = false
     private var counterLeft = 0.0 //left servo
@@ -188,12 +191,12 @@ class ArmClaw : Feature(), Buildable {
 
     fun autoRotateClaw1(i: Double) {
         blockHumanClawRotationControl()
-        Devices.servo0.position = i
+        servo0.position = i
     }
 
     fun autoRotateClaw2(i: Double) {
         blockHumanClawRotationControl()
-        Devices.servo1.position = i
+        servo1.position = i
     }
 
     fun autoRaiseArm(pos: KeyPositions) {
@@ -276,7 +279,7 @@ class ArmClaw : Feature(), Buildable {
 
     var pixelPositionSelector: SelectorPositions
         get() {
-            if (pixelSelectorServo < 25.0) return SelectorPositions.LEFT
+            if (pixelSelectorServo < 14.0) return SelectorPositions.LEFT
             return SelectorPositions.RIGHT
         }
         set(value) {
@@ -291,30 +294,23 @@ class ArmClaw : Feature(), Buildable {
             else        Devices.motor2.power = 0.0
         }
 
+    var intakeHeight: Int
+        get() =
+            if (servo8.position > 40.0) 2
+            else if (servo8.position > 20.0) 1
+            else 0
+        set(value) {
+            val newValue = value % 3
+            when (newValue) {
+                2 -> servo8.position = 41.5
+                1 -> servo8.position = 40.0
+                0 -> servo8.position = 20.0
+            }
+        }
+
     enum class SelectorPositions {
         LEFT,
         RIGHT
-    }
-
-    private var pixelHolderServo: Double
-        get() = Devices.servo4.position
-        set(value) {
-            Devices.servo4.position = value
-        }
-
-    var pixelHolderPosition: HolderPositions
-        get() {
-            if (pixelHolderServo > 50) return HolderPositions.DOWN
-            return HolderPositions.UP
-        }
-        set(value) {
-            pixelHolderServo =  if (value == HolderPositions.DOWN)  65.0
-                                else                                40.0
-        }
-
-    enum class HolderPositions {
-        UP,
-        DOWN
     }
 
     fun isArmLiftingInProgress(): Boolean {
@@ -336,8 +332,8 @@ class ArmClaw : Feature(), Buildable {
         get() = Devices.distanceSensor.distance
 
     fun servoPickupPos() {
-        Devices.servo0.position = 20.0
-        Devices.servo1.position = 42.5
+        servo0.position = 20.0
+        servo1.position = 42.5
     }
 
     override fun loop() {
@@ -369,16 +365,25 @@ class ArmClaw : Feature(), Buildable {
             } else {
                 Logging.log("NOT PERMITTED")
             }
-            Logging.log("Pixel Selector Position", pixelPositionSelector)
-            Logging.log("Servo Holder Position", pixelHolderPosition)
-            Logging.log("\n-----------------------------\n")
+            Logging.log("-----------------------------")
+            Logging.log("Pixel Selector Position")
+            val selectorBlankSpace = " ".repeat("-----------------------------".length / 2)
+            val selectorMsg = if (pixelPositionSelector == SelectorPositions.LEFT) {
+                "LEFT" + " ".repeat(selectorBlankSpace.length - 4) + ":" + selectorBlankSpace
+            } else {
+                selectorBlankSpace + ":" + " ".repeat(selectorBlankSpace.length - 5) + "RIGHT"
+            }
+            Logging.log(selectorMsg)
+            Logging.log("-----------------------------")
+            Logging.log("Intake Height", intakeHeight)
+            Logging.log("-----------------------------")
             Logging.log("Arm Control Mode", armControlMode)
             Logging.log("Intake Control Mode", intakeControlMode)
             Logging.log("Claw Rotation Control Mode", clawRotationControlMode)
             Logging.log("Claw Release Control Mode", clawReleaseControlMode)
             Logging.log("Arm Encoder Position", -Devices.encoder3.position)
-            Logging.log("Servo0 pos", Devices.servo0.position)
-            Logging.log("Servo1 pos", Devices.servo1.position)
+            Logging.log("Servo0 pos", servo0.position)
+            Logging.log("Servo1 pos", servo1.position)
             Logging.update()
         }
 
@@ -413,24 +418,24 @@ class ArmClaw : Feature(), Buildable {
             if (Devices.controller2.triangle) {
                 servoPickupPos()
             } else if (Devices.controller2.leftStickButton) {
-                Devices.servo0.position = 20.0
-                Devices.servo1.position = 13.1
+                servo0.position = 20.0
+                servo1.position = 13.1
             } else if (Devices.controller2.rightStickButton) {
-                Devices.servo0.position = 3.5
-                Devices.servo1.position = 18.5
+                servo0.position = 3.5
+                servo1.position = 18.5
             }  else if (Devices.controller2.a) {
                 servo0.position = 0.0;
                 servo1.position = 29.66;
             } else {
-                var grabber0Pos = Devices.servo0.position
+                var grabber0Pos = servo0.position
                 grabber0Pos += Devices.controller2.leftStickX * 0.00075
                 grabber0Pos = max(0.0, min(100.0, grabber0Pos))
-                Devices.servo0.position = grabber0Pos
+                servo0.position = grabber0Pos
 
-                var grabber1Pos = Devices.servo1.position
+                var grabber1Pos = servo1.position
                 grabber1Pos += Devices.controller2.rightStickX * 0.00075
                 grabber1Pos = max(0.0, min(100.0, grabber1Pos))
-                Devices.servo1.position = grabber1Pos
+                servo1.position = grabber1Pos
             }
         }
 
@@ -442,12 +447,14 @@ class ArmClaw : Feature(), Buildable {
             } else if (Devices.controller2.rightBumper) {
                 pixelPositionSelector = SelectorPositions.RIGHT
             }
-            if (Devices.controller2.square) pixelHolderPosition = HolderPositions.DOWN
-            else if (Devices.controller2.circle) pixelHolderPosition = HolderPositions.UP
-            if (Devices.controller1.rightStickButton) {
-                Devices.servo8.position = 100.0
-                opMode!!.waitFor(0.5)
-                Devices.servo8.position = 50.0
+            if (Devices.controller2.x && !xPressed) {
+                intakeHeight++
+                xPressed = true
+            } else if (!Devices.controller2.x) {
+                xPressed = false
+            }
+            if (Devices.controller2.b) {
+                intakeHeight = 0
             }
         }
     }

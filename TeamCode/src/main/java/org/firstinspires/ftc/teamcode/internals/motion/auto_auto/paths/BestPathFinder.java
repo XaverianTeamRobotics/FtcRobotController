@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.red.MiddleToRedBackdrop;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.red.RedRightStartToRedBackdrop;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.middle.blue.BlueRightToMiddle;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.middle.blue.BlueStackToMiddle;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.middle.red.RedLeftToMiddle;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.blue.BlueBackdropToBlueLeftPark;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.blue.BlueBackdropToBlueRightPark;
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.backdrop.
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.red.RedBackdropToRedLeftPark;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.red.RedBackdropToRedRightPark;
 import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.parking.red.RedRightToRightBackdropPark;
+import org.firstinspires.ftc.teamcode.internals.motion.auto_auto.paths.stack.blue.BlueRightToStack;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.pathing.Auto;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.internals.motion.odometry.trajectories.TrajectorySequenceBuilder;
@@ -63,6 +65,10 @@ public class BestPathFinder {
         // ADD PATH SEGMENTS HERE!!!!
         pathSegments.add(new BlueRightToMiddle());
         pathSegments.add(new RedLeftToMiddle());
+
+        pathSegments.add(new BlueRightToStack());
+
+        pathSegments.add(new BlueStackToMiddle());
 
         pathSegments.add(new BlueLeftToLeftBackdropPark());
         pathSegments.add(new RedRightToRightBackdropPark());

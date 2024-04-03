@@ -41,7 +41,7 @@ class AutonomousCreationEngineConfig {
     }
 
     enum class AutonomousAction {
-        PARK_LEFT, PARK_CENTER, PARK_RIGHT, BACKDROP_SCORE, SPIKE_MARK_SCORE, DELAY_1S, DELAY_5S
+        PARK_LEFT, PARK_CENTER, PARK_RIGHT, BACKDROP_SCORE, SPIKE_MARK_SCORE, DELAY_1S, DELAY_5S, PICKUP_FROM_STACK
     }
 
     var teamColor: TeamColor? = null

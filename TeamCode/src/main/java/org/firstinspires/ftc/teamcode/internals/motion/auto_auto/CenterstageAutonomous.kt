@@ -2,12 +2,9 @@ package org.firstinspires.ftc.teamcode.internals.motion.auto_auto
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
-import com.acmerobotics.roadrunner.trajectory.MarkerCallback
 import org.firstinspires.ftc.teamcode.features.ArmClaw
 import org.firstinspires.ftc.teamcode.features.VisionProcessingFeature
 import org.firstinspires.ftc.teamcode.internals.hardware.Devices
-import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter
-import org.firstinspires.ftc.teamcode.internals.hardware.HardwareGetter.Companion.opMode
 import org.firstinspires.ftc.teamcode.internals.image.VisionPipeline.TeamColor
 import org.firstinspires.ftc.teamcode.internals.image.centerstage.SpikeMarkDetectionPipeline
 import org.firstinspires.ftc.teamcode.internals.math.units.deg
@@ -31,6 +28,7 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
     protected val leftPark = Vector2d(60.00, 60.00)
     protected val rightPark = Vector2d(60.00, 12.00)
     protected val middlePark = Vector2d(48.00, 36.00)
+    protected val stack = Vector2d(-52.00, 12.00)
 
     protected val redBackdrop = Vector2d(backdrop.x, -backdrop.y)
     protected val redLeftPark = Vector2d(rightPark.x, -rightPark.y)
@@ -38,6 +36,10 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
     protected val redMiddlePark = Vector2d(middlePark.x, -middlePark.y)
     protected val redSpikeMark = Vector2d(spikeMark2.x, -spikeMark2.y)
     protected val redSpikeMark2 = Vector2d(spikeMark.x, -spikeMark.y)
+    protected val redStack = Vector2d(stack.x, -stack.y)
+
+    protected val LEFT_PIXEL = 1;
+    protected val RIGHT_PIXEL = 2;
 
     protected fun buildSpikeMarkArmMethod(
         builder: TrajectorySequenceBuilder,
@@ -193,7 +195,7 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
         drivetrain: AutonomousDrivetrain,
         endPosition: Vector2d,
         reportGenerator: AutonomousReportGenerator? = null,
-        yellowPixelPosition: Int = 1
+        pixelsToDrop: Int = RIGHT_PIXEL
     ): TrajectorySequenceBuilder {
         var builder1 = builder
         builder1 = builder1.completeTrajectory()
@@ -223,8 +225,8 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
                 }
             }
             .appendAction {
-                if (yellowPixelPosition == 1) armClaw.openRightGrabber()
-                else armClaw.openLeftGrabber()
+                if (pixelsToDrop or RIGHT_PIXEL == RIGHT_PIXEL) armClaw.openRightGrabber()
+                if (pixelsToDrop or LEFT_PIXEL == LEFT_PIXEL) armClaw.openLeftGrabber()
                 waitFor(0.5)
                 val p = drivetrain.poseEstimate
                 val b = drivetrain.trajectorySequenceBuilder(p)
@@ -242,6 +244,41 @@ abstract class CenterstageAutonomous : OperationMode(), AutonomousOperation {
             }
             .appendTrajectory()
         return builder1
+    }
+
+    protected fun buildIntakeFromStack(
+        builder: TrajectorySequenceBuilder,
+        drivetrain: AutonomousDrivetrain,
+        endPosition: Vector2d,
+        reportGenerator: AutonomousReportGenerator? = null,
+        pixelsToCollect: Int = RIGHT_PIXEL,
+    ): TrajectorySequenceBuilder {
+        val collectLeft = pixelsToCollect and LEFT_PIXEL == LEFT_PIXEL
+        val collectRight = pixelsToCollect and RIGHT_PIXEL == RIGHT_PIXEL
+        return builder
+            .completeTrajectory().appendAction {
+                armClaw.blockHumanArmControlForced()
+                armClaw.intakeRunning = true
+                armClaw.intakeHeight = 2
+
+            }.appendTrajectory()
+            .forward(6.0)
+            .lineTo(endPosition)
+            .completeTrajectory()
+            .appendAction {
+                if (collectLeft) {
+                    armClaw.openLeftGrabber()
+                    armClaw.pixelPositionSelector = ArmClaw.SelectorPositions.LEFT
+                } else if (collectRight) {
+                    armClaw.openRightGrabber()
+                    armClaw.pixelPositionSelector = ArmClaw.SelectorPositions.RIGHT
+                }
+            }
+            .appendAction {
+                armClaw.intakeRunning = false
+                armClaw.unblockHumanArmControlForced()
+            }
+            .appendTrajectory()
     }
 
     override fun run() {
