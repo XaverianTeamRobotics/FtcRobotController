@@ -14,10 +14,10 @@ class MecanumDriveScript : Script {
     private val backRightMotor: DcMotor
 
     constructor() {
-        frontLeftMotor = motors[0]
-        backLeftMotor = motors[1]
-        frontRightMotor = motors[2]
-        backRightMotor = motors[3]
+        frontLeftMotor = motors.tryGetNamed("fl", 0)
+        backLeftMotor = motors.tryGetNamed("bl", 1)
+        frontRightMotor = motors.tryGetNamed("fr", 2)
+        backRightMotor = motors.tryGetNamed("br", 3)
     }
 
     constructor(frontLeftMotor: DcMotor, backLeftMotor: DcMotor, frontRightMotor: DcMotor, backRightMotor: DcMotor) {
