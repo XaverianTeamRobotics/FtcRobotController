@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals
+package org.firstinspires.ftc.teamcode.internals.base
 
 abstract class Script {
     val thread: Thread = Thread { run() }

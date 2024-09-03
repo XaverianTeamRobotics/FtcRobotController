@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.internals
+package org.firstinspires.ftc.teamcode.internals.base
 
 import com.qualcomm.robotcore.hardware.*
 import com.qualcomm.robotcore.hardware.HardwareMap.DeviceMapping
@@ -13,9 +13,9 @@ object HardwareManager {
      lateinit var telemetry: Telemetry
           private set
 
-     lateinit var motors: HardwareArray<DcMotor>                      private set
-     lateinit var servos: HardwareArray<Servo>                        private set
-     lateinit var distanceSensor: HardwareArray<DistanceSensor>       private set
+     lateinit var motors: HardwareArray<DcMotor> private set
+     lateinit var servos: HardwareArray<Servo> private set
+     lateinit var distanceSensor: HardwareArray<DistanceSensor> private set
 
      /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -26,11 +26,11 @@ object HardwareManager {
           if (secret != HardwareSecret.secret) {
                throw HardwareSecret.SecretException()
           }
-          this.hardwareMap = hardwareMap
+          HardwareManager.hardwareMap = hardwareMap
           initialized = true
-          this.gamepad1 = gamepad1
-          this.gamepad2 = gamepad2
-          this.telemetry = telemetry
+          HardwareManager.gamepad1 = gamepad1
+          HardwareManager.gamepad2 = gamepad2
+          HardwareManager.telemetry = telemetry
 
           motors = HardwareArray(hardwareMap.dcMotor, "motor")
           servos = HardwareArray(hardwareMap.servo, "servo")

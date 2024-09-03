@@ -1,15 +1,13 @@
-package org.firstinspires.ftc.teamcode.internals
+package org.firstinspires.ftc.teamcode.internals.base
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 
 abstract class BaseOpMode : LinearOpMode() {
-    private val mainThread: Thread = Thread { run() }
-    private val scripts: MutableList<Script> = mutableListOf()
     private val subThreads: List<Thread>
         get() = scripts.map { it.thread }
     private val allThreads: List<Thread>
         get() = listOf(mainThread) + subThreads
-    private var started = false
+    private val mainThread: Thread = Thread { run() }
 
     override fun runOpMode() {
         HardwareManager.init(hardwareMap, gamepad1, gamepad2, telemetry, HardwareSecret.secret)
@@ -33,14 +31,6 @@ abstract class BaseOpMode : LinearOpMode() {
         scripts.forEach { it.onStop() }
     }
 
-    fun addScript(script: Script) {
-        script.init()
-        if (started) {
-            script.thread.start()
-        }
-        scripts.add(script)
-    }
-
     abstract fun construct()
     abstract fun run()
     abstract fun onStop()
@@ -50,5 +40,15 @@ abstract class BaseOpMode : LinearOpMode() {
         const val DEBUG_GROUP_NAME = "Debug"
         const val AUTONOMOUS_GROUP_NAME = "Autonomous"
         const val FULL_GROUP_NAME = "Full"
+
+        @Synchronized fun addScript(script: Script) {
+            script.init()
+            if (started) {
+                script.thread.start()
+            }
+            scripts.add(script)
+        }
+        private val scripts: MutableList<Script> = mutableListOf()
+        private var started = false
     }
 }
