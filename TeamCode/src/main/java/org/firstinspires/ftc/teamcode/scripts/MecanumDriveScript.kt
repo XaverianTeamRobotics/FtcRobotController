@@ -2,28 +2,22 @@ package org.firstinspires.ftc.teamcode.scripts
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.gamepad1
+import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.motors
 import org.firstinspires.ftc.teamcode.internals.base.Script
-import org.firstinspires.ftc.teamcode.internals.dynamicmapping.*
 import kotlin.math.abs
 import kotlin.math.max
 
-@UsesDynamicMapping
 class MecanumDriveScript : Script {
-    @DynamicMappingField(hardwareType = DynamicMappingHardware.MOTOR, default = 0)
     private val frontLeftMotor: DcMotor
-    @DynamicMappingField(hardwareType = DynamicMappingHardware.MOTOR, default = 1)
     private val backLeftMotor: DcMotor
-    @DynamicMappingField(hardwareType = DynamicMappingHardware.MOTOR, default = 2)
     private val frontRightMotor: DcMotor
-    @DynamicMappingField(hardwareType = DynamicMappingHardware.MOTOR, default = 3)
     private val backRightMotor: DcMotor
 
     constructor() {
-        val dynamicMapping = DynamicMappingManager.applyDynamicMapping(this::class)
-        frontLeftMotor = dynamicMapping.frontLeftMotor
-        backLeftMotor = dynamicMapping.backLeftMotor
-        frontRightMotor = dynamicMapping.frontRightMotor
-        backRightMotor = dynamicMapping.backRightMotor
+        frontLeftMotor = motors[0]
+        backLeftMotor = motors[1]
+        frontRightMotor = motors[2]
+        backRightMotor = motors[3]
     }
 
     constructor(frontLeftMotor: DcMotor, backLeftMotor: DcMotor, frontRightMotor: DcMotor, backRightMotor: DcMotor) {
