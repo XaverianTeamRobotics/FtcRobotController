@@ -1,7 +1,10 @@
-import { defineConfig } from 'vitepress'
+import { defineConfigWithTheme } from 'vitepress'
+import type { ThemeConfig } from 'vitepress-carbon'
+import baseConfig from 'vitepress-carbon/config'
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default defineConfigWithTheme<ThemeConfig>({
+  extends: baseConfig,
   title: "Hawk Robotics Documentation",
   description: "Documentation for the Ftc Robot Controller",
   themeConfig: {

@@ -8,7 +8,7 @@ hero:
     - theme: brand
       text: Get Started
       link: /get-started
+features:
+  - title: WIP
+    details: This site is under construction.
 ---
-
-> [!CAUTION]
-> Site Under Construction
