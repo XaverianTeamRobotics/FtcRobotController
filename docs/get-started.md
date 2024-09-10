@@ -5,9 +5,8 @@ slug: get-started
 
 # {{ $frontmatter.title }}
 
-::: warning
-Site Under Construction
-:::
+> [!CAUTION]
+> Site Under Construction
 
 ## About us
 

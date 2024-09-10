@@ -10,6 +10,5 @@ hero:
       link: /get-started
 ---
 
-::: warning
-Site Under Construction
-:::
+> [!CAUTION]
+> Site Under Construction
