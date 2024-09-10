@@ -40,8 +40,8 @@ proguard/
 captures/
 
 # IntelliJ
-*.iml
-.idea/
+#*.iml
+#.idea/
 
 # For Mac users
 .DS_Store
