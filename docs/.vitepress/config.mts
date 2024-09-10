@@ -14,7 +14,9 @@ export default defineConfigWithTheme<ThemeConfig>({
     ],
 
     sidebar: [
-      { text: 'Get Started', link: '/get-started'}
+      { text: 'Get Started', link: '/get-started'},
+      { text: 'OpModes', link: '/opmodes'},
+      { text: 'Hardware', link: '/hardware'},
     ],
 
     socialLinks: [
