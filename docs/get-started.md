@@ -53,7 +53,6 @@ We will touch more in-depth on opmodes and scripts later.
 
 ### Hardware
 
-Hardware is controlled by the `HardwareManager` class. The `HardwareManager` class
-is initialized before the `init()` function is called. The `HardwareManager` class
-contains all the hardware objects that are available to the robot. The available 
-devices should be configured in the Driver Station.
+Hardware is controlled by the `HardwareManager` class. It
+contains all the hardware objects that are available to the robot, which should 
+be configured in the Driver Station.
