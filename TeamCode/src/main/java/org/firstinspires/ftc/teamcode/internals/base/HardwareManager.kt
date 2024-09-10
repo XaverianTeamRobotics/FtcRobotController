@@ -16,6 +16,7 @@ object HardwareManager {
     lateinit var motors: HardwareArray<DcMotor> private set
     lateinit var servos: HardwareArray<Servo> private set
     lateinit var distanceSensor: HardwareArray<DistanceSensor> private set
+    lateinit var touchSwitches: HardwareArray<TouchSensor> private set
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -42,6 +43,12 @@ object HardwareManager {
             mapping.put(sensor.deviceName, sensor)
         }
         distanceSensor = HardwareArray(mapping, "distanceSensor")
+
+        val touchSensorMapping = hardwareMap.DeviceMapping(TouchSensor::class.java)
+        for (sensor in hardwareMap.getAll(TouchSensor::class.java)) {
+            touchSensorMapping.put(sensor.deviceName, sensor)
+        }
+        touchSwitches = HardwareArray(touchSensorMapping, "ts")
     }
 
     class HardwareArray <T : HardwareDevice?> internal constructor(val mapping: DeviceMapping<T>, val namePrefix: String) {
@@ -63,7 +70,7 @@ object HardwareManager {
             throw IllegalArgumentException("No $namePrefix found with name $name")
         }
 
-        fun tryGetNamed(name: String, fallback: Int): T {
+        fun get(name: String, fallback: Int): T {
             return try {
                 get(name)
             } catch (e: IllegalArgumentException) {
