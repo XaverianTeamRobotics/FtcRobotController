@@ -72,17 +72,6 @@ val touchSensor = HardwareManager.touchSwitches[0]
 touchSensor.isPressed
 ```
 
-## Using HardwareArray
-
-The `HardwareArray` class provides methods to access hardware components by their index or name.
-
-### Example
-
-```kotlin
-val motorByName = HardwareManager.motors["motorName"]
-val motorByIndex = HardwareManager.motors[1]
-```
-
 ## Error Handling
 
 If you try to access a hardware component that does not exist, an `IllegalArgumentException` will be thrown. 
