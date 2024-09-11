@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.scripts
 
 import org.firstinspires.ftc.teamcode.internals.base.HardwareManager
 import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.gamepad1
+import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.motors
 import org.firstinspires.ftc.teamcode.internals.base.Script
 
 class LinearSlideScript(id: Int = 0, private val inverted: Boolean = false) : Script() {

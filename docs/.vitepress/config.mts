@@ -20,7 +20,7 @@ export default defineConfigWithTheme<ThemeConfig>({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/XaverianTeamRobotics/FtcRobotController' }
     ]
   }
 })

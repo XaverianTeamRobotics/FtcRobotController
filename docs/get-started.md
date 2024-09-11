@@ -5,9 +5,6 @@ slug: get-started
 
 # {{ $frontmatter.title }}
 
-> [!CAUTION]
-> Site Under Construction
-
 ## About us
 
 Our robot uses code made completely in Kotlin, a fairly new language

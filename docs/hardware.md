@@ -5,9 +5,6 @@ slug: hardware
 
 # {{ $frontmatter.title }}
 
-> [!CAUTION]
-> Site Under Construction
-
 This guide will help you understand how to access and manage hardware components 
 in your robot using the `HardwareManager` class.
 
