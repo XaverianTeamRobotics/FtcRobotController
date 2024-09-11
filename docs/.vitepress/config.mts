@@ -14,13 +14,18 @@ export default defineConfigWithTheme<ThemeConfig>({
     ],
 
     sidebar: [
-      { text: 'Get Started', link: '/get-started'},
+      { text: 'Welcome', link: '/'},
       { text: 'OpModes', link: '/opmodes'},
       { text: 'Hardware', link: '/hardware'},
     ],
 
+    search: {
+      provider: 'local',
+    },
+
     socialLinks: [
       { icon: 'github', link: 'https://github.com/XaverianTeamRobotics/FtcRobotController' }
     ]
-  }
+  },
+  cleanUrls: true
 })
