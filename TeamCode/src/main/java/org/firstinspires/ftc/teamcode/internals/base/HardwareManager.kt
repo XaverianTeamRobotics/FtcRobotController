@@ -21,17 +21,12 @@ object HardwareManager {
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private lateinit var hardwareMap: HardwareMap
-    private var initialized = false
 
     fun init(hardwareMap: HardwareMap, gamepad1: Gamepad, gamepad2: Gamepad, telemetry: Telemetry, secret: String) {
-        if (initialized) {
-            throw IllegalStateException("HardwareManager has already been initialized")
-        }
         if (secret != HardwareSecret.secret) {
             throw HardwareSecret.SecretException()
         }
         HardwareManager.hardwareMap = hardwareMap
-        initialized = true
         HardwareManager.gamepad1 = gamepad1
         HardwareManager.gamepad2 = gamepad2
         HardwareManager.telemetry = telemetry
