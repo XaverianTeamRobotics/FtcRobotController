@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.internals.base
 
 import com.qualcomm.robotcore.hardware.*
 import com.qualcomm.robotcore.hardware.HardwareMap.DeviceMapping
+import com.qualcomm.robotcore.util.RobotLog
 import org.firstinspires.ftc.robotcore.external.Telemetry
 
 object HardwareManager {
@@ -39,11 +40,7 @@ object HardwareManager {
         }
         distanceSensor = HardwareArray(mapping, "distanceSensor")
 
-        val touchSensorMapping = hardwareMap.DeviceMapping(TouchSensor::class.java)
-        for (sensor in hardwareMap.getAll(TouchSensor::class.java)) {
-            touchSensorMapping.put(sensor.deviceName, sensor)
-        }
-        touchSwitches = HardwareArray(touchSensorMapping, "ts")
+        touchSwitches = HardwareArray(hardwareMap.touchSensor, "ts")
     }
 
     class HardwareArray <T : HardwareDevice?> internal constructor(val mapping: DeviceMapping<T>, val namePrefix: String) {
@@ -53,6 +50,9 @@ object HardwareManager {
                     return set.value
                 }
             }
+            try {
+                return hardwareMap.get("$namePrefix$number") as T
+            } catch (_: Exception) {}
             throw IllegalArgumentException("No $namePrefix found with number $number")
         }
 
@@ -69,6 +69,7 @@ object HardwareManager {
             return try {
                 get(name)
             } catch (e: IllegalArgumentException) {
+                RobotLog.w("No $namePrefix found with $name, trying fallback $fallback")
                 get(fallback)
             }
         }
