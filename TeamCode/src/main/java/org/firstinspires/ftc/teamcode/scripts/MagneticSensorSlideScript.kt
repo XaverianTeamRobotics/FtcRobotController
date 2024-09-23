@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.scripts
 
-import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.internals.base.HardwareManager
 import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.gamepad1
 import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.telemetry

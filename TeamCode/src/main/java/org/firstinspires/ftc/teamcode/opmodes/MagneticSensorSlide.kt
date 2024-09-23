@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.internals.base.HardwareManager
 import org.firstinspires.ftc.teamcode.scripts.LinearSlideScript
 import org.firstinspires.ftc.teamcode.scripts.MagneticSensorSlideScript
 
-@TeleOp(name = "MagneticSensorSlide", group = BaseOpMode.DEBUG_GROUP_NAME)
+@TeleOp(name = "Magnetic Sensor Slide", group = BaseOpMode.DEBUG_GROUP_NAME)
 class MagneticSensorSlide: BaseOpMode() {
     override fun construct() {
         addScript(MagneticSensorSlideScript())
