@@ -3,7 +3,7 @@ title: Using Hardware
 slug: hardware
 ---
 
-# {{ $frontmatter.title }}
+# Hardware
 
 This guide will help you understand how to access and manage hardware components 
 in your robot using the `HardwareManager` class.

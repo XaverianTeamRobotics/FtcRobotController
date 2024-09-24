@@ -2,7 +2,7 @@
 title: Welcome
 ---
 
-# {{ $frontmatter.title }}
+# Welcome
 
 ## About us
 

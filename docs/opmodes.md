@@ -3,7 +3,7 @@ title: OpModes
 slug: opmodes
 ---
 
-# {{ $frontmatter.title }}
+# OpModes
 
 OpModes in the context of the provided project are classes that control the robot's behavior. 
 They are part of the robot control system and are used to define the actions the robot should perform during different phases of operation. 

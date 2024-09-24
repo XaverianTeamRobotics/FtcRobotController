@@ -1,8 +1,9 @@
 ---
 title: Servos
+slug: servos
 ---
 
-# {{ $frontmatter.title }}
+# Servos
 
 Servos are a type of motor that, unlike motors, can be controlled to move to a specific position. The servos used for 
 robotics are called "dual-mode" servos. These have the ability to rotate continuously like a motor, or move to a specific
