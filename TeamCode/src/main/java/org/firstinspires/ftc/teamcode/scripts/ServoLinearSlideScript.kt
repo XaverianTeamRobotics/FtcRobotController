@@ -14,7 +14,7 @@ class ServoLinearSlideScript(id: Int = 0, private val inverted: Boolean = false,
 
     override fun run() {
         while (true) {
-            servo.position = (if (inverted) -1 else 1) * ((input()/2) + 0.5)
+            servo.position = ((((if (inverted) -1 else 1) * input())/2) + 0.5)
         }
     }
 
