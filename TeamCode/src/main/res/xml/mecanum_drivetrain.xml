@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<!--
+
+ADDING HARDWARE DEVICES
+1. If you've done that, now add an entry for the hardware device here using VALID FTC ROBOT CONFIGURATION SYNTAX. If you don't know how to write that, follow these steps:
+    - On the DS, make a robot configuration with the device you'd like to add to this configuration
+    - Activate the configuration on the DS
+    - After the RC restarts, connect your computer to the robot and open the Device File Explorer in your IDE and view the RC's files
+    - Navigate to the FIRST folder (for some reason, the RC has an internal SD card and this is where the FIRST folder is stored, so you'll find the FIRST folder in the SD card folder)
+    - Find the configuration XML file for the config you just made on the DS, it will be in the FIRST folder as long as you activated it
+    - Open it and copy the XML tag(s) for your device into the right spot in this file
+    - Then disconnect your computer from the robot and delete the config you made on the DS
+2. After building and installing this app onto the RC, make sure you choose the "Production" configuration.
+3. Your hardware device will now be accessible via Devices.nameOfYourHardware, and it will be automatically
+initialized before your opmode's construct() method executes.
+
+NOTE
+If you want to, you can learn the config syntax by digging through the SDK. Explode org.firstinspires.ftc:Hardware@aar. Inside com.qualcomm.hardware you'll find a bunch of packages containing classes/interfaces of all the internal low-level hardware devices. These classes can help you determine the tag signature you need to follow.
+
+-->
+<Robot type="FirstInspires-FTC" name="Basic Mecanum Drivetrain">
+    <LynxUsbDevice name="Control Hub Portal" serialNumber="(embedded)" parentModuleAddress="173">
+        <LynxModule name="Control Hub" port="173">
+            <goBILDA5202SeriesMotor name="motor0-fl" port="0" />
+            <goBILDA5202SeriesMotor name="motor1-bl" port="1" />
+            <goBILDA5202SeriesMotor name="motor2-fr" port="2" />
+            <goBILDA5202SeriesMotor name="motor3-br" port="3" />
+        </LynxModule>
+    </LynxUsbDevice>
+</Robot>

@@ -40,8 +40,8 @@ proguard/
 captures/
 
 # IntelliJ
-*.iml
-.idea/
+#*.iml
+#.idea/
 
 # For Mac users
 .DS_Store
@@ -79,3 +79,7 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+# docs
+docs/.vitepress/cache
+docs/package-lock.json
