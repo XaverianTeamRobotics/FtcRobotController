@@ -45,6 +45,10 @@ gamepad2.right_trigger // Float value for the right trigger
 
 ## Common Programming Techniques
 
+> [!TIP]
+> Whenever you use a hardware device, it slightly slows down other processes. It is important to only
+> use the hardware when necessary. These techniques will help with this.
+
 ### Storing the Previous State
 
 A common programming technique is to store the previous state of the gamepad and compare it to the
@@ -103,6 +107,70 @@ if (gamepad1.left_stick_x != previousState.left_stick_x) {
 }
 ```
 
-> [!TIP]
-> Whenever you use a hardware device, it slightly slows down other processes. It is important to only
-> use the hardware when necessary.
+### Toggles
+
+A toggle is a button which makes an action occur until it is pressed again. This uses a boolean variable to
+keep track of the state of the toggle and changes it when the button is pressed. It uses a rising edge detector
+to only change the state when the button is pressed, not when it is held.
+
+```kotlin
+var toggleState = false // This must go outside the while loop
+// ...
+if (gamepad1.a && !previousState.a) {
+    toggleState = !toggleState // Change the toggleState variable to the opposite of what it was
+    
+    if (toggleState) {
+        // The toggle is true
+    } else {
+        // The toggle is false
+    }
+}
+```
+
+## Gamepad Feedback
+
+> [!WARNING]
+> Gamepad feedback is not available on all gamepads. The Logitech F310 gamepad does not have any feedback,
+> while the Xbox 360 gamepad has vibration feedback and not LED feedback.
+
+Gamepads have two ways of providing feedback: vibration and LED lights.
+
+### Vibration Feedback
+
+Simple vibration feedback is a simple on/off vibration. It can be used to provide feedback to the driver
+when a certain action is performed. It is used with the `rumble()` function of the gamepad. It takes in
+one argument, the duration of the vibration in milliseconds.
+
+```kotlin
+gamepad1.rumble(1000) // Vibrate for 1 second
+```
+
+There is also the `rumbleBlips()` function which takes in one argument: the number of blips. A blip is a
+short vibration. The function will vibrate for the duration of the blip, then pause for the same duration,
+and repeat for the number of blips specified.
+
+```kotlin
+gamepad1.rumbleBlips(3) // Vibrate 3 times
+```
+
+### LED Feedback
+
+The LED on the gamepad is controlled by the `setLedColor()` function. It takes in four arguments:
+the red component, the green component, the blue component, and the duration in milliseconds. The
+color components are between `0.0` and `1.0`.
+
+```kotlin
+gamepad1.setLedColor(1.0, 0.0, 0.0, 1000) // Set the LED to red for 1 second
+```
+
+If you want the LED to stay on indefinitely, you can set the duration to a special constant.
+
+```kotlin
+gamepad1.setLedColor(0.0, 1.0, 0.0, Gamepad.LED_DURATION_CONTINUOUS) // Set the LED to green indefinitely
+```
+
+> [!WARNING]
+> The Driver Station uses LEDs to specify which gamepad is `gamepad1` and which is `gamepad2`. A green
+> LED indicates no assignment, blue indicates `gamepad1`, and red indicates `gamepad2`. If your code
+> sets the LED to any of those colors, it may confuse the user into thinking the gamepad is not connected
+> properly. For that reason, avoid manually setting the LED to red, green, or blue.
