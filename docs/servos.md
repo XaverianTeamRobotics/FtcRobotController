@@ -5,6 +5,8 @@ slug: servos
 
 # Servos
 
+_[Some information taken from REV Robotics Documentation](https://docs.revrobotics.com/rev-crossover-products/servo/srs-programmer/switching-operating-modes)_
+
 Servos are a type of motor that, unlike motors, can be controlled to move to a specific position. The servos used for 
 robotics are called "dual-mode" servos. These have the ability to rotate continuously like a motor, or move to a specific
 angle like a servo. Unlike motors, they accept an input signal between 0 and 1, where 0 is the minimum position and 1 is the

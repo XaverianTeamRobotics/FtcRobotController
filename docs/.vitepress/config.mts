@@ -18,6 +18,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       { text: 'OpModes', link: '/opmodes'},
       { text: 'Hardware', link: '/hardware'},
       { text: 'Servos', link: '/servos'},
+      { text: 'Handling Input', link: '/input'},
     ],
 
     search: {
