@@ -174,3 +174,45 @@ gamepad1.setLedColor(0.0, 1.0, 0.0, Gamepad.LED_DURATION_CONTINUOUS) // Set the 
 > LED indicates no assignment, blue indicates `gamepad1`, and red indicates `gamepad2`. If your code
 > sets the LED to any of those colors, it may confuse the user into thinking the gamepad is not connected
 > properly. For that reason, avoid manually setting the LED to red, green, or blue.
+
+## Allow Gamepad Remapping
+
+Sometimes, you want a script to be reusable. To make a script is reusable as possible, you want
+to allow the script to be able to change the gamepad input it takes. This can be done by defining a
+function which gives the gamepad input as a return value.
+
+Kotlin allows us to use functions as variables. This means we can pass a function as an argument to
+the constructor of a script. First, we need to allow the script to take a function as an argument.
+
+```kotlin
+ class MyScript(private val gamepadInput: () -> Boolean) : Script() {
+    // ...
+}
+```
+
+This makes a script which takes a function which returns a boolean value. This function can be called
+whenever we need the gamepad input. An example of such a function would be
+    
+```kotlin
+val gamepadInput = { gamepad1.a }
+```
+
+Then, to get the value of the button, we can just call the function.
+
+```kotlin
+gamepadInput()
+```
+
+Say we are designing a script and we want to allow the user to change the button which activates something,
+but we also want to provide a default value. We can do this by providing a default value to the constructor
+of the script.
+
+```kotlin
+class MyScript(private val gamepadInput: () -> Boolean = { gamepad1.a }) : Script() {
+    // ...
+}
+```
+
+> [!TIP]
+> If you want to see more information regarding this topic, you can check out any of the
+> other scripts and use those as examples.
