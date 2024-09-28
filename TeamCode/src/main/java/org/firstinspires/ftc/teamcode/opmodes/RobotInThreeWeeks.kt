@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.scripts.MecanumDriveScript
 import org.firstinspires.ftc.teamcode.scripts.ContinuousServoScript
 
 @TeleOp(name="RobotInThreeWeeks", group = BaseOpMode.FULL_GROUP_NAME)
-class RobotinThreeWeeks: BaseOpMode() {
+class RobotInThreeWeeks: BaseOpMode() {
     override fun construct() {
         addScript(MecanumDriveScript())
         addScript(ContinuousServoScript(inverted = true)) // Slide
