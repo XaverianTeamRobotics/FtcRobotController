@@ -31,7 +31,7 @@ class MecanumDriveScript : Script {
 
     override fun run() {
         while (true) {
-            val y = gamepad1.left_stick_y.toDouble()
+            val y = -gamepad1.left_stick_y.toDouble()
             val x = gamepad1.left_stick_x.toDouble() * 1.1
             val rx = gamepad1.right_stick_x.toDouble()
 
