@@ -37,10 +37,10 @@ class ContinuousMotorScript(id: Int = 0, private val inverted: Boolean = false,
             }
         }
 
-        fun twoButtonInbut(pos: () -> Boolean, neg: () -> Boolean): () -> Double {
+        fun twoButtonInbut(pos: () -> Boolean, neg: () -> Boolean, pow: Double = 1.0): () -> Double {
             return {
-                if (pos()) 1.0
-                else if (neg()) -1.0
+                if (pos()) pow
+                else if (neg()) -pow
                 else 0.0
             }
         }
