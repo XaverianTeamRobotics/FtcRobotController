@@ -10,15 +10,15 @@ import org.firstinspires.ftc.teamcode.scripts.ContinuousServoScript
 class RobotinThreeWeeks: BaseOpMode() {
     override fun construct() {
         addScript(MecanumDriveScript())
-        addScript(ContinuousServoScript(inverted = true))
+        addScript(ContinuousServoScript(inverted = true)) // Slide
         addScript(ContinuousServoScript(id = 1, input = ContinuousMotorScript.threeWayInput(
-            {gamepad1.y}, {gamepad1.a}, {gamepad1.b}
+            {gamepad1.y}, {gamepad1.a}, {gamepad1.b} // Intake
         )))
         addScript(ContinuousMotorScript(id = 2, input = ContinuousMotorScript.twoButtonInbut(
-            {gamepad1.right_bumper}, {gamepad1.left_bumper}
+            {gamepad1.right_bumper}, {gamepad1.left_bumper} // Lifters
         )))
         addScript(ContinuousMotorScript(id = 3, input = ContinuousMotorScript.twoButtonInbut(
-            {gamepad1.dpad_down}, {gamepad1.dpad_up}, pow = 0.5
+            {gamepad1.dpad_down}, {gamepad1.dpad_up}, pow = 0.5 // Tilting
         )))
     }
 
