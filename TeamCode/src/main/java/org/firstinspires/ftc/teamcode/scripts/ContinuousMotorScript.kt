@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.scripts
 
+import com.qualcomm.robotcore.util.RobotLog
 import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.gamepad1
 import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.motors
 import org.firstinspires.ftc.teamcode.internals.base.Script
 
-class ContinuousMotorScript(id: Int = 0, private val inverted: Boolean = false,
+class ContinuousMotorScript(private val id: Int = 0, private val inverted: Boolean = false,
                             private val input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }) : Script() {
     private val motor = motors.get("cm$id", 0)
 
@@ -13,8 +14,14 @@ class ContinuousMotorScript(id: Int = 0, private val inverted: Boolean = false,
     }
 
     override fun run() {
+        var prev: Double = 0.0
         while (true) {
-            motor.power = (if (inverted) -1.0 else 1.0) * input()
+            val i = (if (inverted) -1.0 else 1.0) * input()
+            if (i != prev) {
+                motor.power = i
+                RobotLog.v("CMS${id}: Set power to ${i}")
+            }
+            prev = i
         }
     }
 

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.scripts.ContinuousServoScript
 @TeleOp(name="RobotInThreeWeeks", group = BaseOpMode.FULL_GROUP_NAME)
 class RobotInThreeWeeks: BaseOpMode() {
     override fun construct() {
-        addScript(MecanumDriveScript())
+        addScript(MecanumDriveScript(powerScale = 0.8))
         addScript(ContinuousServoScript(inverted = true)) // Slide
         addScript(ContinuousServoScript(id = 1, input = ContinuousMotorScript.threeWayInput(
             {gamepad1.y}, {gamepad1.a}, {gamepad1.b} // Intake
