@@ -99,6 +99,17 @@ In this example:
 - The `run()` method would contain the main loop code.
 - The `onStop()` method would contain any cleanup code needed when the OpMode stops.
 
+## Uplooading OpModes
+
+To upload OpModes to the robot controller, you need to connect the robot controller
+to your computer via USB and press the play button in Android Studio. This will compile
+the code and upload it to the robot controller. Once the code is uploaded, you can select
+the OpMode on the Driver Station and run it on the robot.
+
+> [!NOTE]
+> You will need either a USB-C to USB-C or USB-A to USB-C cable to connect the robot controller to your computer.
+> If you connect the USB-A end to the robot controller, it will not show up in Android Studio.
+
 # How OpModes Work Internally
 
 The multithreaded model of OpModes in the provided project allows for concurrent execution of the main 
