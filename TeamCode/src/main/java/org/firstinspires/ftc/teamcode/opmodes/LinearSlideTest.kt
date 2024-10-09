@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.scripts.LinearSlideScript
 @TeleOp(name = "Linear Slide Test", group = BaseOpMode.DEBUG_GROUP_NAME)
 class LinearSlideTest : BaseOpMode() {
     override fun construct() {
-        addScript(LinearSlideScript())
+        addScript(LinearSlideScript(positiveDirection = { game}))
     }
 
     override fun run() {
