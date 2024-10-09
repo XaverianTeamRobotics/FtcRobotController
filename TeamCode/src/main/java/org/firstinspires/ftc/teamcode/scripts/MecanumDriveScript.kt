@@ -19,7 +19,7 @@ class MecanumDriveScript(private val powerScale: Double = 1.0, private val rotSc
         while (true) {
             val y = -gamepad1.left_stick_y.toDouble() * powerScale
             val x = gamepad1.left_stick_x.toDouble() * 1.1 * powerScale
-            val rx = gamepad1.right_stick_x.toDouble() * powerScale * rotScale
+            val rx = -gamepad1.right_stick_x.toDouble() * powerScale * rotScale
 
             val denominator = max(abs(y) + abs(x) + abs(rx), 1.0)
             val frontLeftPower = (y + x + rx) / denominator

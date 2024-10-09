@@ -83,3 +83,5 @@ lint/tmp/
 # docs
 docs/.vitepress/cache
 docs/package-lock.json
+/docs/node_modules/
+/docs/node_modules/
