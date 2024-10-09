@@ -3,7 +3,7 @@ title: OpModes
 slug: opmodes
 ---
 
-# {{ $frontmatter.title }}
+# OpModes
 
 OpModes in the context of the provided project are classes that control the robot's behavior. 
 They are part of the robot control system and are used to define the actions the robot should perform during different phases of operation. 
@@ -98,6 +98,17 @@ In this example:
 - The `construct()` method adds a `MecanumDriveScript` to the OpMode.
 - The `run()` method would contain the main loop code.
 - The `onStop()` method would contain any cleanup code needed when the OpMode stops.
+
+## Uplooading OpModes
+
+To upload OpModes to the robot controller, you need to connect the robot controller
+to your computer via USB and press the play button in Android Studio. This will compile
+the code and upload it to the robot controller. Once the code is uploaded, you can select
+the OpMode on the Driver Station and run it on the robot.
+
+> [!NOTE]
+> You will need either a USB-C to USB-C or USB-A to USB-C cable to connect the robot controller to your computer.
+> If you connect the USB-A end to the robot controller, it will not show up in Android Studio.
 
 # How OpModes Work Internally
 

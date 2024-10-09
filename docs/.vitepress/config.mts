@@ -17,6 +17,8 @@ export default defineConfigWithTheme<ThemeConfig>({
       { text: 'Welcome', link: '/'},
       { text: 'OpModes', link: '/opmodes'},
       { text: 'Hardware', link: '/hardware'},
+      { text: 'Servos', link: '/servos'},
+      { text: 'Handling Input', link: '/input'},
     ],
 
     search: {
@@ -27,5 +29,8 @@ export default defineConfigWithTheme<ThemeConfig>({
       { icon: 'github', link: 'https://github.com/XaverianTeamRobotics/FtcRobotController' }
     ]
   },
-  cleanUrls: true
+  cleanUrls: true,
+  markdown: {
+    math: true
+  }
 })
