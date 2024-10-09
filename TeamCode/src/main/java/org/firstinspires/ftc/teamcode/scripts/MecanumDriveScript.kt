@@ -8,31 +8,15 @@ import org.firstinspires.ftc.teamcode.internals.base.Script
 import kotlin.math.abs
 import kotlin.math.max
 
-class MecanumDriveScript : Script {
-    private val frontLeftMotor: DcMotor
-    private val backLeftMotor: DcMotor
-    private val frontRightMotor: DcMotor
-    private val backRightMotor: DcMotor
-    private val hasBevelGears: Boolean
-    private val powerScale: Double
-
-    constructor(hasBevelGears: Boolean = true, powerScale: Double = 1.0) {
-        frontLeftMotor = motors.get("fl", 0)
-        backLeftMotor = motors.get("bl", 1)
-        frontRightMotor = motors.get("fr", 2)
-        backRightMotor = motors.get("br", 3)
-        this.hasBevelGears = hasBevelGears
-        this.powerScale = powerScale
-    }
-
-    constructor(frontLeftMotor: DcMotor, backLeftMotor: DcMotor, frontRightMotor: DcMotor, backRightMotor: DcMotor, hasBevelGears: Boolean, powerScale: Double) {
-        this.frontLeftMotor = frontLeftMotor
-        this.backLeftMotor = backLeftMotor
-        this.frontRightMotor = frontRightMotor
-        this.backRightMotor = backRightMotor
-        this.hasBevelGears = hasBevelGears
-        this.powerScale = powerScale
-    }
+class MecanumDriveScript(
+    private val hasBevelGears: Boolean = true,
+    private val powerScale: Double = 1.0,
+    private val rotScale: Double = 1.0
+) : Script() {
+    private val frontLeftMotor: DcMotor = motors.get("fl", 0)
+    private val backLeftMotor: DcMotor = motors.get("bl", 1)
+    private val frontRightMotor: DcMotor = motors.get("fr", 2)
+    private val backRightMotor: DcMotor = motors.get("br", 3)
 
     override fun init() {}
 
@@ -42,7 +26,7 @@ class MecanumDriveScript : Script {
 
             val y = -gamepad1.left_stick_y.toDouble()
             val x = gamepad1.left_stick_x.toDouble() * 1.1
-            val rx = gamepad1.right_stick_x.toDouble()
+            val rx = gamepad1.right_stick_x.toDouble() * rotScale
 
             val denominator = max(abs(y) + abs(x) + abs(rx), 1.0)
             var frontLeftPower = (y + x + rx) / denominator
