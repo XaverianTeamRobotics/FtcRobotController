@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.internals.base
 
+import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.hardware.*
 import com.qualcomm.robotcore.hardware.HardwareMap.DeviceMapping
 import com.qualcomm.robotcore.util.RobotLog
@@ -18,6 +19,8 @@ object HardwareManager {
     lateinit var servos: HardwareArray<Servo> private set
     lateinit var distanceSensor: HardwareArray<DistanceSensor> private set
     lateinit var touchSwitches: HardwareArray<TouchSensor> private set
+    var limelight3A: Limelight3A? = null
+        private set
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -41,6 +44,10 @@ object HardwareManager {
         distanceSensor = HardwareArray(mapping, "distanceSensor")
 
         touchSwitches = HardwareArray(hardwareMap.touchSensor, "ts")
+
+        try {
+            limelight3A = hardwareMap.get(Limelight3A::class.java, "limelight")
+        } catch (_: Exception) {}
     }
 
     class HardwareArray <T : HardwareDevice?> internal constructor(val mapping: DeviceMapping<T>, val namePrefix: String) {
