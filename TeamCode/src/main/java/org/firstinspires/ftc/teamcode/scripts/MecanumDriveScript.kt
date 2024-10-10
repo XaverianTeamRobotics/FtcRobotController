@@ -8,6 +8,13 @@ import org.firstinspires.ftc.teamcode.internals.base.Script
 import kotlin.math.abs
 import kotlin.math.max
 
+/**
+ * Script for controlling a mecanum drive robot.
+ *
+ * @property hasBevelGears Boolean indicating if the robot has bevel gears.
+ * @property powerScale Double value to scale the motor power.
+ * @property rotScale Double value to scale the rotation.
+ */
 class MecanumDriveScript(
     private val hasBevelGears: Boolean = true,
     private val powerScale: Double = 1.0,

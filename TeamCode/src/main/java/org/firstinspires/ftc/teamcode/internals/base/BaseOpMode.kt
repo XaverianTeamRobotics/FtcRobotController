@@ -2,13 +2,32 @@ package org.firstinspires.ftc.teamcode.internals.base
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 
+/**
+ * Abstract base class for all operation modes.
+ * Extends LinearOpMode to provide a linear flow of execution.
+ * Must be annotated with `@TeleOp` or `@Autonomous` to appear on the driver station.
+ */
 abstract class BaseOpMode : LinearOpMode() {
+    /**
+     * List of sub-threads for each script.
+     */
     private val subThreads: List<Thread>
         get() = scripts.map { it.thread }
+
+    /**
+     * List of all threads including the main thread and sub-threads.
+     */
     private val allThreads: List<Thread>
         get() = listOf(mainThread) + subThreads
+
+    /**
+     * Main thread that runs the operation mode.
+     */
     private val mainThread: Thread = Thread { run() }
 
+    /**
+     * Runs the operation mode. Initializes hardware, starts threads, and manages script execution.
+     */
     override fun runOpMode() {
         HardwareManager.init(hardwareMap, gamepad1, gamepad2, telemetry, HardwareSecret.secret)
         construct()
@@ -31,8 +50,20 @@ abstract class BaseOpMode : LinearOpMode() {
         scripts.forEach { it.onStop() }
     }
 
+    /**
+     * Constructs the operation mode. To be implemented by subclasses.
+     */
     abstract fun construct()
+
+    /**
+     * Main logic for the operation mode. To be implemented by subclasses.
+     * Runs only once.
+     */
     abstract fun run()
+
+    /**
+     * Called when the operation mode is stopped. To be implemented by subclasses.
+     */
     abstract fun onStop()
 
     companion object {
@@ -41,6 +72,11 @@ abstract class BaseOpMode : LinearOpMode() {
         const val AUTONOMOUS_GROUP_NAME = "Autonomous"
         const val FULL_GROUP_NAME = "Full"
 
+        /**
+         * Adds a script to the list of scripts and starts it if the operation mode has started.
+         *
+         * @param script The script to add.
+         */
         @Synchronized fun addScript(script: Script) {
             script.init()
             if (started) {
@@ -48,7 +84,15 @@ abstract class BaseOpMode : LinearOpMode() {
             }
             scripts.add(script)
         }
+
+        /**
+         * List of scripts to be executed.
+         */
         private val scripts: MutableList<Script> = mutableListOf()
+
+        /**
+         * Boolean indicating if the operation mode has started.
+         */
         private var started = false
     }
 }

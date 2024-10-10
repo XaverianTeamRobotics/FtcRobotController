@@ -14,10 +14,10 @@ class RobotInThreeWeeks: BaseOpMode() {
         addScript(ContinuousServoScript(id = 1, input = ContinuousMotorScript.threeWayInput(
             {gamepad1.y}, {gamepad1.a}, {gamepad1.b} // Intake
         )))
-        addScript(ContinuousMotorScript(id = 2, input = ContinuousMotorScript.twoButtonInbut(
+        addScript(ContinuousMotorScript(id = 2, input = ContinuousMotorScript.twoButtonInput(
             {gamepad1.right_bumper}, {gamepad1.left_bumper} // Lifters
         )))
-        addScript(ContinuousMotorScript(id = 3, input = ContinuousMotorScript.twoButtonInbut(
+        addScript(ContinuousMotorScript(id = 3, input = ContinuousMotorScript.twoButtonInput(
             {gamepad1.dpad_down}, {gamepad1.dpad_up}, pow = 0.5 // Tilting
         )))
     }
