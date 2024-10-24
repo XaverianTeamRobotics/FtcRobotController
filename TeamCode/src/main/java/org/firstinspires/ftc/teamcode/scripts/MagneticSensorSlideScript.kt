@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.scripts
 
-import org.firstinspires.ftc.teamcode.internals.base.HardwareManager
-import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.gamepad1
-import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.telemetry
-import org.firstinspires.ftc.teamcode.internals.base.Script
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.gamepad1
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.telemetry
+import org.firstinspires.ftc.teamcode.internals.templates.Script
 import kotlin.system.exitProcess
 
 /**

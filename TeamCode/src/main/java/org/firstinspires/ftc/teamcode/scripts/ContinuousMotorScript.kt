@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.scripts
 
 import com.qualcomm.robotcore.util.RobotLog
-import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.gamepad1
-import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.motors
-import org.firstinspires.ftc.teamcode.internals.base.Script
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.gamepad1
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.motors
+import org.firstinspires.ftc.teamcode.internals.templates.Script
 
 /**
  * Script for continuously controlling a motor based on gamepad input.

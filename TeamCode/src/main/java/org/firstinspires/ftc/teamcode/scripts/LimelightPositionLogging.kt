@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.scripts
 
-import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.limelight3A
-import org.firstinspires.ftc.teamcode.internals.base.HardwareManager.telemetry
-import org.firstinspires.ftc.teamcode.internals.base.Script
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.limelight3A
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.telemetry
+import org.firstinspires.ftc.teamcode.internals.templates.Script
 
 /**
  * Script for logging the position data from the Limelight 3A vision sensor.
