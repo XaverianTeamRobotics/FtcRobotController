@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="TeamCode" pattern="(test[FtcRobotController.TeamCode*]:*..*||[FtcRobotController.TeamCode.main]:org.firstinspires.ftc.teamcode..*)&amp;&amp;![FtcRobotController.TeamCode.androidTest]:org.firstinspires.ftc.teamcode.test.BuildConfig&amp;&amp;![FtcRobotController.TeamCode.androidTest]:org.firstinspires.ftc.teamcode.test.*" />
+</component>
