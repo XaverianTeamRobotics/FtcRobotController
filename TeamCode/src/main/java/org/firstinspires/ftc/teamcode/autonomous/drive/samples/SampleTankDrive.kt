@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.drive
+package org.firstinspires.ftc.teamcode.autonomous.drive.samples
 
 import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.control.PIDCoefficients
@@ -24,7 +24,7 @@ import com.qualcomm.robotcore.hardware.IMU
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
 import com.qualcomm.robotcore.hardware.VoltageSensor
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
-import org.firstinspires.ftc.teamcode.autonomous.drive.StandardTrackingWheelLocalizer.Companion.encoderTicksToInches
+import org.firstinspires.ftc.teamcode.autonomous.localizers.StandardTrackingWheelLocalizer.Companion.encoderTicksToInches
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceBuilder
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceRunner
@@ -122,8 +122,8 @@ class SampleTankDrive(hardwareMap: HardwareMap) : TankDrive(kV, kA, kStatic, TRA
         return TrajectoryBuilder(
             startPose,
             reversed,
-            SampleTankDrive.Companion.VEL_CONSTRAINT,
-            SampleTankDrive.Companion.accelConstraint
+            VEL_CONSTRAINT,
+            accelConstraint
         )
     }
 
@@ -131,15 +131,15 @@ class SampleTankDrive(hardwareMap: HardwareMap) : TankDrive(kV, kA, kStatic, TRA
         return TrajectoryBuilder(
             startPose,
             startHeading,
-            SampleTankDrive.Companion.VEL_CONSTRAINT,
-            SampleTankDrive.Companion.accelConstraint
+            VEL_CONSTRAINT,
+            accelConstraint
         )
     }
 
     fun trajectorySequenceBuilder(startPose: Pose2d?): TrajectorySequenceBuilder {
         return TrajectorySequenceBuilder(
             startPose,
-            SampleTankDrive.Companion.VEL_CONSTRAINT, SampleTankDrive.Companion.accelConstraint,
+            VEL_CONSTRAINT, accelConstraint,
             MAX_ANG_VEL, MAX_ANG_ACCEL
         )
     }

@@ -73,5 +73,5 @@ public class OdometrySettingsDashboardConfiguration {
     public static double VX_WEIGHT = OdometrySettingStore.getDouble("VX_WEIGHT");
     public static double VY_WEIGHT = OdometrySettingStore.getDouble("VY_WEIGHT");
     public static double OMEGA_WEIGHT = OdometrySettingStore.getDouble("OMEGA_WEIGHT");
-
+    public static double LIMELIGHT_MT_PIPELINE_ID = OdometrySettingStore.getDouble("LIMELIGHT_MT_PIPELINE_ID");
 }

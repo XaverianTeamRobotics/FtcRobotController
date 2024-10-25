@@ -197,4 +197,8 @@ public class OdometrySettings {
      */
     public static double OMEGA_WEIGHT = 1;
 
+    /**
+     * The pipeline ID for the limelight MegaTag pipeline (usually 3)
+     */
+    public static double LIMELIGHT_MT_PIPELINE_ID = 3;
 }

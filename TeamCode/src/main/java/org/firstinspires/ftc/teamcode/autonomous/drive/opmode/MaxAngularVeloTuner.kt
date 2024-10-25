@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.Telemetry
-import org.firstinspires.ftc.teamcode.autonomous.drive.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDrive
 import java.util.Objects
 import kotlin.math.max
 

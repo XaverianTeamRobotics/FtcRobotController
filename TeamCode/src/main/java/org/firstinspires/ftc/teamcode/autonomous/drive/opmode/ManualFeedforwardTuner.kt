@@ -11,9 +11,8 @@ import com.acmerobotics.roadrunner.profile.MotionState
 import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.util.RobotLog
 import org.firstinspires.ftc.robotcore.external.Telemetry
-import org.firstinspires.ftc.teamcode.autonomous.drive.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_ACCEL
 import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_VEL
 import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.kA

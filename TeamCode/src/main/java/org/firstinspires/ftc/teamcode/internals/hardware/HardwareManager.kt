@@ -70,6 +70,12 @@ object HardwareManager {
         private set
 
     /**
+     * IMU sensor. (defined by "imu" in the configuration, doesnt have to be built-in imu)
+     */
+    lateinit var imu: IMU
+        private set
+
+    /**
      * Initializes the hardware manager with the provided hardware map, gamepads, telemetry, and secret.
      *
      * @param hardwareMap The hardware map to use.
@@ -100,6 +106,10 @@ object HardwareManager {
 
         try {
             limelight3A = hardwareMap.get(Limelight3A::class.java, "limelight")
+        } catch (_: Exception) {}
+
+        try {
+            imu = hardwareMap.get(IMU::class.java, "imu")
         } catch (_: Exception) {}
     }
 

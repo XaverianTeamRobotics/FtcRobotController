@@ -4,7 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
-import org.firstinspires.ftc.teamcode.autonomous.drive.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDrive
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -23,7 +23,7 @@ class LocalizationTest : LinearOpMode() {
 
         waitForStart()
 
-        while (!isStopRequested()) {
+        while (!isStopRequested) {
             drive.setWeightedDrivePower(
                 Pose2d(
                     -gamepad1.left_stick_y.toDouble(),

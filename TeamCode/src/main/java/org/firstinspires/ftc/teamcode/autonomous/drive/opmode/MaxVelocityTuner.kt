@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.VoltageSensor
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.Telemetry
-import org.firstinspires.ftc.teamcode.autonomous.drive.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings
 import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.GEAR_RATIO
 import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.WHEEL_RADIUS

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.drive
+package org.firstinspires.ftc.teamcode.autonomous.drive.samples
 
 import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.control.PIDCoefficients
@@ -24,7 +24,7 @@ import com.qualcomm.robotcore.hardware.IMU
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
 import com.qualcomm.robotcore.hardware.VoltageSensor
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
-import org.firstinspires.ftc.teamcode.autonomous.drive.StandardTrackingWheelLocalizer.Companion.encoderTicksToInches
+import org.firstinspires.ftc.teamcode.autonomous.localizers.StandardTrackingWheelLocalizer.Companion.encoderTicksToInches
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceBuilder
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceRunner
@@ -251,7 +251,7 @@ class SampleMecanumDrive(hardwareMap: HardwareMap) :
     }
 
 
-    public override fun getExternalHeadingVelocity(): Double? {
+    override fun getExternalHeadingVelocity(): Double? {
         return imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate.toDouble()
     }
 
