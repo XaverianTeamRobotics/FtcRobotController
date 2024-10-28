@@ -29,7 +29,7 @@ class ContinuousMotorScript(
      */
     override fun run() {
         var prev: Double = 0.0
-        while (true) {
+        while (scriptIsActive()) {
             val i = (if (inverted) -1.0 else 1.0) * input()
             if (i != prev) {
                 motor.power = i

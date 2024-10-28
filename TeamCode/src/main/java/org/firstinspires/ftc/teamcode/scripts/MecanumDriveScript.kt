@@ -31,7 +31,7 @@ class MecanumDriveScript(
     override fun init() {}
 
     override fun run() {
-        while (true) {
+        while (scriptIsActive()) {
             var startT = System.currentTimeMillis()
 
             val y = forwardInput()
