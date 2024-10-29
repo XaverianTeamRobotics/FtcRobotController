@@ -7,6 +7,8 @@ import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.ftccommon.external.OnCreate;
 
+import java.util.Arrays;
+
 @Config(value = "OdometrySettings")
 public class OdometrySettingsDashboardConfiguration {
 
@@ -27,17 +29,22 @@ public class OdometrySettingsDashboardConfiguration {
 
     @OnCreate
     public static void start(Context context) {
-        FtcDashboard.stop(context);
-        OdometrySettingStore.init();
+        try {
+            FtcDashboard.stop(context);
+            OdometrySettingStore.init();
 
-        // force restarting by requiring dash instance to be null
-        FtcDashboard.start(context);
+            // force restarting by requiring dash instance to be null
+            FtcDashboard.start(context);
 
-        if(!OdometrySettingStore.isOkay()) {
-            System.out.println("Odometry settings not OK. See other logs.");
-            RobotLog.addGlobalWarningMessage("Odometry settings failed to load from the most recent save! Does a save exist? Check logcat for more details.");
-        }else{
-            System.out.println("Odometry settings OK.");
+            if (!OdometrySettingStore.isOkay()) {
+                System.out.println("Autonomous settings not OK. See other logs.");
+                RobotLog.addGlobalWarningMessage("Autonomous settings failed to load from the most recent save! Does a save exist? Check logcat for more details.");
+            } else {
+                System.out.println("Autonomous settings OK.");
+            }
+        } catch (Exception e) {
+            RobotLog.e(e.toString());
+            RobotLog.addGlobalWarningMessage("Autonomous settings failed to load! Check logcat for more details.");
         }
     }
 
@@ -73,5 +80,5 @@ public class OdometrySettingsDashboardConfiguration {
     public static double VX_WEIGHT = OdometrySettingStore.getDouble("VX_WEIGHT");
     public static double VY_WEIGHT = OdometrySettingStore.getDouble("VY_WEIGHT");
     public static double OMEGA_WEIGHT = OdometrySettingStore.getDouble("OMEGA_WEIGHT");
-
+    public static double LIMELIGHT_MT_PIPELINE_ID = OdometrySettingStore.getDouble("LIMELIGHT_MT_PIPELINE_ID");
 }

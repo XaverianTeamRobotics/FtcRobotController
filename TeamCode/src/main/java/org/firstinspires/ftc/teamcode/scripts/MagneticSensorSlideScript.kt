@@ -31,7 +31,7 @@ class MagneticSensorSlideScript(
      * It adjusts the motor power based on the input and the state of the magnetic sensor.
      */
     override fun run() {
-        while (true) {
+        while (scriptIsActive()) {
             val modifier = if (inverted) -1.0 else 1.0
             var i = input()
             if (magSensor.isPressed) {

@@ -29,7 +29,7 @@ class ContinuousServoScript(
      */
     override fun run() {
         var prev = 0.0
-        while (true) {
+        while (scriptIsActive()) {
             val i = ((((if (inverted) -1 else 1) * input()) / 2) + 0.5)
             if (i != prev) {
                 servo.position = i

@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.internal.system.Misc
-import org.firstinspires.ftc.teamcode.autonomous.drive.SampleMecanumDrive
-import org.firstinspires.ftc.teamcode.autonomous.drive.StandardTrackingWheelLocalizer.Companion.rpmToVelocity
+import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.autonomous.localizers.StandardTrackingWheelLocalizer.Companion.rpmToVelocity
 import org.firstinspires.ftc.teamcode.autonomous.util.LoggingUtil
 import org.firstinspires.ftc.teamcode.autonomous.util.RegressionUtil
 import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_RPM

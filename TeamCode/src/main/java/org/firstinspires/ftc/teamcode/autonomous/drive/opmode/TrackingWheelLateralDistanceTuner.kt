@@ -6,8 +6,8 @@ import com.acmerobotics.roadrunner.util.Angle.normDelta
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.util.RobotLog
-import org.firstinspires.ftc.teamcode.autonomous.drive.SampleMecanumDrive
-import org.firstinspires.ftc.teamcode.autonomous.drive.StandardTrackingWheelLocalizer
+import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.autonomous.localizers.StandardTrackingWheelLocalizer
 
 /**
  * Opmode designed to assist the user in tuning the `StandardTrackingWheelLocalizer`'s
