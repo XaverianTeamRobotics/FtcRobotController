@@ -62,6 +62,7 @@ public class OdometrySettingsDashboardConfiguration {
     public static double WHEEL_RADIUS = OdometrySettingStore.getDouble("WHEEL_RADIUS");
     public static double GEAR_RATIO = OdometrySettingStore.getDouble("GEAR_RATIO");
     public static double TRACK_WIDTH = OdometrySettingStore.getDouble("TRACK_WIDTH");
+    public static double WHEEL_BASE = OdometrySettingStore.getDouble("WHEEL_BASE");
     public static double MAX_VEL = OdometrySettingStore.getDouble("MAX_VEL");
     public static double MAX_ACCEL = OdometrySettingStore.getDouble("MAX_ACCEL");
     public static double MAX_ANG_VEL = OdometrySettingStore.getDouble("MAX_ANG_VEL");

@@ -83,6 +83,11 @@ public class OdometrySettings {
     public static double TRACK_WIDTH = 13.7795;
 
     /**
+     * The wheel base of the driving wheels in inches.
+     */
+    public static double WHEEL_BASE = 13.7795;
+
+    /**
      * Maximum experimental velocity of your bot. Calculate it using the equation:
      * <br><br>
      * <kbd>
