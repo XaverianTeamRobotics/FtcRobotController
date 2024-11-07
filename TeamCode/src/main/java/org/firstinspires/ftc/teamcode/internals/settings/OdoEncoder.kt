@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.internals.settings
 
-import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
+import org.firstinspires.ftc.teamcode.internals.Clock
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -11,7 +11,7 @@ import kotlin.math.roundToInt
  * Wraps a motor instance to provide corrected velocity counts and allow reversing independently of the corresponding
  * slot's motor direction
  */
-class OdoEncoder @JvmOverloads constructor(motor: DcMotorEx, clock: NanoClock = NanoClock.system()) {
+class OdoEncoder @JvmOverloads constructor(motor: DcMotorEx, clock: Clock = Clock()) {
     enum class Direction(multiplier: Int) {
         FORWARD(1),
         REVERSE(-1);
@@ -28,7 +28,7 @@ class OdoEncoder @JvmOverloads constructor(motor: DcMotorEx, clock: NanoClock = 
     }
 
     private val motor: DcMotorEx
-    private val clock: NanoClock
+    private val clock: Clock
 
     private var direction: Direction?
 
@@ -45,7 +45,7 @@ class OdoEncoder @JvmOverloads constructor(motor: DcMotorEx, clock: NanoClock = 
 
         this.lastPosition = 0
         this.velocityEstimates = DoubleArray(3)
-        this.lastUpdateTime = clock.seconds()
+        this.lastUpdateTime = clock.seconds
     }
 
     fun getDirection(): Direction? {
@@ -74,7 +74,7 @@ class OdoEncoder @JvmOverloads constructor(motor: DcMotorEx, clock: NanoClock = 
         val multiplier = getMultiplier()
         val currentPosition = motor.getCurrentPosition() * multiplier
         if (currentPosition != lastPosition) {
-            val currentTime = clock.seconds()
+            val currentTime = clock.seconds
             val dt = currentTime - lastUpdateTime
             velocityEstimates[velocityEstimateIdx] = (currentPosition - lastPosition) / dt
             velocityEstimateIdx = (velocityEstimateIdx + 1) % 3

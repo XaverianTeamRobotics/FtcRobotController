@@ -17,5 +17,6 @@ dependencies {
     implementation 'org.firstinspires.ftc:Vision:10.1.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.acmerobotics.dashboard:dashboard:0.4.15'
+    implementation 'com.acmerobotics.roadrunner:core:0.5.6' // although we dont use this as the main autonomous we use the utilities
 }
 
