@@ -19,6 +19,7 @@ export default defineConfigWithTheme<ThemeConfig>({
       { text: 'Hardware', link: '/hardware'},
       { text: 'Servos', link: '/servos'},
       { text: 'Handling Input', link: '/input'},
+      { text: 'Branches', link: '/branches'},
     ],
 
     search: {
