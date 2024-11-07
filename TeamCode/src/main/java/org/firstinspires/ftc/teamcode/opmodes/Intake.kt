@@ -9,12 +9,12 @@ import org.firstinspires.ftc.teamcode.scripts.ContinuousServoScript
 @TeleOp(name = "Intake", group = BaseOpMode.DEBUG_GROUP_NAME)
 class Intake: BaseOpMode() {
     override fun construct() {
-        addScript(ContinuousServoScript(id = 0, inverted = false, input = {
+        addScript(ContinuousServoScript(id = 0, inverted = false) {
             HardwareManager.gamepad1.left_trigger.toDouble() - HardwareManager.gamepad1.right_trigger.toDouble()
-        }))
-        addScript(ContinuousServoScript(id = 1, inverted = true, input = {
+        })
+        addScript(ContinuousServoScript(id = 1, inverted = true) {
             HardwareManager.gamepad1.left_trigger.toDouble() - HardwareManager.gamepad1.right_trigger.toDouble()
-        }))
+        })
     }
 
     override fun run() {

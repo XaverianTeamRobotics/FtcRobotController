@@ -8,8 +8,9 @@ import org.firstinspires.ftc.teamcode.scripts.ContinuousServoScript
 @TeleOp(name = "ContinuousServo", group = BaseOpMode.DEBUG_GROUP_NAME)
 class ContinuousServo: BaseOpMode() {
     override fun construct() {
-        addScript(ContinuousServoScript(id = 0, input = {
-            HardwareManager.gamepad1.right_trigger.toDouble()-HardwareManager.gamepad1.left_trigger.toDouble()}))
+        addScript(ContinuousServoScript(id = 0) {
+            HardwareManager.gamepad1.right_trigger.toDouble() - HardwareManager.gamepad1.left_trigger.toDouble()
+        })
     }
 
     override fun run() {
