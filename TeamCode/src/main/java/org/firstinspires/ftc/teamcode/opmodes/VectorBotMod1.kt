@@ -10,9 +10,9 @@ import org.firstinspires.ftc.teamcode.scripts.MecanumDriveScript
 @TeleOp(name = "VectorBot Model 1", group = BaseOpMode.FULL_GROUP_NAME)
 class VectorBotMod1: BaseOpMode() {
     override fun construct() {
-        addScript(MecanumDriveScript(hasBevelGears = true, powerScale = 0.8))
-        addScript(ContinuousMotorScript(id = 4, input = { (gamepad1.right_trigger-gamepad1.left_trigger).toDouble() }))
-        addScript(ContinuousServoScript(id = 0, input = ContinuousMotorScript.twoWayToggleInput({ gamepad1.x }, power = 0.25)))
+        addScript(MecanumDriveScript(hasBevelGears = true, powerScale = 0.8)) //drivetrain
+        addScript(ContinuousMotorScript(id = 4, input = { (gamepad1.right_trigger-gamepad1.left_trigger).toDouble() })) //vertical lifter
+        addScript(ContinuousServoScript(id = 0, input = ContinuousMotorScript.twoWayToggleInput({ gamepad1.x }, power = 0.25))) //claw thingy-mobbober at the end of the slide
     }
 
     override fun run() {
