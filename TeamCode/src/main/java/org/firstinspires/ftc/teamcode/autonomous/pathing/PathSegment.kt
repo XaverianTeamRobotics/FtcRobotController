@@ -18,6 +18,11 @@ interface PathSegment {
     val end: PoseVelocityPair
 
     /**
+     * The length of the path segment
+     */
+    val length: Double
+
+    /**
      * Get the robot pose at a certain displacement along the path segment
      * @param displacement The displacement from the start of this path segment
      * @return The desired pose and velocity of the robot at the given displacement

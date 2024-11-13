@@ -13,37 +13,65 @@ class LengthUnit {
 
     // A set of properties which use the inches value to calculate the other units
     var inches: Double = 0.0
+
+    var cm: Double
+        get() = inches * CM
         set(value) {
-            field = value
-            cm = value / CM
-            mm = value / MM
-            m = value / M
-            ft = value / FT
+            inches = value / CM
         }
 
-    var cm: Double = 0.0
+    var mm: Double
+        get() = inches * MM
         set(value) {
-            field = value
-            inches = value * CM
+            inches = value / MM
         }
 
-    var mm: Double = 0.0
+    var m: Double
+        get() = inches * M
         set(value) {
-            field = value
-            inches = value * MM
+            inches = value / M
         }
 
-    var m: Double = 0.0
+
+    var ft: Double
+        get() = inches * FT
         set(value) {
-            field = value
-            inches = value * M
+            inches = value / FT
         }
 
-    var ft: Double = 0.0
-        set(value) {
-            field = value
-            inches = value * FT
-        }
+    operator fun plus(other: LengthUnit) = LengthUnit().apply {
+        inches = other.inches + inches
+    }
+
+    operator fun minus(other: LengthUnit) = LengthUnit().apply {
+        inches = inches - other.inches
+    }
+
+    operator fun times(other: LengthUnit) = LengthUnit().apply {
+        inches = inches * other.inches
+    }
+
+    operator fun div(other: LengthUnit) = LengthUnit().apply {
+        inches = inches / other.inches
+    }
+
+    operator fun times(scalar: Double) = LengthUnit().apply {
+        inches = inches * scalar
+    }
+
+    operator fun div(scalar: Double) = LengthUnit().apply {
+        inches = inches / scalar
+    }
+
+    operator fun compareTo(other: LengthUnit) = inches.compareTo(other.inches)
+
+    operator fun unaryMinus() = LengthUnit().apply {
+        inches = -inches
+    }
+
+    override fun toString(): String {
+        return "$inches in"
+    }
 }
 
 // A set of extension properties for int and double to convert between units of length

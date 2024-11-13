@@ -1,15 +1,15 @@
-package org.firstinspires.ftc.teamcode.opmodes
+package org.firstinspires.ftc.teamcode.opmodes.auto
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.internals.templates.BaseOpMode
-import org.firstinspires.ftc.teamcode.scripts.LimelightPositionLogging
 import org.firstinspires.ftc.teamcode.scripts.MecanumDriveScript
+import org.firstinspires.ftc.teamcode.scripts.auto.GoBildaPinpointLogging
 
-@TeleOp(name="Limelight Position Logging With Drivetrain", group = BaseOpMode.DEBUG_GROUP_NAME)
-class LimelightPositionLoggingWithDrivetrain: BaseOpMode() {
+@TeleOp(group = BaseOpMode.AUTONOMOUS_GROUP_NAME)
+class GoBildaPinpointTest: BaseOpMode() {
     override fun construct() {
         addScript(MecanumDriveScript(rotScale = 0.75, powerScale = 0.75))
-        addScript(LimelightPositionLogging())
+        addScript(GoBildaPinpointLogging())
     }
 
     override fun run() {
