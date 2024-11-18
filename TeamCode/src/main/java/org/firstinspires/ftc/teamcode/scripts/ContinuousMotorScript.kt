@@ -82,5 +82,23 @@ class ContinuousMotorScript(
                 else 0.0
             }
         }
+
+        /**
+         * Creates a two-way toggle input function based on a toggle condition.
+         */
+        fun twoWayToggleInput(input: () -> Boolean, power: Double = 1.0, idle: Double = 0.0): () -> Double {
+            var state = false
+            var held = false
+            return {
+                if (input() && !held) {
+                    state = !state
+                    held = true
+                } else if (!input()) {
+                    held = false
+                }
+
+                if (state) power else idle
+            }
+        }
     }
 }
