@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.scripts.ContinuousMotorScript
 @TeleOp(name = "Linear Slide Test", group = BaseOpMode.DEBUG_GROUP_NAME)
 class LinearSlideTest : BaseOpMode() {
     override fun construct() {
-        addScript(ContinuousMotorScript(id = 6, input = { (gamepad1.left_trigger - gamepad1.right_trigger).toDouble() }))
+        addScript(ContinuousMotorScript(id = 0, input = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }))
     }
 
     override fun run() {
