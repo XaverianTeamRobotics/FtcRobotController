@@ -56,7 +56,7 @@ public class OdometrySettingsDashboardConfiguration {
     public static EncoderConfig ENCODER_RIGHT = OdometrySettingStore.getEncoder("ENCODER_RIGHT");
     public static EncoderConfig ENCODER_LEFT = OdometrySettingStore.getEncoder("ENCODER_LEFT");
     public static EncoderConfig ENCODER_MIDDLE = OdometrySettingStore.getEncoder("ENCODER_MIDDLE");
-    public static String IMU_NAME = OdometrySettingStore.getIMU("IMU");
+    public static String IMU_NAME = OdometrySettingStore.getIMU("IMU_NAME");
     public static double TICKS_PER_REV = OdometrySettingStore.getDouble("TICKS_PER_REV");
     public static double MAX_RPM = OdometrySettingStore.getDouble("MAX_RPM");
     public static double WHEEL_RADIUS = OdometrySettingStore.getDouble("WHEEL_RADIUS");
