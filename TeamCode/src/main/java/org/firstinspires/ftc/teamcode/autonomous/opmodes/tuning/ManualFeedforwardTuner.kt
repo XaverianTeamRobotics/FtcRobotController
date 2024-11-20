@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.drive.opmode
+package org.firstinspires.ftc.teamcode.autonomous.opmodes.tuning
 
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
@@ -69,7 +69,7 @@ class ManualFeedforwardTuner : LinearOpMode() {
         if (isStopRequested()) return
 
         var movingForwards = true
-        var activeProfile = ManualFeedforwardTuner.Companion.generateProfile(true)
+        var activeProfile = generateProfile(true)
         var profileStart = clock.seconds()
 
 
@@ -88,7 +88,7 @@ class ManualFeedforwardTuner : LinearOpMode() {
                     if (profileTime > activeProfile.duration()) {
                         // generate a new profile
                         movingForwards = !movingForwards
-                        activeProfile = ManualFeedforwardTuner.Companion.generateProfile(movingForwards)
+                        activeProfile = generateProfile(movingForwards)
                         profileStart = clock.seconds()
                     }
 
@@ -116,7 +116,7 @@ class ManualFeedforwardTuner : LinearOpMode() {
                     if (gamepad1.b) {
                         mode = Mode.TUNING_MODE
                         movingForwards = true
-                        activeProfile = ManualFeedforwardTuner.Companion.generateProfile(movingForwards)
+                        activeProfile = generateProfile(movingForwards)
                         profileStart = clock.seconds()
                     }
 
