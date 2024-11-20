@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.*
 import com.qualcomm.robotcore.hardware.HardwareMap.DeviceMapping
 import com.qualcomm.robotcore.util.RobotLog
 import org.firstinspires.ftc.robotcore.external.Telemetry
+import org.firstinspires.ftc.teamcode.internals.hardware.drivers.GoBildaPinpointDriver
 
 /**
  * Manages the hardware components of the robot.
@@ -72,7 +73,12 @@ object HardwareManager {
     /**
      * IMU sensor. (defined by "imu" in the configuration, doesnt have to be built-in imu)
      */
+    @JvmStatic
     lateinit var imu: IMU
+        private set
+
+    @JvmStatic
+    lateinit var pinpoint: GoBildaPinpointDriver
         private set
 
     /**
@@ -110,6 +116,10 @@ object HardwareManager {
 
         try {
             imu = hardwareMap.get(IMU::class.java, "imu")
+        } catch (_: Exception) {}
+
+        try {
+            pinpoint = hardwareMap.get(GoBildaPinpointDriver::class.java, "pinpoint")
         } catch (_: Exception) {}
     }
 

@@ -19,6 +19,8 @@ class LimelightLocalizer : Localizer {
         if (result.isValid) {
             val botpose = result.botpose
             poseEstimate = Pose2d(botpose.position.x, botpose.position.y, botpose.orientation.yaw)
+        } else {
+            poseEstimate = HybridLocalizer.NULL_POSE
         }
     }
 }

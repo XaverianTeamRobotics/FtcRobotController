@@ -1,17 +1,17 @@
-package org.firstinspires.ftc.teamcode.autonomous.drive.samples
+package org.firstinspires.ftc.teamcode.autonomous.drive
 
-import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.control.PIDCoefficients
-import com.acmerobotics.roadrunner.drive.TankDrive
-import com.acmerobotics.roadrunner.followers.TankPIDVAFollower
+import com.acmerobotics.roadrunner.drive.MecanumDrive
+import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower
 import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.acmerobotics.roadrunner.localization.Localizer
 import com.acmerobotics.roadrunner.trajectory.Trajectory
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint
+import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint
-import com.acmerobotics.roadrunner.trajectory.constraints.TankVelocityConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint
 import com.qualcomm.hardware.lynx.LynxModule
@@ -24,44 +24,43 @@ import com.qualcomm.robotcore.hardware.IMU
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
 import com.qualcomm.robotcore.hardware.VoltageSensor
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
-import org.firstinspires.ftc.teamcode.autonomous.localizers.StandardTrackingWheelLocalizer.Companion.encoderTicksToInches
+import org.firstinspires.ftc.teamcode.autonomous.localizers.LimelightLocalizer
+import org.firstinspires.ftc.teamcode.autonomous.localizers.PinpointLocalizer
+import org.firstinspires.ftc.teamcode.autonomous.localizers.hybrid
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceBuilder
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceRunner
 import org.firstinspires.ftc.teamcode.autonomous.util.LynxModuleUtil
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_ACCEL
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_ANG_ACCEL
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_ANG_VEL
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_VEL
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.TRACK_WIDTH
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.kA
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.kStatic
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.kV
-import java.util.ArrayList
-import java.util.Arrays
+import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings
+import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.*
 import kotlin.math.abs
 
 /*
- * Simple tank drive hardware implementation for REV hardware.
+ * Simple mecanum drive hardware implementation for REV hardware.
+ *
+ * If localizer is null, the default will be used
  */
-@Config
-class SampleTankDrive(hardwareMap: HardwareMap) : TankDrive(kV, kA, kStatic, TRACK_WIDTH) {
+class MecanumDriver(hardwareMap: HardwareMap, localizer: Localizer? = null) :
+    MecanumDrive(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER) {
     private val trajectorySequenceRunner: TrajectorySequenceRunner
 
     private val follower: TrajectoryFollower?
 
-    private val motors: MutableList<DcMotorEx>
-    private val leftMotors: MutableList<DcMotorEx>
-    private val rightMotors: MutableList<DcMotorEx>
-    private val imu: IMU
+    private val leftFront: DcMotorEx
+    private val leftRear: DcMotorEx
+    private val rightRear: DcMotorEx
+    private val rightFront: DcMotorEx
+    private val motors: List<DcMotorEx>
 
+    private val imu: IMU
     private val batteryVoltageSensor: VoltageSensor
 
-    override val rawExternalHeading get() = imu.robotYawPitchRollAngles.getYaw(AngleUnit.RADIANS)
+    override val rawExternalHeading: Double
+        get() = imu.robotYawPitchRollAngles.getYaw(AngleUnit.RADIANS)
 
     init {
-        follower = TankPIDVAFollower(
-            AXIAL_PID, CROSS_TRACK_PID,
+        follower = HolonomicPIDVAFollower(
+            TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
             Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5
         )
 
@@ -82,64 +81,46 @@ class SampleTankDrive(hardwareMap: HardwareMap) : TankDrive(kV, kA, kStatic, TRA
         )
         imu.initialize(parameters)
 
-        // add/remove motors depending on your robot (e.g., 6WD)
-        val leftFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftFront")
-        val leftRear = hardwareMap.get<DcMotorEx?>(DcMotorEx::class.java, "leftRear")
-        val rightRear = hardwareMap.get<DcMotorEx?>(DcMotorEx::class.java, "rightRear")
-        val rightFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightFront")
+        leftFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftFront")
+        leftRear = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftRear")
+        rightRear = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightRear")
+        rightFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightFront")
 
-        motors = Arrays.asList<DcMotorEx?>(leftFront, leftRear, rightRear, rightFront)
-        leftMotors = Arrays.asList<DcMotorEx?>(leftFront, leftRear)
-        rightMotors = Arrays.asList<DcMotorEx?>(rightFront, rightRear)
+        motors = listOf<DcMotorEx>(leftFront, leftRear, rightRear, rightFront)
 
         for (motor in motors) {
-            val motorConfigurationType = motor.getMotorType().clone()
-            motorConfigurationType.setAchieveableMaxRPMFraction(1.0)
-            motor.setMotorType(motorConfigurationType)
+            val motorConfigurationType = motor.motorType.clone()
+            motorConfigurationType.achieveableMaxRPMFraction = 1.0
+            motor.motorType = motorConfigurationType
         }
 
         setZeroPowerBehavior(ZeroPowerBehavior.BRAKE)
 
         // TODO: reverse any motors using DcMotor.setDirection()
 
-        // TODO: if desired, use setLocalizer() to change the localization method
-        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
+        if (localizer != null) {
+            this.localizer = localizer
+        } else {
+            this.localizer = LimelightLocalizer() hybrid PinpointLocalizer()
+        }
+
         trajectorySequenceRunner = TrajectorySequenceRunner(
             follower, HEADING_PID, batteryVoltageSensor,
-            ArrayList<Int?>(), ArrayList<Int?>(), ArrayList<Int?>(), ArrayList<Int?>()
-        )
-    }
-
-    fun trajectoryBuilder(startPose: Pose2d): TrajectorySequenceBuilder {
-        return TrajectorySequenceBuilder(
-            startPose,
-            VEL_CONSTRAINT, accelConstraint,
-            MAX_ANG_VEL, MAX_ANG_ACCEL
         )
     }
 
     fun trajectoryBuilder(startPose: Pose2d, reversed: Boolean): TrajectoryBuilder {
-        return TrajectoryBuilder(
-            startPose,
-            reversed,
-            VEL_CONSTRAINT,
-            accelConstraint
-        )
+        return TrajectoryBuilder(startPose, reversed, VEL_CONSTRAINT, ACCEL_CONSTRAINT)
     }
 
-    fun trajectoryBuilder(startPose: Pose2d, startHeading: Double): TrajectoryBuilder {
-        return TrajectoryBuilder(
-            startPose,
-            startHeading,
-            VEL_CONSTRAINT,
-            accelConstraint
-        )
+    fun trajectoryBuilder(startPose: Pose2d, startHeading: Double = 0.0): TrajectoryBuilder {
+        return TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, ACCEL_CONSTRAINT)
     }
 
     fun trajectorySequenceBuilder(startPose: Pose2d?): TrajectorySequenceBuilder {
         return TrajectorySequenceBuilder(
             startPose,
-            VEL_CONSTRAINT, accelConstraint,
+            VEL_CONSTRAINT, ACCEL_CONSTRAINT,
             MAX_ANG_VEL, MAX_ANG_ACCEL
         )
     }
@@ -183,7 +164,6 @@ class SampleTankDrive(hardwareMap: HardwareMap) : TankDrive(kV, kA, kStatic, TRA
         return trajectorySequenceRunner.getLastPoseError()
     }
 
-
     fun update() {
         updatePoseEstimate()
         val signal = trajectorySequenceRunner.update(poseEstimate, poseVelocity)
@@ -215,6 +195,7 @@ class SampleTankDrive(hardwareMap: HardwareMap) : TankDrive(kV, kA, kStatic, TRA
             coefficients.p, coefficients.i, coefficients.d,
             coefficients.f * 12 / batteryVoltageSensor.getVoltage()
         )
+
         for (motor in motors) {
             motor.setPIDFCoefficients(runMode, compensatedCoefficients)
         }
@@ -223,74 +204,74 @@ class SampleTankDrive(hardwareMap: HardwareMap) : TankDrive(kV, kA, kStatic, TRA
     fun setWeightedDrivePower(drivePower: Pose2d) {
         var vel: Pose2d? = drivePower
 
-        if (abs(drivePower.x) + abs(drivePower.heading) > 1) {
+        if ((abs(drivePower.x) + abs(drivePower.y) + abs(drivePower.heading)) > 1) {
             // re-normalize the powers according to the weights
-            val denom = (VX_WEIGHT * abs(drivePower.x)
-                    + OMEGA_WEIGHT * abs(drivePower.heading))
+            val denom =
+                (VX_WEIGHT * abs(drivePower.x) + VY_WEIGHT * abs(drivePower.y) + OMEGA_WEIGHT * abs(drivePower.heading))
 
             vel = Pose2d(
                 VX_WEIGHT * drivePower.x,
-                0.0,
+                VY_WEIGHT * drivePower.y,
                 OMEGA_WEIGHT * drivePower.heading
             ).div(denom)
-        } else {
-            // Ensure the y axis is zeroed out.
-            vel = Pose2d(drivePower.x, 0.0, drivePower.heading)
         }
 
-        setDrivePower(vel)
+        setDrivePower(vel!!)
     }
 
-    public override fun getWheelPositions(): List<Double> {
-        var leftSum = 0.0
-        var rightSum = 0.0
-        for (leftMotor in leftMotors) {
-            leftSum += encoderTicksToInches(leftMotor.getCurrentPosition().toDouble())
-        }
-        for (rightMotor in rightMotors) {
-            rightSum += encoderTicksToInches(rightMotor.getCurrentPosition().toDouble())
-        }
-        return listOf<Double>(leftSum / leftMotors.size, rightSum / rightMotors.size)
+    override fun getWheelPositions(): List<Double> {
+//        lastEncPositions.clear()
+//
+//        val wheelPositions = ArrayList<Double>()
+//        for (motor in motors) {
+//            val position = motor.getCurrentPosition()
+//            lastEncPositions.add(position)
+//            wheelPositions.add(encoderTicksToInches(position.toDouble()))
+//        }
+//        return wheelPositions
+
+        // This is only used by the mecanum localizer which we don't use
+
+        return emptyList()
     }
 
-    public override fun getWheelVelocities(): List<Double> {
-        var leftSum = 0.0
-        var rightSum = 0.0
-        for (leftMotor in leftMotors) {
-            leftSum += encoderTicksToInches(leftMotor.getVelocity())
-        }
-        for (rightMotor in rightMotors) {
-            rightSum += encoderTicksToInches(rightMotor.getVelocity())
-        }
-        return listOf<Double>(leftSum / leftMotors.size, rightSum / rightMotors.size)
+    override fun getWheelVelocities(): List<Double> {
+//        lastEncVels.clear()
+//
+//        val wheelVelocities = ArrayList<Double>()
+//        for (motor in motors) {
+//            val vel = motor.getVelocity().toInt()
+//            lastEncVels.add(vel)
+//            wheelVelocities.add(encoderTicksToInches(vel.toDouble()))
+//        }
+//        return wheelVelocities
+
+        // This is only used by the mecanum localizer which we don't use
+        return emptyList()
     }
 
-    override fun setMotorPowers(v: Double, v1: Double) {
-        for (leftMotor in leftMotors) {
-            leftMotor.setPower(v)
-        }
-        for (rightMotor in rightMotors) {
-            rightMotor.setPower(v1)
-        }
+    override fun setMotorPowers(v: Double, v1: Double, v2: Double, v3: Double) {
+        leftFront.power = v
+        leftRear.power = v1
+        rightRear.power = v2
+        rightFront.power = v3
     }
+
 
     override fun getExternalHeadingVelocity(): Double? {
         return imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate.toDouble()
     }
 
     companion object {
-        @JvmField
-        var AXIAL_PID: PIDCoefficients = PIDCoefficients(0.0, 0.0, 0.0)
-        @JvmField
-        var CROSS_TRACK_PID: PIDCoefficients = PIDCoefficients(0.0, 0.0, 0.0)
-        @JvmField
-        var HEADING_PID: PIDCoefficients = PIDCoefficients(0.0, 0.0, 0.0)
+        val TRANSLATIONAL_PID: PIDCoefficients
+            get() = OdometrySettings.TRANSLATIONAL_PID
+        val HEADING_PID: PIDCoefficients
+            get() = OdometrySettings.HEADING_PID
 
-        var VX_WEIGHT: Double = 1.0
-        var OMEGA_WEIGHT: Double = 1.0
-
-        private val VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH)
-        private val accelConstraint = getAccelerationConstraint(MAX_ACCEL)
+        private val VEL_CONSTRAINT
+            get() = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH)
+        private val ACCEL_CONSTRAINT
+            get() = getAccelerationConstraint(MAX_ACCEL)
 
         fun getVelocityConstraint(
             maxVel: Double,
@@ -298,9 +279,9 @@ class SampleTankDrive(hardwareMap: HardwareMap) : TankDrive(kV, kA, kStatic, TRA
             trackWidth: Double
         ): TrajectoryVelocityConstraint {
             return MinVelocityConstraint(
-                Arrays.asList<TrajectoryVelocityConstraint?>(
+                listOf<TrajectoryVelocityConstraint>(
                     AngularVelocityConstraint(maxAngularVel),
-                    TankVelocityConstraint(maxVel, trackWidth)
+                    MecanumVelocityConstraint(maxVel, trackWidth)
                 )
             )
         }

@@ -48,14 +48,10 @@ public class OdometrySettingsDashboardConfiguration {
         }
     }
 
-    public static LocalizationType LOCALIZATION_TYPE = OdometrySettingStore.getType("LOCALIZATION_TYPE");
     public static MotorConfig DRIVE_FRONT_RIGHT = OdometrySettingStore.getMotor("DRIVE_FRONT_RIGHT");
     public static MotorConfig DRIVE_BACK_RIGHT = OdometrySettingStore.getMotor("DRIVE_BACK_RIGHT");
     public static MotorConfig DRIVE_FRONT_LEFT = OdometrySettingStore.getMotor("DRIVE_FRONT_LEFT");
     public static MotorConfig DRIVE_BACK_LEFT = OdometrySettingStore.getMotor("DRIVE_BACK_LEFT");
-    public static EncoderConfig ENCODER_RIGHT = OdometrySettingStore.getEncoder("ENCODER_RIGHT");
-    public static EncoderConfig ENCODER_LEFT = OdometrySettingStore.getEncoder("ENCODER_LEFT");
-    public static EncoderConfig ENCODER_MIDDLE = OdometrySettingStore.getEncoder("ENCODER_MIDDLE");
     public static String IMU_NAME = OdometrySettingStore.getIMU("IMU_NAME");
     public static double TICKS_PER_REV = OdometrySettingStore.getDouble("TICKS_PER_REV");
     public static double MAX_RPM = OdometrySettingStore.getDouble("MAX_RPM");
@@ -67,11 +63,6 @@ public class OdometrySettingsDashboardConfiguration {
     public static double MAX_ACCEL = OdometrySettingStore.getDouble("MAX_ACCEL");
     public static double MAX_ANG_VEL = OdometrySettingStore.getDouble("MAX_ANG_VEL");
     public static double MAX_ANG_ACCEL = OdometrySettingStore.getDouble("MAX_ANG_ACCEL");
-    public static double ENCODER_TICKS_PER_REV = OdometrySettingStore.getDouble("ENCODER_TICKS_PER_REV");
-    public static double ENCODER_WHEEL_RADIUS = OdometrySettingStore.getDouble("ENCODER_WHEEL_RADIUS");
-    public static double ENCODER_GEAR_RATIO = OdometrySettingStore.getDouble("ENCODER_GEAR_RATIO");
-    public static double ENCODER_TRACK_WIDTH = OdometrySettingStore.getDouble("ENCODER_TRACK_WIDTH");
-    public static double ENCODER_FORWARD_OFFSET = OdometrySettingStore.getDouble("ENCODER_FORWARD_OFFSET");
     public static double kA = OdometrySettingStore.getDouble("kA");
     public static double kV = OdometrySettingStore.getDouble("kV");
     public static double kStatic = OdometrySettingStore.getDouble("kStatic");
@@ -82,4 +73,8 @@ public class OdometrySettingsDashboardConfiguration {
     public static double VY_WEIGHT = OdometrySettingStore.getDouble("VY_WEIGHT");
     public static double OMEGA_WEIGHT = OdometrySettingStore.getDouble("OMEGA_WEIGHT");
     public static double LIMELIGHT_MT_PIPELINE_ID = OdometrySettingStore.getDouble("LIMELIGHT_MT_PIPELINE_ID");
+    public static double PINPOINT_X_OFFSET = OdometrySettingStore.getDouble("PINPOINT_X_OFFSET");
+    public static double PINPOINT_Y_OFFSET = OdometrySettingStore.getDouble("PINPOINT_Y_OFFSET");
+    public static boolean PINPOINT_X_REVERSED = OdometrySettingStore.getBoolean("PINPOINT_X_REVERSED");
+    public static boolean PINPOINT_Y_REVERSED = OdometrySettingStore.getBoolean("PINPOINT_Y_REVERSED");
 }

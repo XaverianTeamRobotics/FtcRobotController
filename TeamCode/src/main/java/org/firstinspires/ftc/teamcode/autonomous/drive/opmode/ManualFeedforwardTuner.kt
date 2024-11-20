@@ -12,7 +12,7 @@ import com.acmerobotics.roadrunner.util.NanoClock
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.Telemetry
-import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
 import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_ACCEL
 import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_VEL
 import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.kA
@@ -40,7 +40,7 @@ import java.util.Objects
 class ManualFeedforwardTuner : LinearOpMode() {
     private val dashboard: FtcDashboard = FtcDashboard.getInstance()
 
-    private var drive: SampleMecanumDrive? = null
+    private var drive: MecanumDriver? = null
 
     internal enum class Mode {
         DRIVER_MODE,
@@ -52,7 +52,7 @@ class ManualFeedforwardTuner : LinearOpMode() {
     override fun runOpMode() {
         val telemetry: Telemetry = MultipleTelemetry(this.telemetry, dashboard.getTelemetry())
 
-        drive = SampleMecanumDrive(hardwareMap)
+        drive = MecanumDriver(hardwareMap)
 
         val voltageSensor = hardwareMap.voltageSensor.iterator().next()
 

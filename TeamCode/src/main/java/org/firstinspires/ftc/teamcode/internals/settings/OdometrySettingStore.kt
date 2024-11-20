@@ -87,6 +87,12 @@ object OdometrySettingStore {
     }
 
     @JvmStatic
+    fun getBoolean(name: String?): Boolean {
+        makeConfig()
+        return Objects.requireNonNull<SettingLoader.Value?>(vals!!.get(name)).obj as Boolean
+    }
+
+    @JvmStatic
     fun getType(name: String?): LocalizationType? {
         makeConfig()
         return Objects.requireNonNull<SettingLoader.Value?>(vals!!.get(name)).obj as LocalizationType?
