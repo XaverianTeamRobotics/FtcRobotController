@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.scripts
+package org.firstinspires.ftc.teamcode.scripts.drive
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.RobotLog

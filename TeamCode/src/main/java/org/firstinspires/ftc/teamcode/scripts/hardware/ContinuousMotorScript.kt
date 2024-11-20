@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.scripts
+package org.firstinspires.ftc.teamcode.scripts.hardware
 
 import com.qualcomm.robotcore.util.RobotLog
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.gamepad1

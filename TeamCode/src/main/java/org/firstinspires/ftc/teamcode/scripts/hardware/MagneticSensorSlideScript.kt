@@ -1,10 +1,8 @@
-package org.firstinspires.ftc.teamcode.scripts
+package org.firstinspires.ftc.teamcode.scripts.hardware
 
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.gamepad1
-import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.telemetry
 import org.firstinspires.ftc.teamcode.internals.templates.Script
-import kotlin.system.exitProcess
 
 /**
  * Script for controlling a slide motor with a magnetic sensor.
