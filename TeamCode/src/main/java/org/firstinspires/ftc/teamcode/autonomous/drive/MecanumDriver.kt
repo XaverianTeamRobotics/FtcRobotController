@@ -81,10 +81,10 @@ class MecanumDriver(hardwareMap: HardwareMap, localizer: Localizer? = null) :
         )
         imu.initialize(parameters)
 
-        leftFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftFront")
-        leftRear = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "leftRear")
-        rightRear = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightRear")
-        rightFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, "rightFront")
+        leftFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, DRIVE_FRONT_LEFT.NAME)
+        leftRear = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, DRIVE_BACK_LEFT.NAME)
+        rightRear = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, DRIVE_BACK_RIGHT.NAME)
+        rightFront = hardwareMap.get<DcMotorEx>(DcMotorEx::class.java, DRIVE_FRONT_RIGHT.NAME)
 
         motors = listOf<DcMotorEx>(leftFront, leftRear, rightRear, rightFront)
 

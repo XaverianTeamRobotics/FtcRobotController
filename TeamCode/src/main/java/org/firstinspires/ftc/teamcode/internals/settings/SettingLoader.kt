@@ -142,6 +142,9 @@ object SettingLoader {
                 str.append("imu")
             }
             str.append(java.lang.System.lineSeparator())
+        } else if (type == Boolean::class.java) {
+            val data = field.get(null) as Boolean
+            str.append("Boolean").append(System.lineSeparator()).append(data).append(System.lineSeparator())
         } else {
             throw java.lang.IllegalAccessException("Entry creation of " + field + " with a type of " + type + " failed.")
         }
