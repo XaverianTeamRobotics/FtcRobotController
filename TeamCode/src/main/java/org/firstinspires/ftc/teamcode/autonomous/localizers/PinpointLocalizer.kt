@@ -6,10 +6,10 @@ import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager
 import org.firstinspires.ftc.teamcode.internals.hardware.drivers.GoBildaPinpointDriver
 import org.firstinspires.ftc.teamcode.internals.hardware.drivers.GoBildaPinpointDriver.EncoderDirection.FORWARD
 import org.firstinspires.ftc.teamcode.internals.hardware.drivers.GoBildaPinpointDriver.EncoderDirection.REVERSED
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.PINPOINT_X_OFFSET
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.PINPOINT_X_REVERSED
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.PINPOINT_Y_OFFSET
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.PINPOINT_Y_REVERSED
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.PINPOINT_X_OFFSET
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.PINPOINT_X_REVERSED
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.PINPOINT_Y_OFFSET
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.PINPOINT_Y_REVERSED
 
 class PinpointLocalizer: Localizer {
     override var poseEstimate: Pose2d = Pose2d()
@@ -30,7 +30,7 @@ class PinpointLocalizer: Localizer {
         }
 
         pinpoint.setOffsets(PINPOINT_X_OFFSET, PINPOINT_Y_OFFSET)
-        pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
+        pinpoint.setEncoderResolution(19.89436789 / 2)
         pinpoint.setEncoderDirections(if (PINPOINT_X_REVERSED) REVERSED else FORWARD, if (PINPOINT_Y_REVERSED) REVERSED else FORWARD)
         pinpoint.resetPosAndIMU()
         // Wait 0.25 seconds for the IMU to calibrate

@@ -40,7 +40,7 @@ object SettingLoader {
         val builder = java.lang.StringBuilder()
         builder.append(";")
 
-        for (field in OdometrySettingsDashboardConfiguration::class.java.getFields()) {
+        for (field in AutoSettings::class.java.getFields()) {
             try {
                 val str: kotlin.String? = SettingLoader.makeEntry(field)
                 // Entries are delimited by a semicolon

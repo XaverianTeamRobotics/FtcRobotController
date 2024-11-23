@@ -13,11 +13,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_ACCEL
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_VEL
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.kA
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.kStatic
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.kV
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.MAX_ACCEL
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.MAX_VEL
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.kA
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.kStatic
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.kV
 import java.util.Objects
 
 /*

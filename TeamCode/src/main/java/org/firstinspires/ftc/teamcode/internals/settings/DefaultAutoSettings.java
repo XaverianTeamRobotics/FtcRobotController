@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * <br>
  * DONT MAKE THIS INTO KOTLIN!!!!!
  */
-public class OdometrySettings {
+public class DefaultAutoSettings {
     /**
      * The name and direction of the front right motor.
      */
@@ -181,4 +181,15 @@ public class OdometrySettings {
      * Whether the Y axis of the pinpoint is reversed.
      */
     public static boolean PINPOINT_Y_REVERSED = false;
+
+    /**
+     * The maximum angular velocity before the primary localizer becomes unavailable (the limelight, unless overwritten)
+     */
+    public static double MAX_SAFE_ANGULAR_VELOCITY = 10.0;
+
+    /**
+     * The maximum linear velocity before the primary localizer becomes unavailable (the limelight, unless overwritten)
+     */
+    public static double MAX_SAFE_LINEAR_VELOCITY = 10.0;
+
 }

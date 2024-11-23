@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
 import org.firstinspires.ftc.teamcode.autonomous.util.LoggingUtil
 import org.firstinspires.ftc.teamcode.autonomous.util.RegressionUtil
 import org.firstinspires.ftc.teamcode.autonomous.util.rpmToVelocity
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.MAX_RPM
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.MAX_RPM
 import java.util.ArrayList
 import kotlin.math.sqrt
 

@@ -2,8 +2,13 @@ package org.firstinspires.ftc.teamcode.autonomous.localizers
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.localization.Localizer
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.MAX_SAFE_LINEAR_VELOCITY
+import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.sqrt
 
-class HybridLocalizer(val primary: Localizer, val fallback: Localizer): Localizer {
+class HybridLocalizer(val primary: Localizer, val fallback: Localizer, private val enableMaxSafeVel: Boolean = true): Localizer {
     override var poseEstimate: Pose2d = Pose2d()
         set(value) {
             field = value
@@ -17,7 +22,7 @@ class HybridLocalizer(val primary: Localizer, val fallback: Localizer): Localize
         primary.update()
         fallback.update()
 
-        if (!(primary.poseEstimate epsilonEquals NULL_POSE)) {
+        if (!(primary.poseEstimate epsilonEquals NULL_POSE) && (!enableMaxSafeVel || (abs(fallback.poseVelocity!!.heading) < AutoSettings.MAX_SAFE_ANGULAR_VELOCITY && sqrt(fallback.poseVelocity!!.x.pow(2) + fallback.poseVelocity!!.y.pow(2)) < MAX_SAFE_LINEAR_VELOCITY))) {
             poseEstimate = primary.poseEstimate
             fallback.poseEstimate = primary.poseEstimate
         } else {

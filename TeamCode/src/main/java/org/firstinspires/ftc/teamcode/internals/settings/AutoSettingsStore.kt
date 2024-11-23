@@ -5,9 +5,9 @@ import java.util.HashMap
 import java.util.Objects
 
 /**
- * Manages the state of [OdometrySettingsDashboardConfiguration] fields before being loaded into the dashboard.
+ * Manages the state of [AutoSettings] fields before being loaded into the dashboard.
  */
-object OdometrySettingStore {
+object AutoSettingsStore {
     private var isMade = false
     private var isOkay = true
     private var vals: HashMap<String?, SettingLoader.Value?>? = null
@@ -22,7 +22,7 @@ object OdometrySettingStore {
     }
 
     /**
-     * Imports the current configuration from a file or from [OdometrySettings].
+     * Imports the current configuration from a file or from [DefaultAutoSettings].
      */
     private fun makeConfig() {
         // we also want to make sure this never gets regenerated AFTER app load...that would be very bad
@@ -45,7 +45,7 @@ object OdometrySettingStore {
         // the defaults are stored in DefaultOdometrySettings, so we use some basic reflection to put them into the hashmap
         // calling reflection basic is a crime punishible to the highest degree but i work with it so much im getting good at it now... D:
         val kvals = HashMap<String?, SettingLoader.Value?>()
-        for (field in OdometrySettings::class.java.getDeclaredFields()) {
+        for (field in DefaultAutoSettings::class.java.getDeclaredFields()) {
             try {
                 kvals.put(field.getName(), SettingLoader.Value(field.get(null), field.getType()))
             } catch (e: IllegalAccessException) {

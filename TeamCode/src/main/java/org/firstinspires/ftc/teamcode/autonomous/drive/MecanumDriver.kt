@@ -19,6 +19,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode
 import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
 import com.qualcomm.robotcore.hardware.DcMotorEx
+import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.IMU
 import com.qualcomm.robotcore.hardware.PIDFCoefficients
@@ -31,8 +32,8 @@ import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySe
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceBuilder
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceRunner
 import org.firstinspires.ftc.teamcode.autonomous.util.LynxModuleUtil
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.*
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.*
 import kotlin.math.abs
 
 /*
@@ -97,6 +98,10 @@ class MecanumDriver(hardwareMap: HardwareMap, localizer: Localizer? = null) :
         setZeroPowerBehavior(ZeroPowerBehavior.BRAKE)
 
         // TODO: reverse any motors using DcMotor.setDirection()
+        leftFront.direction = DRIVE_FRONT_LEFT.DIRECTION
+        leftRear.direction = DRIVE_BACK_LEFT.DIRECTION
+        rightFront.direction = DRIVE_FRONT_RIGHT.DIRECTION
+        rightRear.direction = DRIVE_BACK_RIGHT.DIRECTION
 
         if (localizer != null) {
             this.localizer = localizer
@@ -264,9 +269,9 @@ class MecanumDriver(hardwareMap: HardwareMap, localizer: Localizer? = null) :
 
     companion object {
         val TRANSLATIONAL_PID: PIDCoefficients
-            get() = OdometrySettings.TRANSLATIONAL_PID
+            get() = AutoSettings.TRANSLATIONAL_PID
         val HEADING_PID: PIDCoefficients
-            get() = OdometrySettings.HEADING_PID
+            get() = AutoSettings.HEADING_PID
 
         private val VEL_CONSTRAINT
             get() = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH)
