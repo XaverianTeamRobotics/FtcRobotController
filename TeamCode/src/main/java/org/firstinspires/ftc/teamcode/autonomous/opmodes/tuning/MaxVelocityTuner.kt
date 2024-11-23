@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.drive.opmode
+package org.firstinspires.ftc.teamcode.autonomous.opmodes.tuning
 
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
@@ -10,10 +10,10 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.VoltageSensor
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.Telemetry
-import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDrive
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.GEAR_RATIO
-import org.firstinspires.ftc.teamcode.internals.settings.OdometrySettings.WHEEL_RADIUS
+import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.GEAR_RATIO
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.WHEEL_RADIUS
 import java.util.Objects
 import kotlin.math.max
 
@@ -37,7 +37,7 @@ class MaxVelocityTuner : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        val drive = SampleMecanumDrive(hardwareMap)
+        val drive = MecanumDriver(hardwareMap)
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)
 
@@ -83,7 +83,7 @@ class MaxVelocityTuner : LinearOpMode() {
     }
 
     private fun veloInchesToTicks(inchesPerSec: Double): Double {
-        return inchesPerSec / (2 * Math.PI * WHEEL_RADIUS) / GEAR_RATIO * OdometrySettings.TICKS_PER_REV
+        return inchesPerSec / (2 * Math.PI * WHEEL_RADIUS) / GEAR_RATIO * AutoSettings.TICKS_PER_REV
     }
 
     companion object {

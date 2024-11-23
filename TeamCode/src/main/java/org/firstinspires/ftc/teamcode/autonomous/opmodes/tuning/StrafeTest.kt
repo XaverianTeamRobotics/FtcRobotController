@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.drive.opmode
+package org.firstinspires.ftc.teamcode.autonomous.opmodes.tuning
 
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
@@ -7,22 +7,22 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.Telemetry
-import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
 
 /*
  * This is a simple routine to test translational drive capabilities.
  */
 @Config
 @Autonomous(group = "drive")
-class StraightTest : LinearOpMode() {
+class StrafeTest : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
         val telemetry: Telemetry = MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry())
 
-        val drive = SampleMecanumDrive(hardwareMap)
+        val drive = MecanumDriver(hardwareMap)
 
         val trajectory = drive.trajectoryBuilder(Pose2d())
-            .forward(DISTANCE)
+            .strafeRight(DISTANCE)
             .build()
 
         waitForStart()

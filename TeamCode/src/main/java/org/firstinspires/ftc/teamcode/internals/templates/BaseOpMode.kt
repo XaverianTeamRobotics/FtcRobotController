@@ -105,3 +105,5 @@ abstract class BaseOpMode : LinearOpMode() {
             private set
     }
 }
+
+fun LinearOpMode.initHardwareManager() = HardwareManager.init(hardwareMap, gamepad1, gamepad2, telemetry, HardwareSecret.secret)

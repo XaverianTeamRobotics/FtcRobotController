@@ -10,13 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  * <br>
  * DONT MAKE THIS INTO KOTLIN!!!!!
  */
-public class OdometrySettings {
-
-    /**
-     * The type of localization in use.
-     */
-    public static LocalizationType LOCALIZATION_TYPE = LocalizationType.POD;
-
+public class DefaultAutoSettings {
     /**
      * The name and direction of the front right motor.
      */
@@ -36,21 +30,6 @@ public class OdometrySettings {
      * The name and direction of the back left motor.
      */
     public static MotorConfig DRIVE_BACK_LEFT = new MotorConfig("motor3", DcMotorSimple.Direction.REVERSE);
-
-    /**
-     * The name and direction of the right encoder.
-     */
-    public static EncoderConfig ENCODER_RIGHT = new EncoderConfig("motor3", OdoEncoder.Direction.FORWARD);
-
-    /**
-     * The name and direction of the left encoder.
-     */
-    public static EncoderConfig ENCODER_LEFT = new EncoderConfig("motor0", OdoEncoder.Direction.FORWARD);
-
-    /**
-     * The name and direction of the middle encoder.
-     */
-    public static EncoderConfig ENCODER_MIDDLE = new EncoderConfig("motor7", OdoEncoder.Direction.FORWARD);
 
     /**
      * The name of the IMU or gyroscope replacing the right encoder if in use.
@@ -132,31 +111,6 @@ public class OdometrySettings {
     public static double MAX_ANG_ACCEL = MAX_ANG_VEL;
 
     /**
-     * The ticks per revolution of the encoder of your dead wheels. This should come from the encoder's specsheet or a similar specification document. For example, the REV Through Bore Encoder (SKU REV-11-1271) counts 8192 ticks per revolution.
-     */
-    public static double ENCODER_TICKS_PER_REV = 8192;
-
-    /**
-     * The radius of your dead wheels in inches. For example, the Rotacaster 35mm Omni Wheel (SKU R2-0354-99/01) has a radius of 0.688976377953 inches.
-     */
-    public static double ENCODER_WHEEL_RADIUS = 0.688976377953;
-
-    /**
-     * The gear ratio between the output (encoder) speed and input (dead wheel) speed.
-     */
-    public static double ENCODER_GEAR_RATIO = 1;
-
-    /**
-     * The track width of the encoder wheels in inches. Track width is the lateral distance from the center of one wheel to the center of another wheel. Only a rough estimate is needed originally as it will be tuned later. For example, <a href="https://openodometry.weebly.com/">OpenOdometry v3</a> has a track width of ≈16 inches when using the default assembly compatible with the Strafer v5.
-     */
-    public static double ENCODER_TRACK_WIDTH = 9.40945;
-
-    /**
-     * The offset of the middle (strafing) encoder from the center of the robot's rotation in the Z axis (where the X axis is the track width's axis and the Y axis is vertical). The X axis offset of the middle encoder isn't important; the kinematics work the same regardless of where the middle encoder lies on the X axis. Only a rough estimate is needed originally as it will be tuned later. For example, <a href="https://openodometry.weebly.com/">OpenOdometry v3</a> has a forward offset of ≈4 inches when using the default assembly compatible with the Strafer v5.
-     */
-    public static double ENCODER_FORWARD_OFFSET = 0.08;
-
-    /**
      * The PID acceleration variable. This is to be tuned by the manual feedforward tuner.
      */
     public static double kA = 0.0033;
@@ -175,7 +129,6 @@ public class OdometrySettings {
      * Mecanum wheels often exhibit less torque strafing than they do going straigt. This is to be tuned by the strafe tuner.
      */
     public static double LATERAL_MULTIPLIER = 1;
-
 
     /**
      * The heading PID controller. This is to be tuned by the final back-and-forth and follower PID tuners. Standard values are a kP of 8, kI of 0, and kD of 1.
@@ -206,4 +159,37 @@ public class OdometrySettings {
      * The pipeline ID for the limelight MegaTag pipeline (usually 3)
      */
     public static double LIMELIGHT_MT_PIPELINE_ID = 3;
+
+    /**
+     * The X offset of the pinpoint.
+     * This is in mm for some stupid reason idk dont ask me
+     */
+    public static double PINPOINT_X_OFFSET = 0;
+
+    /**
+     * The Y offset of the pinpoint.
+     * This is in mm for some stupid reason idk dont ask me
+     */
+    public static double PINPOINT_Y_OFFSET = 0;
+
+    /**
+     * Whether the X axis of the pinpoint is reversed.
+     */
+    public static boolean PINPOINT_X_REVERSED = false;
+
+    /**
+     * Whether the Y axis of the pinpoint is reversed.
+     */
+    public static boolean PINPOINT_Y_REVERSED = false;
+
+    /**
+     * The maximum angular velocity before the primary localizer becomes unavailable (the limelight, unless overwritten)
+     */
+    public static double MAX_SAFE_ANGULAR_VELOCITY = 10.0;
+
+    /**
+     * The maximum linear velocity before the primary localizer becomes unavailable (the limelight, unless overwritten)
+     */
+    public static double MAX_SAFE_LINEAR_VELOCITY = 10.0;
+
 }

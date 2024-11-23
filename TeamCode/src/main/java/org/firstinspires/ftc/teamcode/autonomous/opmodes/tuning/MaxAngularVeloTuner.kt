@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.drive.opmode
+package org.firstinspires.ftc.teamcode.autonomous.opmodes.tuning
 
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.Telemetry
-import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
 import java.util.Objects
 import kotlin.math.max
 
@@ -30,7 +30,7 @@ class MaxAngularVeloTuner : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        val drive = SampleMecanumDrive(hardwareMap)
+        val drive = MecanumDriver(hardwareMap)
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)
 

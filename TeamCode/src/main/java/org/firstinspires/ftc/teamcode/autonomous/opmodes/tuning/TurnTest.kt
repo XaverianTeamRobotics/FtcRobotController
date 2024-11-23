@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.autonomous.drive.opmode
+package org.firstinspires.ftc.teamcode.autonomous.opmodes.tuning
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
 
 /*
  * This is a simple routine to test turning capabilities.
@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.autonomous.drive.samples.SampleMecanumDriv
 class TurnTest : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
-        val drive = SampleMecanumDrive(hardwareMap)
+        val drive = MecanumDriver(hardwareMap)
 
         waitForStart()
 

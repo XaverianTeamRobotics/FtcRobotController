@@ -60,23 +60,14 @@ public class TrajectorySequenceRunner {
 
     private VoltageSensor voltageSensor;
 
-    private List<Integer> lastDriveEncPositions, lastDriveEncVels, lastTrackingEncPositions, lastTrackingEncVels;
-
     public TrajectorySequenceRunner(
-            TrajectoryFollower follower, PIDCoefficients headingPIDCoefficients, VoltageSensor voltageSensor,
-            List<Integer> lastDriveEncPositions, List<Integer> lastDriveEncVels, List<Integer> lastTrackingEncPositions, List<Integer> lastTrackingEncVels
-    ) {
+            TrajectoryFollower follower, PIDCoefficients headingPIDCoefficients, VoltageSensor voltageSensor) {
         this.follower = follower;
 
         turnController = new PIDFController(headingPIDCoefficients);
         turnController.setInputBounds(0, 2 * Math.PI);
 
         this.voltageSensor = voltageSensor;
-
-        this.lastDriveEncPositions = lastDriveEncPositions;
-        this.lastDriveEncVels = lastDriveEncVels;
-        this.lastTrackingEncPositions = lastTrackingEncPositions;
-        this.lastTrackingEncVels = lastTrackingEncVels;
 
         clock = NanoClock.system();
 
