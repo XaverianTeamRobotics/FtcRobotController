@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.opmodes
+package org.firstinspires.ftc.teamcode.opmodes.hardwaretest
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.internals.templates.BaseOpMode
-import org.firstinspires.ftc.teamcode.scripts.ContinuousMotorScript
-import org.firstinspires.ftc.teamcode.scripts.ContinuousServoScript
+import org.firstinspires.ftc.teamcode.scripts.hardware.ContinuousMotorScript
+import org.firstinspires.ftc.teamcode.scripts.hardware.ContinuousServoScript
 
 
 @TeleOp(name = "Servo Mode Servo", group = BaseOpMode.DEBUG_GROUP_NAME)
