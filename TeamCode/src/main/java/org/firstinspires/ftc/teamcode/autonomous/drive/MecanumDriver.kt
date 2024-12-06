@@ -59,6 +59,9 @@ class MecanumDriver(hardwareMap: HardwareMap, localizer: Localizer? = null) :
     override val rawExternalHeading: Double
         get() = imu.robotYawPitchRollAngles.getYaw(AngleUnit.RADIANS)
 
+    val ppl = PinpointLocalizer()
+    val lll = LimelightLocalizer()
+
     init {
         follower = HolonomicPIDVAFollower(
             TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
@@ -106,7 +109,7 @@ class MecanumDriver(hardwareMap: HardwareMap, localizer: Localizer? = null) :
         if (localizer != null) {
             this.localizer = localizer
         } else {
-            this.localizer = LimelightLocalizer() hybrid PinpointLocalizer()
+            this.localizer = lll hybrid ppl
         }
 
         trajectorySequenceRunner = TrajectorySequenceRunner(

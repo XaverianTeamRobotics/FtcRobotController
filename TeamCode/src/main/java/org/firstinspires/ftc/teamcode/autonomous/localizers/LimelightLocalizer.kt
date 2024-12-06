@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.limelig
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.telemetry
 import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings
 import java.lang.Math.pow
+import java.lang.Math.toRadians
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -36,7 +37,7 @@ class LimelightLocalizer: Localizer {
             }
             val botpose = result.botpose
             // M to in = 39.37008
-            poseEstimate = Pose2d(botpose.position.x * 39.37008, botpose.position.y * 39.37008, botpose.orientation.yaw)
+            poseEstimate = Pose2d(botpose.position.x * 39.37008, botpose.position.y * 39.37008, toRadians(botpose.orientation.yaw))
         } else {
             poseEstimate = HybridLocalizer.NULL_POSE
         }

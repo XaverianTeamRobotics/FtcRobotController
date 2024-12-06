@@ -81,5 +81,5 @@ public class AutoSettings {
     public static boolean PINPOINT_Y_REVERSED = AutoSettingsStore.getBoolean("PINPOINT_Y_REVERSED");
     public static double MAX_SAFE_ANGULAR_VELOCITY = AutoSettingsStore.getDouble("MAX_SAFE_ANGULAR_VELOCITY");
     public static double MAX_SAFE_LINEAR_VELOCITY = AutoSettingsStore.getDouble("MAX_SAFE_LINEAR_VELOCITY");
-
+    public static double PINPOINT_YAW_SCALAR = AutoSettingsStore.getDouble("PINPOINT_YAW_SCALAR");
 }

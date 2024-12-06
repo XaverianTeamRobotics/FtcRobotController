@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
 import org.firstinspires.ftc.teamcode.autonomous.localizers.LimelightLocalizer
 import org.firstinspires.ftc.teamcode.internals.templates.initHardwareManager
+import java.lang.Math.toDegrees
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -41,8 +42,11 @@ class LocalizationTest : LinearOpMode() {
             val poseEstimate = drive.poseEstimate
             telemetry.addData("x", poseEstimate.x)
             telemetry.addData("y", poseEstimate.y)
-            telemetry.addData("heading", poseEstimate.heading)
+            telemetry.addData("heading (deg)", toDegrees(poseEstimate.heading))
+            telemetry.addData("pinpointRefreshRate", drive.ppl.pinpoint.loopTime)
             telemetry.update()
+
+            sleep(50)
         }
     }
 }
