@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous.localizers
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.localization.Localizer
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager
+import org.firstinspires.ftc.teamcode.internals.hardware.drivers.GoBildaPinpointDriver
 import org.firstinspires.ftc.teamcode.internals.hardware.drivers.GoBildaPinpointDriver.EncoderDirection.FORWARD
 import org.firstinspires.ftc.teamcode.internals.hardware.drivers.GoBildaPinpointDriver.EncoderDirection.REVERSED
 import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.PINPOINT_X_OFFSET
