@@ -54,13 +54,11 @@ public class AutoSettings {
     public static MotorConfig DRIVE_BACK_RIGHT = AutoSettingsStore.getMotor("DRIVE_BACK_RIGHT");
     public static MotorConfig DRIVE_FRONT_LEFT = AutoSettingsStore.getMotor("DRIVE_FRONT_LEFT");
     public static MotorConfig DRIVE_BACK_LEFT = AutoSettingsStore.getMotor("DRIVE_BACK_LEFT");
-    public static String IMU_NAME = AutoSettingsStore.getIMU("IMU_NAME");
     public static double TICKS_PER_REV = AutoSettingsStore.getDouble("TICKS_PER_REV");
     public static double MAX_RPM = AutoSettingsStore.getDouble("MAX_RPM");
     public static double WHEEL_RADIUS = AutoSettingsStore.getDouble("WHEEL_RADIUS");
     public static double GEAR_RATIO = AutoSettingsStore.getDouble("GEAR_RATIO");
     public static double TRACK_WIDTH = AutoSettingsStore.getDouble("TRACK_WIDTH");
-    public static double WHEEL_BASE = AutoSettingsStore.getDouble("WHEEL_BASE");
     public static double MAX_VEL = AutoSettingsStore.getDouble("MAX_VEL");
     public static double MAX_ACCEL = AutoSettingsStore.getDouble("MAX_ACCEL");
     public static double MAX_ANG_VEL = AutoSettingsStore.getDouble("MAX_ANG_VEL");
@@ -82,4 +80,6 @@ public class AutoSettings {
     public static double MAX_SAFE_ANGULAR_VELOCITY = AutoSettingsStore.getDouble("MAX_SAFE_ANGULAR_VELOCITY");
     public static double MAX_SAFE_LINEAR_VELOCITY = AutoSettingsStore.getDouble("MAX_SAFE_LINEAR_VELOCITY");
     public static double PINPOINT_YAW_SCALAR = AutoSettingsStore.getDouble("PINPOINT_YAW_SCALAR");
+    public static double LIMELIGHT_SERVO_CENTER = AutoSettingsStore.getDouble("LIMELIGHT_SERVO_CENTER");
+    public static double LIMELIGHT_SERVO_BUCKET = AutoSettingsStore.getDouble("LIMELIGHT_SERVO_BUCKET");
 }

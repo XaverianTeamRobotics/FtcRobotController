@@ -198,4 +198,14 @@ public class DefaultAutoSettings {
      * 0 = default
      */
     public static double PINPOINT_YAW_SCALAR = 0;
+
+    /**
+     * The Center position of the limelight servo
+     */
+    public static double LIMELIGHT_SERVO_CENTER = 0.484;
+
+    /**
+     * The Bucket position of the limelight servo
+     */
+    public static double LIMELIGHT_SERVO_BUCKET = 1;
 }

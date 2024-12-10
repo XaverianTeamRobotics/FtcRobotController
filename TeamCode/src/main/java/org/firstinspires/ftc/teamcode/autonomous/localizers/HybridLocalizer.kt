@@ -18,16 +18,21 @@ class HybridLocalizer(val primary: Localizer, val fallback: Localizer, private v
 
     override var poseVelocity: Pose2d? = null
 
+    var usingFallback: Boolean = false
+        private set
+
     override fun update() {
         primary.update()
         fallback.update()
 
         if (!(primary.poseEstimate epsilonEquals NULL_POSE) && (!enableMaxSafeVel || (abs(fallback.poseVelocity!!.heading) < AutoSettings.MAX_SAFE_ANGULAR_VELOCITY && sqrt(fallback.poseVelocity!!.x.pow(2) + fallback.poseVelocity!!.y.pow(2)) < MAX_SAFE_LINEAR_VELOCITY))) {
-            poseEstimate = primary.poseEstimate
+            poseEstimate = primary.poseEstimate // Use primary
             fallback.poseEstimate = primary.poseEstimate
+            usingFallback = false
         } else {
-            poseEstimate = fallback.poseEstimate
+            poseEstimate = fallback.poseEstimate // Use fallback
             primary.poseEstimate = fallback.poseEstimate
+            usingFallback = true
         }
 
         poseVelocity = if (primary.poseVelocity != null) {

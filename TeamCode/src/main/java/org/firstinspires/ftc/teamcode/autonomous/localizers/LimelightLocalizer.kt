@@ -5,7 +5,6 @@ import com.acmerobotics.roadrunner.localization.Localizer
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.limelight3A
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.telemetry
 import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings
-import java.lang.Math.pow
 import java.lang.Math.toRadians
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -23,7 +22,7 @@ class LimelightLocalizer: Localizer {
 
     override fun update() {
         val result = limelight3A!!.latestResult
-        if (result != null && result.isValid) {
+        if (result != null && result.isValid && !disabled) {
             // Find the closest marker. If it is more than 72 inches away, set poseEstimate to NULL_POSE
             var closest = Double.MAX_VALUE
             for (marker in result.fiducialResults) {
@@ -41,5 +40,9 @@ class LimelightLocalizer: Localizer {
         } else {
             poseEstimate = HybridLocalizer.NULL_POSE
         }
+    }
+
+    companion object {
+        var disabled: Boolean = false
     }
 }

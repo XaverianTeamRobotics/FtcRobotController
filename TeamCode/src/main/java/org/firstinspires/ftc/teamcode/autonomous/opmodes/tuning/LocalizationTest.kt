@@ -5,7 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
 import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
+import org.firstinspires.ftc.teamcode.autonomous.limelight.LimelightServoScript
 import org.firstinspires.ftc.teamcode.autonomous.localizers.LimelightLocalizer
+import org.firstinspires.ftc.teamcode.internals.templates.BaseOpMode
 import org.firstinspires.ftc.teamcode.internals.templates.initHardwareManager
 import java.lang.Math.toDegrees
 
@@ -17,17 +19,18 @@ import java.lang.Math.toDegrees
  * encoder localizer heading may be significantly off if the track width has not been tuned).
  */
 @TeleOp(group = "drive")
-class LocalizationTest : LinearOpMode() {
-    @Throws(InterruptedException::class)
-    override fun runOpMode() {
-        initHardwareManager()
+class LocalizationTest : BaseOpMode() {
+    lateinit var drive: MecanumDriver
 
-        val drive = MecanumDriver(hardwareMap)
+    override fun construct() {
+        drive = MecanumDriver(hardwareMap)
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)
 
-        waitForStart()
+        addScript(LimelightServoScript({LimelightServoScript.LimelightServoPosition.CENTER}))
+    }
 
+    override fun run() {
         while (!isStopRequested) {
             drive.setWeightedDrivePower(
                 Pose2d(
@@ -48,5 +51,9 @@ class LocalizationTest : LinearOpMode() {
 
             sleep(50)
         }
+    }
+
+    override fun onStop() {
+
     }
 }
