@@ -192,4 +192,20 @@ public class DefaultAutoSettings {
      */
     public static double MAX_SAFE_LINEAR_VELOCITY = 10.0;
 
+    /**
+     * The yaw multiplier for the pinpoint.
+     * Obtained from {@link org.firstinspires.ftc.teamcode.autonomous.opmodes.tuning.PinpointYawTuner}.
+     * 0 = default
+     */
+    public static double PINPOINT_YAW_SCALAR = 0;
+
+    /**
+     * The Center position of the limelight servo
+     */
+    public static double LIMELIGHT_SERVO_CENTER = 0.484;
+
+    /**
+     * The Bucket position of the limelight servo
+     */
+    public static double LIMELIGHT_SERVO_BUCKET = 1;
 }
