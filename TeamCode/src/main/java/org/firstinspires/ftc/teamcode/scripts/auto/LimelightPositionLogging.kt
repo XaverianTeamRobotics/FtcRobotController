@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.scripts
+package org.firstinspires.ftc.teamcode.scripts.auto
 
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.limelight3A
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.telemetry

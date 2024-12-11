@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.opmodes
+package org.firstinspires.ftc.teamcode.opmodes.robot
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.internals.templates.BaseOpMode
-import org.firstinspires.ftc.teamcode.scripts.ContinuousMotorScript
-import org.firstinspires.ftc.teamcode.scripts.ContinuousServoScript
-import org.firstinspires.ftc.teamcode.scripts.MecanumDriveScript
+import org.firstinspires.ftc.teamcode.scripts.hardware.ContinuousMotorScript
+import org.firstinspires.ftc.teamcode.scripts.hardware.ContinuousServoScript
+import org.firstinspires.ftc.teamcode.scripts.drive.MecanumDriveScript
 
 
 @TeleOp(name = "VectorBot Model 1", group = BaseOpMode.FULL_GROUP_NAME)
