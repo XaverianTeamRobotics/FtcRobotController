@@ -33,7 +33,22 @@ import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySe
 import org.firstinspires.ftc.teamcode.autonomous.trajectorysequence.TrajectorySequenceRunner
 import org.firstinspires.ftc.teamcode.autonomous.util.LynxModuleUtil
 import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings
-import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.*
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.DRIVE_BACK_LEFT
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.DRIVE_BACK_RIGHT
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.DRIVE_FRONT_LEFT
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.DRIVE_FRONT_RIGHT
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.LATERAL_MULTIPLIER
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.MAX_ACCEL
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.MAX_ANG_ACCEL
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.MAX_ANG_VEL
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.MAX_VEL
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.OMEGA_WEIGHT
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.TRACK_WIDTH
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.VX_WEIGHT
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.VY_WEIGHT
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.kA
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.kStatic
+import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.kV
 import kotlin.math.abs
 
 /*

@@ -24,19 +24,14 @@ class ManualSaveConfig : BaseOpMode() {
                 }
                 telemetry.clear()
                 telemetry.update()
+                AutoSettings.loader.save()
+                telemetry.addLine("Saved. Exiting OpMode...")
+                telemetry.update()
                 try {
-                    SettingLoader.save()
-                    telemetry.addLine("Saved. Exiting OpMode...")
-                    telemetry.update()
-                    try {
-                        java.lang.Thread.sleep(1000)
-                    } catch (`_`: java.lang.Exception) {
-                    }
-                    requestOpModeStop()
-                } catch (e: SettingLoaderFailureException) {
-                    telemetry.addLine("Saving settings failed! " + e.message)
-                    telemetry.update()
+                    java.lang.Thread.sleep(1000)
+                } catch (`_`: java.lang.Exception) {
                 }
+                requestOpModeStop()
             }
         }
     }
