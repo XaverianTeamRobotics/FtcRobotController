@@ -11,7 +11,6 @@ import java.lang.reflect.Field
  * @param clazz the class to load the data into. Should be an object with fields annotated with [DremelData]
  * @see DremelInterpreter
  */
-@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class DremelLoader(private val file: File, private val clazz: Class<*>) {
     private lateinit var interpreter: DremelInterpreter
 
