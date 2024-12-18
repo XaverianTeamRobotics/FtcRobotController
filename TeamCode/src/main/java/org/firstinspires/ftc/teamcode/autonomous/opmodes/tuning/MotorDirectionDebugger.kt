@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
+import org.firstinspires.ftc.teamcode.internals.templates.initHardwareManager
 
 /**
  * This is a simple teleop routine for debugging your motor configuration.
@@ -43,6 +44,7 @@ import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
 class MotorDirectionDebugger : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
+        initHardwareManager()
         val telemetry: Telemetry = MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry())
 
         val drive = MecanumDriver(hardwareMap)

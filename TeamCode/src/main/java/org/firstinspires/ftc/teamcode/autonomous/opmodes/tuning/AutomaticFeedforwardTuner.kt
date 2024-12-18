@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.autonomous.util.LoggingUtil
 import org.firstinspires.ftc.teamcode.autonomous.util.RegressionUtil
 import org.firstinspires.ftc.teamcode.autonomous.util.rpmToVelocity
 import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.MAX_RPM
+import org.firstinspires.ftc.teamcode.internals.templates.initHardwareManager
 import java.util.ArrayList
 import kotlin.math.sqrt
 
@@ -32,6 +33,7 @@ import kotlin.math.sqrt
 class AutomaticFeedforwardTuner : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
+        initHardwareManager()
         val telemetry: Telemetry = MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry())
 
         val drive = MecanumDriver(hardwareMap)

@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
 import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings
 import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.GEAR_RATIO
 import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.WHEEL_RADIUS
+import org.firstinspires.ftc.teamcode.internals.templates.initHardwareManager
 import java.util.Objects
 import kotlin.math.max
 
@@ -37,6 +38,7 @@ class MaxVelocityTuner : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
+        initHardwareManager()
         val drive = MecanumDriver(hardwareMap)
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)

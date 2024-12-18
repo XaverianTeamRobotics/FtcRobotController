@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
+import org.firstinspires.ftc.teamcode.internals.templates.initHardwareManager
 import java.util.Objects
 import kotlin.math.max
 
@@ -30,6 +31,7 @@ class MaxAngularVeloTuner : LinearOpMode() {
 
     @Throws(InterruptedException::class)
     override fun runOpMode() {
+        initHardwareManager()
         val drive = MecanumDriver(hardwareMap)
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER)

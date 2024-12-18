@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
+import org.firstinspires.ftc.teamcode.internals.templates.initHardwareManager
 
 /*
  * Op mode for preliminary tuning of the follower PID coefficients (located in the drive base
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
 class FollowerPIDTuner : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
+        initHardwareManager()
         val drive = MecanumDriver(hardwareMap)
 
         val startPose = Pose2d(-DISTANCE / 2, -DISTANCE / 2, 0.0)

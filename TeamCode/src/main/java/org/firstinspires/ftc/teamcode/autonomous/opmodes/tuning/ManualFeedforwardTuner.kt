@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.MAX_VEL
 import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.kA
 import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.kStatic
 import org.firstinspires.ftc.teamcode.internals.settings.AutoSettings.kV
+import org.firstinspires.ftc.teamcode.internals.templates.initHardwareManager
 import java.util.Objects
 
 /*
@@ -50,6 +51,7 @@ class ManualFeedforwardTuner : LinearOpMode() {
     private var mode: Mode? = null
 
     override fun runOpMode() {
+        initHardwareManager()
         val telemetry: Telemetry = MultipleTelemetry(this.telemetry, dashboard.getTelemetry())
 
         drive = MecanumDriver(hardwareMap)

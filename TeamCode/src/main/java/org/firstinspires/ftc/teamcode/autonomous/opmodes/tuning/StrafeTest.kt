@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
+import org.firstinspires.ftc.teamcode.internals.templates.initHardwareManager
 
 /*
  * This is a simple routine to test translational drive capabilities.
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.autonomous.drive.MecanumDriver
 class StrafeTest : LinearOpMode() {
     @Throws(InterruptedException::class)
     override fun runOpMode() {
+        initHardwareManager()
         val telemetry: Telemetry = MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry())
 
         val drive = MecanumDriver(hardwareMap)

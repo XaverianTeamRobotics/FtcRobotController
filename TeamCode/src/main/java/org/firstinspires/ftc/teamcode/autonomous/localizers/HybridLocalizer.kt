@@ -9,9 +9,12 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class HybridLocalizer(val primary: Localizer, val fallback: Localizer, private val enableMaxSafeVel: Boolean = true): Localizer {
-    override var poseEstimate: Pose2d = Pose2d()
+    private var pe: Pose2d = Pose2d()
+
+    override var poseEstimate: Pose2d
+        get() = pe
         set(value) {
-            field = value
+            pe = value
             primary.poseEstimate = value
             fallback.poseEstimate = value
         }
@@ -26,11 +29,11 @@ class HybridLocalizer(val primary: Localizer, val fallback: Localizer, private v
         fallback.update()
 
         if (!(primary.poseEstimate epsilonEquals NULL_POSE) && (!enableMaxSafeVel || (abs(fallback.poseVelocity!!.heading) < AutoSettings.MAX_SAFE_ANGULAR_VELOCITY && sqrt(fallback.poseVelocity!!.x.pow(2) + fallback.poseVelocity!!.y.pow(2)) < MAX_SAFE_LINEAR_VELOCITY))) {
-            poseEstimate = primary.poseEstimate // Use primary
+            pe = primary.poseEstimate // Use primary
             fallback.poseEstimate = primary.poseEstimate
             usingFallback = false
         } else {
-            poseEstimate = fallback.poseEstimate // Use fallback
+            pe = fallback.poseEstimate // Use fallback
             primary.poseEstimate = fallback.poseEstimate
             usingFallback = true
         }

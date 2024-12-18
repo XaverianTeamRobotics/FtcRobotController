@@ -34,7 +34,7 @@ class PinpointLocalizer: Localizer {
         }
 
         pinpoint.setOffsets(PINPOINT_X_OFFSET, PINPOINT_Y_OFFSET)
-        pinpoint.setEncoderResolution(19.89436789)
+        pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
         if (PINPOINT_YAW_SCALAR != 0.0) {
             pinpoint.setYawScalar(PINPOINT_YAW_SCALAR * pinpoint.getYawScalar())
         }
