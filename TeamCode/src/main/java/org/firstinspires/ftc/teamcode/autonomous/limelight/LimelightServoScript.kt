@@ -16,6 +16,7 @@ class LimelightServoScript(val pos: () -> LimelightServoPosition) : Script() {
         while (scriptIsActive()) {
             servo.position = pos().value()
             LimelightLocalizer.disabled = pos() != LimelightServoPosition.CENTER
+            LimelightLocalizer.servoPos = pos()
         }
     }
 
