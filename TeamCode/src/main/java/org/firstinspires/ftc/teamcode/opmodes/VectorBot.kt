@@ -15,11 +15,11 @@ class VectorBot: BaseOpMode() {
         addScript(ContinuousMotorScript(id = 6, input = {(-gamepad2.right_stick_y.toDouble())})) //vertical lifter; motor 2
         addScript(ContinuousServoScript(id = 3, input = {(gamepad2.left_stick_y).toDouble()})) //horizontal slide servo 1
         addScript(ContinuousServoScript(id = 4, input = {(-gamepad2.left_stick_y).toDouble()})) //horizontal slide servo 2
-        //addScript(ContinuousServoScript(id = 2, input = {(gamepad2.right_trigger-gamepad2.left_trigger).toDouble()})) //second claw rotator
         addScript(ContinuousServoScript(id = 0, input = ContinuousMotorScript.twoWayToggleInput(input = {gamepad2.x}))) //claw grabber
         addScript(ContinuousServoScript(id = 1, input = ContinuousMotorScript.twoWayToggleInput(input = {gamepad2.dpad_right}))) //claw rotator
         addScript(ContinuousServoScript(id = 2, input = ContinuousMotorScript.twoWayToggleInput(input = {gamepad2.dpad_up}))) //claw raiser
-    }
+        addScript(ContinuousServoScript(id = 6, input = ContinuousMotorScript.twoWayToggleInput(input = {gamepad2.circle}, power = 1.0, idle = 0.625)))
+}
 
     override fun run() {
     }
