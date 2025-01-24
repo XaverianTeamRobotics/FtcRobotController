@@ -1,8 +1,16 @@
 package org.firstinspires.ftc.teamcode.internals.hardware
 
+import com.qualcomm.hardware.dfrobot.HuskyLens
 import com.qualcomm.hardware.limelightvision.Limelight3A
-import com.qualcomm.robotcore.hardware.*
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DistanceSensor
+import com.qualcomm.robotcore.hardware.Gamepad
+import com.qualcomm.robotcore.hardware.HardwareDevice
+import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.HardwareMap.DeviceMapping
+import com.qualcomm.robotcore.hardware.IMU
+import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.hardware.TouchSensor
 import com.qualcomm.robotcore.util.RobotLog
 import org.firstinspires.ftc.robotcore.external.Telemetry
 
@@ -70,6 +78,13 @@ object HardwareManager {
         private set
 
     /**
+     * Huskylens Camera
+     */
+    @JvmStatic
+    lateinit var huskylens: HuskyLens
+        private set
+
+    /**
      * IMU sensor. (defined by "imu" in the configuration, doesnt have to be built-in imu)
      */
     lateinit var imu: IMU
@@ -110,6 +125,10 @@ object HardwareManager {
 
         try {
             imu = hardwareMap.get(IMU::class.java, "imu")
+        } catch (_: Exception) {}
+
+        try {
+            huskylens = hardwareMap.get(HuskyLens::class.java, "huskylens")
         } catch (_: Exception) {}
     }
 
