@@ -12,7 +12,7 @@ class VectorBot: BaseOpMode() {
     override fun construct() {
         addScript(MecanumDriveScript(hasBevelGears = true, powerScale = 0.8)) //driver 1 driving the robot
         addScript(ContinuousMotorScript(id = 5, input = {(gamepad2.right_stick_y).toDouble()})) //vertical lifter; motor 1
-        addScript(ContinuousMotorScript(id = 6, input = {(-gamepad2.right_stick_y.toDouble())})) //vertical lifter; motor 2
+        addScript(ContinuousMotorScript(id = 4, input = {(-gamepad2.right_stick_y.toDouble())})) //vertical lifter; motor 2
         addScript(ContinuousServoScript(id = 3, input = {(gamepad2.left_stick_y).toDouble()})) //horizontal slide servo 1
         addScript(ContinuousServoScript(id = 4, input = {(-gamepad2.left_stick_y).toDouble()})) //horizontal slide servo 2
         addScript(ContinuousServoScript(id = 0, input = ContinuousMotorScript.twoWayToggleInput(input = {gamepad2.x}))) //claw grabber
