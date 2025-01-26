@@ -19,7 +19,7 @@ class VectorBot: BaseOpMode() {
         addScript(ContinuousServoScript(id = 1, input = ContinuousMotorScript.twoWayToggleInput(input = {gamepad2.dpad_up}))) //claw raiser
         addScript(ContinuousServoScript(id = 2, input = ContinuousMotorScript.twoWayToggleInput(input = {gamepad2.dpad_right}))) //claw rotator
         addScript(ContinuousServoScript(id = 8, input = ContinuousMotorScript.twoWayToggleInput(input = {gamepad2.right_bumper}, power = 1.0, idle = 0.0))) //transfer claw grabber
-        addScript(ContinuousServoScript(id = 9, input = ContinuousMotorScript.twoWayToggleInput(input = {gamepad2.left_bumper}, power = -1.0, idle = -1.0))) //transfer rotator
+        addScript(ContinuousServoScript(id = 9, input = ContinuousMotorScript.twoWayToggleInput(input = {gamepad2.left_bumper}, power = 1.0, idle = -1.0))) //transfer rotator
 }
 
     override fun run() {
