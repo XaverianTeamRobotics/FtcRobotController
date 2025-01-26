@@ -15,11 +15,11 @@ class TheMostAdvancedAutonomousOfAllTimeTM: BaseOpMode() {
         for (i in 0..3) {
             motors[i].zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
         }
-        addScript(MecanumDriveScript(forwardInput = {0.0}, rotationInput = {0.0}, lateralInput = {input}))
+        addScript(MecanumDriveScript(forwardInput = {-input/10.0}, rotationInput = {0.0}, lateralInput = {input}))
     }
 
     override fun run() {
-        sleep(2500)
+        sleep(1750)
         input = 0.0
         requestOpModeStop()
     }

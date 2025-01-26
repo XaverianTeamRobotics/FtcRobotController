@@ -42,8 +42,8 @@ class Bigbot: BaseOpMode() {
         val highLimit = 14.1
         val encoderTicksPerInch = 516.170
         return EncoderLimiterHook(
-            findInitialPositionFromAbsoluteEncoder(absoluteEncoder.position, absInchPerRev, absInitial),
-            //0.0,
-            lowLimit, highLimit, "slide", { (gamepad2.left_stick_y).toDouble() }, encoderTicksPerInch)
+            //findInitialPositionFromAbsoluteEncoder(absoluteEncoder.position, absInchPerRev, absInitial),
+            0.0,
+            lowLimit, highLimit, "cm0", { (gamepad2.left_stick_y).toDouble() }, encoderTicksPerInch)
     }
 }
