@@ -49,7 +49,6 @@ abstract class BaseOpMode : LinearOpMode() {
         }
         allThreads.forEach { it.interrupt() }
         onStop()
-        allThreads.forEach { it.join() }
         scripts.forEach { it.onStop() }
     }
 
@@ -105,3 +104,5 @@ abstract class BaseOpMode : LinearOpMode() {
             private set
     }
 }
+
+fun LinearOpMode.initHardwareManager() = HardwareManager.init(hardwareMap, gamepad1, gamepad2, telemetry, HardwareSecret.secret)

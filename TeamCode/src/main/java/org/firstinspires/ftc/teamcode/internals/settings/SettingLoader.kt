@@ -40,7 +40,7 @@ object SettingLoader {
         val builder = java.lang.StringBuilder()
         builder.append(";")
 
-        for (field in OdometrySettingsDashboardConfiguration::class.java.getFields()) {
+        for (field in AutoSettings::class.java.getFields()) {
             try {
                 val str: kotlin.String? = SettingLoader.makeEntry(field)
                 // Entries are delimited by a semicolon
@@ -142,6 +142,9 @@ object SettingLoader {
                 str.append("imu")
             }
             str.append(java.lang.System.lineSeparator())
+        } else if (type == Boolean::class.java) {
+            val data = field.get(null) as Boolean
+            str.append("Boolean").append(System.lineSeparator()).append(data).append(System.lineSeparator())
         } else {
             throw java.lang.IllegalAccessException("Entry creation of " + field + " with a type of " + type + " failed.")
         }
@@ -218,33 +221,36 @@ object SettingLoader {
 
                 when (trimmedPieces.get(1)) {
                     "Double" -> value =
-                        SettingLoader.Value(trimmedPieces.get(2)!!.toDouble(), kotlin.Double::class.java)
+                        Value(trimmedPieces.get(2)!!.toDouble(), Double::class.java)
+
+                    "Boolean" -> value =
+                        Value(trimmedPieces.get(2)!!.toBoolean(), Boolean::class.java)
 
                     "MotorConfig" -> if (trimmedPieces.get(3) == "Forward") {
-                        value = SettingLoader.Value(
+                        value = Value(
                             MotorConfig(trimmedPieces.get(2), DcMotorSimple.Direction.FORWARD),
                             MotorConfig::class.java
                         )
                     } else {
-                        value = SettingLoader.Value(
+                        value = Value(
                             MotorConfig(trimmedPieces.get(2), DcMotorSimple.Direction.REVERSE),
                             MotorConfig::class.java
                         )
                     }
 
                     "EncoderConfig" -> if (trimmedPieces.get(3) == "Forward") {
-                        value = SettingLoader.Value(
+                        value = Value(
                             EncoderConfig(trimmedPieces.get(2), OdoEncoder.Direction.FORWARD),
                             EncoderConfig::class.java
                         )
                     } else {
-                        value = SettingLoader.Value(
+                        value = Value(
                             EncoderConfig(trimmedPieces.get(2), OdoEncoder.Direction.REVERSE),
                             EncoderConfig::class.java
                         )
                     }
 
-                    "PIDCoefficents" -> value = SettingLoader.Value(
+                    "PIDCoefficents" -> value = Value(
                         com.acmerobotics.roadrunner.control.PIDCoefficients(
                             trimmedPieces.get(2)!!.toDouble(),
                             trimmedPieces.get(3)!!.toDouble(),
@@ -253,15 +259,15 @@ object SettingLoader {
                     )
 
                     "IMU" -> if (trimmedPieces.get(2) != null) {
-                        value = SettingLoader.Value(trimmedPieces.get(2)!!, kotlin.String::class.java)
+                        value = Value(trimmedPieces.get(2)!!, kotlin.String::class.java)
                     } else {
-                        value = SettingLoader.Value("", kotlin.String::class.java)
+                        value = Value("", kotlin.String::class.java)
                     }
 
                     "LocalizationType" -> if (trimmedPieces.get(2) == "pod") {
-                        value = SettingLoader.Value(LocalizationType.POD, LocalizationType::class.java)
+                        value = Value(LocalizationType.POD, LocalizationType::class.java)
                     } else {
-                        value = SettingLoader.Value(LocalizationType.IMU, LocalizationType::class.java)
+                        value = Value(LocalizationType.IMU, LocalizationType::class.java)
                     }
 
                     else -> continue

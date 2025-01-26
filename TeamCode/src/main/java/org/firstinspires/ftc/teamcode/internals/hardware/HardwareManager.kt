@@ -13,6 +13,8 @@ import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
 import com.qualcomm.robotcore.util.RobotLog
 import org.firstinspires.ftc.robotcore.external.Telemetry
+import org.firstinspires.ftc.teamcode.internals.hardware.drivers.AbsoluteEncoder
+import org.firstinspires.ftc.teamcode.internals.hardware.drivers.GoBildaPinpointDriver
 
 /**
  * Manages the hardware components of the robot.
@@ -87,7 +89,16 @@ object HardwareManager {
     /**
      * IMU sensor. (defined by "imu" in the configuration, doesnt have to be built-in imu)
      */
+    @JvmStatic
     lateinit var imu: IMU
+        private set
+
+    @JvmStatic
+    lateinit var pinpoint: GoBildaPinpointDriver
+        private set
+
+    @JvmStatic
+    lateinit var absoluteEncoders: HardwareArray<AbsoluteEncoder>
         private set
 
     /**
@@ -111,11 +122,19 @@ object HardwareManager {
 
         motors = HardwareArray(hardwareMap.dcMotor, "motor")
         servos = HardwareArray(hardwareMap.servo, "servo")
-        val mapping = hardwareMap.DeviceMapping(DistanceSensor::class.java)
+
+        val dsMapping = hardwareMap.DeviceMapping(DistanceSensor::class.java)
         for (sensor in hardwareMap.getAll(DistanceSensor::class.java)) {
-            mapping.put(sensor.deviceName, sensor)
+            dsMapping.put(sensor.deviceName, sensor)
         }
-        distanceSensor = HardwareArray(mapping, "distanceSensor")
+        distanceSensor = HardwareArray(dsMapping, "distanceSensor")
+
+
+        val aeMapping = hardwareMap.DeviceMapping(AbsoluteEncoder::class.java)
+        for (ae in hardwareMap.getAll(AbsoluteEncoder::class.java)) {
+            aeMapping.put(ae.deviceName, ae)
+        }
+        absoluteEncoders = HardwareArray(aeMapping, "absoluteEncoder")
 
         touchSwitches = HardwareArray(hardwareMap.touchSensor, "ts")
 
@@ -129,6 +148,10 @@ object HardwareManager {
 
         try {
             huskylens = hardwareMap.get(HuskyLens::class.java, "huskylens")
+        } catch (_: Exception) {}
+
+        try {
+            pinpoint = hardwareMap.get(GoBildaPinpointDriver::class.java, "pinpoint")
         } catch (_: Exception) {}
     }
 

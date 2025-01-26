@@ -28,14 +28,19 @@ class ContinuousMotorScript(
      * Main loop for continuously controlling the motor. This method runs continuously.
      */
     override fun run() {
-        var prev: Double = 0.0
-        while (scriptIsActive()) {
-            val i = (if (inverted) -1.0 else 1.0) * input()
-            if (i != prev) {
-                motor.power = i
-                RobotLog.v("CMS${id}: Set power to ${i}")
+        try {
+            var prev: Double = 0.0
+            while (scriptIsActive()) {
+                val i = (if (inverted) -1.0 else 1.0) * input()
+                if (i != prev) {
+                    motor.power = i
+                    RobotLog.v("CMS${id}: Set power to ${i}")
+                }
+                prev = i
             }
-            prev = i
+        } catch (e: Exception) {
+            RobotLog.e("ContinuousMotorScript: ${e.message}")
+            return
         }
     }
 
