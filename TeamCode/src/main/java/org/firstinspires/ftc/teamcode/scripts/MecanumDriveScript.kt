@@ -31,34 +31,39 @@ class MecanumDriveScript(
     override fun init() {}
 
     override fun run() {
-        while (scriptIsActive()) {
-            var startT = System.currentTimeMillis()
+        try {
+            while (scriptIsActive()) {
+                var startT = System.currentTimeMillis()
 
-            val y = forwardInput()
-            val x = lateralInput() * 1.1
-            val rx = rotationInput() * rotScale
+                val y = forwardInput()
+                val x = lateralInput() * 1.1
+                val rx = rotationInput() * rotScale
 
-            val denominator = max(abs(y) + abs(x) + abs(rx), 1.0)
-            var frontLeftPower = (y + x + rx) / denominator
-            var backLeftPower = (y - x + rx) / denominator
-            var frontRightPower = (y - x - rx) / denominator
-            var backRightPower = (y + x - rx) / denominator
+                val denominator = max(abs(y) + abs(x) + abs(rx), 1.0)
+                var frontLeftPower = (y + x + rx) / denominator
+                var backLeftPower = (y - x + rx) / denominator
+                var frontRightPower = (y - x - rx) / denominator
+                var backRightPower = (y + x - rx) / denominator
 
-            if (hasBevelGears) {
-                frontRightPower = -frontRightPower
-                frontLeftPower = -frontLeftPower
-                backLeftPower = -backLeftPower
-                backRightPower = -backRightPower
+                if (hasBevelGears) {
+                    frontRightPower = -frontRightPower
+                    frontLeftPower = -frontLeftPower
+                    backLeftPower = -backLeftPower
+                    backRightPower = -backRightPower
+                }
+
+                frontLeftMotor.power = frontLeftPower * powerScale
+                backLeftMotor.power = backLeftPower * powerScale
+                frontRightMotor.power = -(frontRightPower * powerScale)
+                backRightMotor.power = -(backRightPower * powerScale)
+
+                if (System.currentTimeMillis() - startT > 250) {
+                    RobotLog.w("MECANUM: DELTA T > 250 (${System.currentTimeMillis() - startT})")
+                }
             }
-
-            frontLeftMotor.power = frontLeftPower * powerScale
-            backLeftMotor.power = backLeftPower * powerScale
-            frontRightMotor.power = -(frontRightPower * powerScale)
-            backRightMotor.power = -(backRightPower * powerScale)
-
-            if (System.currentTimeMillis() - startT > 250) {
-                RobotLog.w( "MECANUM: DELTA T > 250 (${System.currentTimeMillis() - startT})")
-            }
+        } catch (e: Exception) {
+            RobotLog.e("MecanumDriveScript: ${e.message}")
+            return
         }
     }
 

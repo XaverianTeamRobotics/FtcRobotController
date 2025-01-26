@@ -100,7 +100,6 @@ class MecanumDriver(hardwareMap: HardwareMap, localizer: Localizer? = null) :
 
         setZeroPowerBehavior(ZeroPowerBehavior.BRAKE)
 
-        // TODO: reverse any motors using DcMotor.setDirection()
         leftFront.direction = DRIVE_FRONT_LEFT.DIRECTION
         leftRear.direction = DRIVE_BACK_LEFT.DIRECTION
         rightFront.direction = DRIVE_FRONT_RIGHT.DIRECTION
@@ -109,6 +108,7 @@ class MecanumDriver(hardwareMap: HardwareMap, localizer: Localizer? = null) :
         if (localizer != null) {
             this.localizer = localizer
         } else {
+            lll.headingProvider = ppl.poseEstimate::heading
             this.localizer = lll hybrid ppl
         }
 

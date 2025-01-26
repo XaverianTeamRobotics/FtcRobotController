@@ -28,14 +28,19 @@ class ContinuousServoScript(
      * Main loop for continuously controlling the servo. This method runs continuously.
      */
     override fun run() {
-        var prev = 0.0
-        while (scriptIsActive()) {
-            val i = ((((if (inverted) -1 else 1) * input()) / 2) + 0.5)
-            if (i != prev) {
-                servo.position = i
-                RobotLog.v("CSS${id}: Set power to ${i}")
+        try {
+            var prev = 0.0
+            while (scriptIsActive()) {
+                val i = ((((if (inverted) -1 else 1) * input()) / 2) + 0.5)
+                if (i != prev) {
+                    servo.position = i
+                    RobotLog.v("CSS${id}: Set power to ${i}")
+                }
+                prev = i
             }
-            prev = i
+        } catch (e: Exception) {
+            RobotLog.e("ContinuousServoScript: ${e.message}")
+            return
         }
     }
 

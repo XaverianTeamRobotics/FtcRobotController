@@ -21,22 +21,16 @@ class LimelightLocalizer: Localizer {
     override var poseEstimate: Pose2d = Pose2d()
     override val poseVelocity: Pose2d? = null
 
+    var headingProvider: (() -> Double)? = null
+
     override fun update() {
         if (!disabled) {
+            if (headingProvider != null) {
+                limelight3A!!.updateRobotOrientation(headingProvider!!())
+            }
             val result = limelight3A!!.latestResult
-            if (result != null && result.isValid) {
-                // Find the closest marker. If it is more than 72 inches away, set poseEstimate to NULL_POSE
-                var closest = Double.MAX_VALUE
-                for (marker in result.fiducialResults) {
-                    val p = marker.targetPoseCameraSpace.position
-                    val d = sqrt(p.x.pow(2) + p.y.pow(2) + p.z.pow(2))
-                    if (d < closest) closest = d
-                }
-                if (closest > 72) {
-                    poseEstimate = HybridLocalizer.NULL_POSE
-                    return
-                }
-                val botpose = result.botpose
+            if (result != null && result.isValid && result.fiducialResults.isNotEmpty()) {
+                val botpose = if (headingProvider != null) result.botpose_MT2 else result.botpose
                 // M to in = 39.37008
                 poseEstimate = Pose2d(
                     botpose.position.x * 39.37008,

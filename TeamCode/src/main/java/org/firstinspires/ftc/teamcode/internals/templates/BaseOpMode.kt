@@ -49,7 +49,6 @@ abstract class BaseOpMode : LinearOpMode() {
         }
         allThreads.forEach { it.interrupt() }
         onStop()
-        allThreads.forEach { it.join() }
         scripts.forEach { it.onStop() }
     }
 

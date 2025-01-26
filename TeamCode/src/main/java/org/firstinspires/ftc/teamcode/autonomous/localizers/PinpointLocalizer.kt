@@ -19,7 +19,7 @@ class PinpointLocalizer: Localizer {
         get() = _pe
         set(value) {
             _pe = value
-            pinpoint.position = Pose2d(value.x * 25.4, value.y * 25.4, value.heading)
+            pinpoint.position = value.copy(value.x * 25.4, value.y * 25.4)
         }
 
     override var poseVelocity: Pose2d? = null

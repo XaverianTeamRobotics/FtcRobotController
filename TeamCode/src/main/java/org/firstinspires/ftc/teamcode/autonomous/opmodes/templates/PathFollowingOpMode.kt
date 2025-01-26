@@ -21,8 +21,16 @@ abstract class PathFollowingOpMode: BaseOpMode() {
 
         addScript(LimelightServoScript { limelightServoPosition })
 
-        trajectorySequence = buildTrajectorySequence(drive.trajectorySequenceBuilder(startPose))
+        val p = startPose
+
+        trajectorySequence = buildTrajectorySequence(drive.trajectorySequenceBuilder(p))
+
+        drive.poseEstimate = p
+
+        postInit()
     }
+
+    abstract fun postInit()
 
     abstract fun buildTrajectorySequence(builder: TrajectorySequenceBuilder): TrajectorySequence
 
