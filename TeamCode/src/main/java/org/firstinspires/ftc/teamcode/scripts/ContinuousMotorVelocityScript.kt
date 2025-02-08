@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.gamepad1
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.motors
+import org.firstinspires.ftc.teamcode.internals.templates.ContinuousAxisScript
 
 /**
  * Script for continuously controlling a motor based on gamepad input.
