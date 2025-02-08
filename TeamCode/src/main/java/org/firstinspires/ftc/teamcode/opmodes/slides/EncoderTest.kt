@@ -11,12 +11,18 @@ import org.firstinspires.ftc.teamcode.internals.templates.BaseOpMode
 class EncoderTest: BaseOpMode() {
     lateinit var motor: DcMotorEx
     override fun construct() {
-        resetEncoder()
         motor = HardwareManager.motors[0] as DcMotorEx
+        resetEncoder()
     }
 
     override fun run() {
         while (opModeIsActive()) {
+            if (gamepad1.x) {
+                motor.power = gamepad1.left_stick_y.toDouble()
+            } else {
+                motor.power = 0.0
+            }
+
             if (gamepad1.a) {
                 resetEncoder()
             }
