@@ -28,6 +28,7 @@ If you want to, you can learn the config syntax by digging through the SDK. Expl
             <servo name="servo0-cs0" port="0" />
             <servo name="servo1-cs1" port="2" />
             <servo name="servo2-cs2" port="4" />
+            <servo name="servo6-cs6" port="3" />
         </LynxModule>
         <LynxModule name="Expansion Hub 2" port="2">
             <goBILDA5202SeriesMotor name="motor4-cm0" port="0" />

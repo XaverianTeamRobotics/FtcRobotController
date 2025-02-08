@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.scripts
 
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorEx
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.gamepad1
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.motors
-import org.firstinspires.ftc.teamcode.internals.templates.ContinuousAxisScript
 
 /**
  * Script for continuously controlling a motor based on gamepad input.
@@ -10,17 +11,27 @@ import org.firstinspires.ftc.teamcode.internals.templates.ContinuousAxisScript
  * @property id The identifier for the motor.
  * @property inverted Boolean indicating if the motor direction is inverted.
  * @property input Lambda function to get the input value for the motor.
+ * @property maxBackwardVelocity The maximum velocity in the negative direction (should be a positive number).
+ * @property maxForwardVelocity The maximum velocity in the positive direction.
  */
-class ContinuousMotorScript(
+class ContinuousMotorVelocityScript(
     private val id: Int = 0,
     private val inverted: Boolean = false,
-    private val input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }
+    private val input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() },
+    private val maxBackwardVelocity: Double = -1.0,
+    private val maxForwardVelocity: Double = 1.0
 ) : ContinuousAxisScript(id, inverted, input) {
-    val motor = motors["cm$id"]
-    override val loggingPrefix = "CMS"
+    val motor = motors["cmv$id"] as DcMotorEx
+    override val loggingPrefix = "CMVS"
+
+    init {
+        motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        motor.mode = DcMotor.RunMode.RUN_USING_ENCODER
+    }
 
     override fun doTheThing(input: Double) {
-        motor.power = input
+        // Translate the -1 to 1 value of input to the maxBackwardVelocity to maxForwardVelocity range. 0 = 0, 1 = maxForwardVelocity, -1 = maxBackwardVelocity
+        motor.velocity = input * (maxForwardVelocity - maxBackwardVelocity) / 2 + (maxForwardVelocity + maxBackwardVelocity) / 2
     }
 
     /**
