@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.scripts.MecanumDriveScript
 @TeleOp(name = "Simple Mecanum OpMode", group = BaseOpMode.DRIVETRAIN_GROUP_NAME)
 class SimpleMecanumOpMode: BaseOpMode() {
     override fun construct() {
-        addScript(MecanumDriveScript())
+        addScript(MecanumDriveScript(rotScale = 0.7))
     }
 
     override fun run() {

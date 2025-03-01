@@ -8,8 +8,7 @@ import org.firstinspires.ftc.teamcode.scripts.ContinuousMotorScript
 @TeleOp(name = "Single Motor Test", group = BaseOpMode.DEBUG_GROUP_NAME)
 class SingleMotor: BaseOpMode() {
     override fun construct() {
-        addScript(ContinuousMotorScript(id = 0, input = {
-            HardwareManager.gamepad1.right_trigger.toDouble()-HardwareManager.gamepad1.left_trigger.toDouble() }))
+        addScript(ContinuousMotorScript())
     }
 
     override fun run() {
