@@ -6,22 +6,24 @@ import org.firstinspires.ftc.teamcode.hooks.EncoderLimiterHook
 import org.firstinspires.ftc.teamcode.hooks.EncoderLimiterHook.Companion.findInitialPositionFromAbsoluteEncoder
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager
 import org.firstinspires.ftc.teamcode.internals.templates.BaseOpMode
+import org.firstinspires.ftc.teamcode.internals.templates.ContinuousAxisScript
 import org.firstinspires.ftc.teamcode.scripts.ContinuousMotorScript
+import org.firstinspires.ftc.teamcode.scripts.ContinuousServoScript
 import org.firstinspires.ftc.teamcode.scripts.MecanumDriveScript
 
 @TeleOp
 class Bigbot: BaseOpMode() {
-    lateinit var hSlideHook: EncoderLimiterHook
-
     override fun construct() {
-        HardwareManager.motors[0].mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-        HardwareManager.motors[0].mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        addScript(MecanumDriveScript(hasBevelGears = false, inverted = true))
+        addScript(ContinuousMotorScript("hslide", input = {hSlideInput()}))
+        addScript(ContinuousMotorScript("vslide", input = {gamepad2.right_stick_y.toDouble()}))
 
-        hSlideHook = get_HSlideHook()
+        addScript(ContinuousMotorScript("lift1", input = ContinuousAxisScript.twoButtonInput({gamepad1.dpad_right}, {gamepad1.dpad_left})))
+        addScript(ContinuousMotorScript("lift2", input = ContinuousAxisScript.twoButtonInput({gamepad1.dpad_up}, {gamepad1.dpad_down})))
 
-        addScript(MecanumDriveScript(hasBevelGears = false))
-        addScript(ContinuousMotorScript(0, false, hSlideHook.getHook())) // H Slide
-        addScript(ContinuousMotorScript(1, false, { HardwareManager.gamepad2.right_stick_y.toDouble() })) // V Slide
+        addScript(ContinuousServoScript("uptilt", input = {gamepad2.left_stick_x.toDouble()}))
+
+        addScript(ContinuousServoScript("intake", input = ContinuousAxisScript.twoButtonInput({gamepad2.dpad_up}, {gamepad2.dpad_down})))
     }
 
     override fun run() {
@@ -32,18 +34,12 @@ class Bigbot: BaseOpMode() {
 
     }
 
-    private fun get_HSlideHook(): EncoderLimiterHook {
-        val absoluteEncoder = HardwareManager.absoluteEncoders[0]
-        absoluteEncoder.minVoltage = 0.0
-        absoluteEncoder.maxVoltage = 3.3
-        val absInchPerRev = 17.752
-        val absInitial = 0.0767
-        val lowLimit = 0.0
-        val highLimit = 14.1
-        val encoderTicksPerInch = 516.170
-        return EncoderLimiterHook(
-            //findInitialPositionFromAbsoluteEncoder(absoluteEncoder.position, absInchPerRev, absInitial),
-            0.0,
-            lowLimit, highLimit, "cm0", { (gamepad2.left_stick_y).toDouble() }, encoderTicksPerInch)
+    fun hSlideInput(): Double {
+        val x = gamepad2.left_stick_y.toDouble()
+        return if (x in -0.10..0.05) {
+            -0.2
+        } else {
+            x
+        }
     }
 }

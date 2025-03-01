@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.scripts
 
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorEx
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.gamepad1
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.motors
 import org.firstinspires.ftc.teamcode.internals.templates.ContinuousAxisScript
@@ -10,19 +12,29 @@ import org.firstinspires.ftc.teamcode.internals.templates.ContinuousAxisScript
  * @property id The identifier for the motor.
  * @property inverted Boolean indicating if the motor direction is inverted.
  * @property input Lambda function to get the input value for the motor.
+ * @property maxBackwardVelocity The maximum velocity in the negative direction (should be a positive number).
+ * @property maxForwardVelocity The maximum velocity in the positive direction.
  */
-class ContinuousMotorScript(
+class ContinuousMotorVelocityScript(
     private val name: String,
     private val inverted: Boolean = false,
-    private val input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }
+    private val input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() },
+    private val maxBackwardVelocity: Double = -1.0,
+    private val maxForwardVelocity: Double = 1.0
 ) : ContinuousAxisScript(name, inverted, input) {
-    constructor(id: Int = 0, inverted: Boolean = false, input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }) : this("cm$id", inverted, input)
+    constructor(id: Int = 0, inverted: Boolean = false, input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }, maxBackwardVelocity: Double = -1.0, maxForwardVelocity: Double = 1.0) : this("cmv$id", inverted, input, maxBackwardVelocity, maxForwardVelocity)
 
-    val motor = motors.get(name, 0)
-    override val loggingPrefix = "CMS"
+    val motor = motors.get(name, 0) as DcMotorEx
+    override val loggingPrefix = "CMVS"
+
+    init {
+        motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+        motor.mode = DcMotor.RunMode.RUN_USING_ENCODER
+    }
 
     override fun doTheThing(input: Double) {
-        motor.power = input
+        // Translate the -1 to 1 value of input to the maxBackwardVelocity to maxForwardVelocity range. 0 = 0, 1 = maxForwardVelocity, -1 = maxBackwardVelocity
+        motor.velocity = input * (maxForwardVelocity - maxBackwardVelocity) / 2 + (maxForwardVelocity + maxBackwardVelocity) / 2
     }
 
     /**

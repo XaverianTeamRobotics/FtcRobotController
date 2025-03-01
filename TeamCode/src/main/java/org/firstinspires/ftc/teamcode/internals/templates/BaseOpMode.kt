@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.internals.templates
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+//import org.firstinspires.ftc.teamcode.internals.display.Display
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareSecret
 
@@ -33,6 +34,7 @@ abstract class BaseOpMode : LinearOpMode() {
     override fun runOpMode() {
         instance = this
         HardwareManager.init(hardwareMap, gamepad1, gamepad2, telemetry, HardwareSecret.secret)
+        //Display.reset()
         construct()
         waitForStart()
         started = true
@@ -45,6 +47,7 @@ abstract class BaseOpMode : LinearOpMode() {
                     scripts.remove(script)
                 }
             }
+            //Display.update()
             sleep(50)
         }
         allThreads.forEach { it.interrupt() }

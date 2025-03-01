@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode.scripts
 
-import com.qualcomm.robotcore.util.RobotLog
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.gamepad1
-import org.firstinspires.ftc.teamcode.internals.templates.Script
+import org.firstinspires.ftc.teamcode.internals.templates.ContinuousAxisScript
 
 /**
  * Script for continuously controlling a servo based on gamepad input.
@@ -13,39 +12,16 @@ import org.firstinspires.ftc.teamcode.internals.templates.Script
  * @property input Lambda function to get the input value for the servo.
  */
 class ContinuousServoScript(
-    private val id: Int = 0,
+    private val name: String,
     private val inverted: Boolean = false,
     private val input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }
-) : Script() {
-    private val servo = HardwareManager.servos.get("cs$id", 0)
+) : ContinuousAxisScript(name, inverted, input) {
+    constructor(id: Int = 0, inverted: Boolean = false, input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }) : this("cs$id", inverted, input)
 
-    /**
-     * Initializes the script. This method is called once when the script is started.
-     */
-    override fun init() {}
+    private val servo = HardwareManager.servos.get(name, 0)
+    override val loggingPrefix: String = "CSS"
 
-    /**
-     * Main loop for continuously controlling the servo. This method runs continuously.
-     */
-    override fun run() {
-        try {
-            var prev = 0.0
-            while (scriptIsActive()) {
-                val i = ((((if (inverted) -1 else 1) * input()) / 2) + 0.5)
-                if (i != prev) {
-                    servo.position = i
-                    RobotLog.v("CSS${id}: Set power to ${i}")
-                }
-                prev = i
-            }
-        } catch (e: Exception) {
-            RobotLog.e("ContinuousServoScript: ${e.message}")
-            return
-        }
+    override fun doTheThing(input: Double) {
+        servo.position = input
     }
-
-    /**
-     * Called when the script is stopped.
-     */
-    override fun onStop() {}
 }

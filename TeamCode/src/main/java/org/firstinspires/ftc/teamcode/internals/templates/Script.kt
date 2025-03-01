@@ -14,7 +14,7 @@ abstract class Script {
      *
      * @return True if the script is active, false otherwise.
      */
-    fun scriptIsActive(): Boolean = !thread.isInterrupted
+    fun scriptIsActive(): Boolean = !thread.isInterrupted && BaseOpMode.instance?.opModeIsActive() ?: false
 
     /**
      * Initializes the script. To be implemented by subclasses.
