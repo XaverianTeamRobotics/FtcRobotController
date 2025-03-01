@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.internals.templates
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.util.RobotLog
+import org.firstinspires.ftc.teamcode.internals.display.Display
 //import org.firstinspires.ftc.teamcode.internals.display.Display
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareSecret
@@ -32,9 +34,35 @@ abstract class BaseOpMode : LinearOpMode() {
      * Runs the operation mode. Initializes hardware, starts threads, and manages script execution.
      */
     override fun runOpMode() {
+        // Close all threads from the previous instance, if there is one
+        if (instance != null) {
+            var aliveThreads = 0
+            // Attempt to close out of all previous threads
+            for (thread in instance!!.allThreads) {
+                thread.interrupt()
+            }
+            // Check to see if the threads stopped
+            allThreads.forEach { thread ->
+                if (thread.isAlive) {
+                    val text = "Thread ${thread.name} is still running."
+                    telemetry.addLine(text)
+                    RobotLog.w(text)
+                    aliveThreads++
+                }
+            }
+            if (aliveThreads > 0) {
+                val text = "Could not close all threads from previous instance.\n" +
+                        "$aliveThreads threads are still running.\n" +
+                        "It is recommended to not run the OpMode and restart the robot."
+                telemetry.addLine(text)
+                RobotLog.e(text)
+            }
+            telemetry.update()
+        }
+
         instance = this
         HardwareManager.init(hardwareMap, gamepad1, gamepad2, telemetry, HardwareSecret.secret)
-        //Display.reset()
+        Display.reset()
         construct()
         waitForStart()
         started = true
@@ -47,7 +75,7 @@ abstract class BaseOpMode : LinearOpMode() {
                     scripts.remove(script)
                 }
             }
-            //Display.update()
+            Display.update()
             sleep(50)
         }
         allThreads.forEach { it.interrupt() }

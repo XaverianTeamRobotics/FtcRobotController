@@ -43,5 +43,10 @@ interface Display {
                 return true
             }
         }
+
+        fun reset() {
+            instance = null
+            create()
+        }
     }
 }
