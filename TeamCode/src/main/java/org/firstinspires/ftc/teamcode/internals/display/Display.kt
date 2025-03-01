@@ -28,6 +28,8 @@ interface Display {
             instance?.display()
         }
 
+        fun update() = display()
+
         fun clear() {
             instance?.clear()
         }
