@@ -21,7 +21,8 @@ class MecanumDriveScript(
     private val rotScale: Double = 1.0,
     private val lateralInput: () -> Double = { gamepad1.left_stick_x.toDouble() },
     private val forwardInput: () -> Double = { -gamepad1.left_stick_y.toDouble() },
-    private val rotationInput: () -> Double = { gamepad1.right_stick_x.toDouble() }
+    private val rotationInput: () -> Double = { gamepad1.right_stick_x.toDouble() },
+    private val inverted: Boolean = false,
 ) : Script() {
     private val frontLeftMotor: DcMotor = motors.get("fl", 0)
     private val backLeftMotor: DcMotor = motors.get("bl", 1)
@@ -35,9 +36,9 @@ class MecanumDriveScript(
             while (scriptIsActive()) {
                 var startT = System.currentTimeMillis()
 
-                val y = forwardInput()
-                val x = lateralInput() * 1.1
-                val rx = rotationInput() * rotScale
+                val y = forwardInput() * if (inverted) -1.0 else 1.0
+                val x = lateralInput() * 1.1 * if (inverted) -1.0 else 1.0
+                val rx = rotationInput() * rotScale * if (inverted) -1.0 else 1.0
 
                 val denominator = max(abs(y) + abs(x) + abs(rx), 1.0)
                 var frontLeftPower = (y + x + rx) / denominator

@@ -12,11 +12,13 @@ import org.firstinspires.ftc.teamcode.internals.templates.ContinuousAxisScript
  * @property input Lambda function to get the input value for the motor.
  */
 class ContinuousMotorScript(
-    private val id: Int = 0,
+    private val name: String,
     private val inverted: Boolean = false,
     private val input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }
-) : ContinuousAxisScript(id, inverted, input) {
-    val motor = motors["cm$id"]
+) : ContinuousAxisScript(name, inverted, input) {
+    constructor(id: Int = 0, inverted: Boolean = false, input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }) : this("cm$id", inverted, input)
+
+    val motor = motors.get(name, 0)
     override val loggingPrefix = "CMS"
 
     override fun doTheThing(input: Double) {

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager.gamepad
  * @property input Lambda function to get the input value for the motor.
  */
 abstract class ContinuousAxisScript(
-    private val id: Int = 0,
+    private val name: String,
     private val inverted: Boolean = false,
     private val input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }
 ) : Script() {
@@ -32,12 +32,12 @@ abstract class ContinuousAxisScript(
                 val i = (if (inverted) -1.0 else 1.0) * input()
                 if (i != prev) {
                     doTheThing(i)
-                    RobotLog.v("$loggingPrefix$id: Set power to $i")
+                    RobotLog.v("$name: Set power to $i")
                 }
                 prev = i
             }
         } catch (e: Exception) {
-            RobotLog.e("$loggingPrefix$id: ${e.message}")
+            RobotLog.e("$name: ${e.message}")
             return
         }
     }

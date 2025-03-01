@@ -25,16 +25,23 @@ If you want to, you can learn the config syntax by digging through the SDK. Expl
             <goBILDA5202SeriesMotor name="motor1-bl" port="1" />
             <goBILDA5202SeriesMotor name="motor2-fr" port="2" />
             <goBILDA5202SeriesMotor name="motor3-br" port="3" />
-            <servo name="servo0-cs0" port="0" />
-            <servo name="servo1-cs1" port="2" />
-            <servo name="servo2-cs2" port="4" />
-            <servo name="servo6-cs6" port="3" />
-        </LynxModule>
-        <LynxModule name="Expansion Hub 2" port="2">
-            <goBILDA5202SeriesMotor name="motor4-cm0" port="0" />
-            <servo name="servo3-cs3" port="0" />
-            <servo name="servo4-cs4" port="2" />
-            <servo name="servo5-cs5" port="4" />
+            <Servo name="servo0-camera" port="0" />
+            <Servo name="servo2-uptilt" port="2" />
+            <RevExternalImu name="imu" port="0" bus="0" />
+            <goBILDAPinpoint name="pinpoint" port="1" bus="0" />
         </LynxModule>
     </LynxUsbDevice>
+
+    <LynxUsbDevice name="Expansion Hub Portal 1" serialNumber="DQ8P0J7N" parentModuleAddress="2">
+        <LynxModule name="Expansion Hub 2" port="2">
+            <goBILDA5202SeriesMotor name="motor4-vslide" port="0" />
+            <goBILDA5202SeriesMotor name="motor5-lift1" port="1" />
+            <goBILDA5202SeriesMotor name="motor6-lift2" port="2" />
+            <goBILDA5202SeriesMotor name="motor7-hslide" port="3" />
+            <Servo name="servo4-lowtilt" port="0" />
+            <Servo name="servo6-intake" port="2" />
+        </LynxModule>
+    </LynxUsbDevice>
+
+    <EthernetDevice name="limelight3a" serialNumber="EthernetOverUsb:eth0:172.29.0.22" port="0" ipAddress="172.29.0.1" />
 </Robot>

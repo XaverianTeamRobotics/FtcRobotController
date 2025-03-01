@@ -16,13 +16,15 @@ import org.firstinspires.ftc.teamcode.internals.templates.ContinuousAxisScript
  * @property maxForwardVelocity The maximum velocity in the positive direction.
  */
 class ContinuousMotorVelocityScript(
-    private val id: Int = 0,
+    private val name: String,
     private val inverted: Boolean = false,
     private val input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() },
     private val maxBackwardVelocity: Double = -1.0,
     private val maxForwardVelocity: Double = 1.0
-) : ContinuousAxisScript(id, inverted, input) {
-    val motor = motors["cmv$id"] as DcMotorEx
+) : ContinuousAxisScript(name, inverted, input) {
+    constructor(id: Int = 0, inverted: Boolean = false, input: () -> Double = { (gamepad1.right_trigger - gamepad1.left_trigger).toDouble() }, maxBackwardVelocity: Double = -1.0, maxForwardVelocity: Double = 1.0) : this("cmv$id", inverted, input, maxBackwardVelocity, maxForwardVelocity)
+
+    val motor = motors.get(name, 0) as DcMotorEx
     override val loggingPrefix = "CMVS"
 
     init {
