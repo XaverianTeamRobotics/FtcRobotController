@@ -58,6 +58,7 @@ abstract class BaseOpMode : LinearOpMode() {
                 RobotLog.e(text)
             }
             telemetry.update()
+            sleep(2000)
         }
 
         instance = this
