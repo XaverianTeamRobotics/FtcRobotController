@@ -28,6 +28,8 @@ interface Display {
             instance?.display()
         }
 
+        fun update() = display()
+
         fun clear() {
             instance?.clear()
         }
@@ -40,6 +42,11 @@ interface Display {
                 instance = DisplayImpl()
                 return true
             }
+        }
+
+        fun reset() {
+            instance = null
+            create()
         }
     }
 }

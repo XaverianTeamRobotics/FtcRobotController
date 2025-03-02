@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.internals.display
 
+import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager
+
 class DisplayImpl @Throws(IllegalStateException::class) constructor(): Display  {
     init {
         if (Display.instance != null) {
@@ -23,7 +25,8 @@ class DisplayImpl @Throws(IllegalStateException::class) constructor(): Display  
     }
 
     override fun display() {
-        frames.values.forEach { println(it.display()) }
+        frames.values.forEach { HardwareManager.telemetry.addLine(it.display()) }
+        HardwareManager.telemetry.update()
     }
 
     override fun clear() {
