@@ -22,6 +22,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7'
     //noinspection GradleDependency
     implementation 'com.acmerobotics.roadrunner:core:0.5.6'
+    //implementation 'org.nanohttpd:nanohttpd:2.3.1'
 }
 dependencies {
     implementation 'org.openftc:easyopencv:1.5.0'
