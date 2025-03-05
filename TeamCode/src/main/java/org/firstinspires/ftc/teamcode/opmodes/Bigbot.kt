@@ -10,36 +10,23 @@ import org.firstinspires.ftc.teamcode.internals.templates.ContinuousAxisScript
 import org.firstinspires.ftc.teamcode.scripts.ContinuousMotorScript
 import org.firstinspires.ftc.teamcode.scripts.ContinuousServoScript
 import org.firstinspires.ftc.teamcode.scripts.MecanumDriveScript
+import org.firstinspires.ftc.teamcode.scripts.TiltAndExtendScript
 
 @TeleOp
 class Bigbot: BaseOpMode() {
     override fun construct() {
-        addScript(MecanumDriveScript(hasBevelGears = false, inverted = true))
-        addScript(ContinuousMotorScript("hslide", input = {hSlideInput()}))
-        addScript(ContinuousMotorScript("vslide", input = {gamepad2.right_stick_y.toDouble()}))
 
-        addScript(ContinuousMotorScript("lift1", input = ContinuousAxisScript.twoButtonInput({gamepad1.dpad_right}, {gamepad1.dpad_left})))
-        addScript(ContinuousMotorScript("lift2", input = ContinuousAxisScript.twoButtonInput({gamepad1.dpad_up}, {gamepad1.dpad_down})))
-
-        addScript(ContinuousServoScript("uptilt", input = {gamepad2.left_stick_x.toDouble()}))
-
-        addScript(ContinuousServoScript("intake", input = ContinuousAxisScript.twoButtonInput({gamepad2.dpad_up}, {gamepad2.dpad_down})))
     }
 
     override fun run() {
-
+        addScript(MecanumDriveScript(hasBevelGears = false, inverted = true))
+        addScript(TiltAndExtendScript(tiltMaxVel = 40.0, extendMaxVel = 1000.0, extend2MaxVel = 1000.0, pMultiplier = 1.5, gamepadEnable = true))
+        sleep(500)
+        addScript(ContinuousServoScript("intake", input = {((gamepad2.right_stick_y.toDouble() / 4) + 0.5)}))
+        addScript(ContinuousServoScript("tilt", input = {(gamepad2.left_stick_y.toDouble() / 2) + 0.5}))
     }
 
     override fun onStop() {
 
-    }
-
-    fun hSlideInput(): Double {
-        val x = gamepad2.left_stick_y.toDouble()
-        return if (x in -0.10..0.05) {
-            -0.2
-        } else {
-            x
-        }
     }
 }

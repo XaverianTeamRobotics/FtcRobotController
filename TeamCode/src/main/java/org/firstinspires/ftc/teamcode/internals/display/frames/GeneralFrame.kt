@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.internals.display.frames
 
 import org.firstinspires.ftc.teamcode.internals.display.Frame
+import java.util.concurrent.CopyOnWriteArrayList
 
 class GeneralFrame: Frame {
-    private val lines = mutableListOf<String>()
+    private val lines = CopyOnWriteArrayList<String>()
     private var contentBeforeFreeze = ""
     var frozen = false
         set(value) {
@@ -18,26 +19,32 @@ class GeneralFrame: Frame {
 
     fun addLine(line: String) {
         lines.add(line)
+        if (!frozen) display()
     }
 
     fun addLine(index: Int, line: String) {
         lines.add(index, line)
+        if (!frozen) display()
     }
 
     fun removeLine(index: Int) {
         lines.removeAt(index)
+        if (!frozen) display()
     }
 
     fun removeLine(line: String) {
         lines.remove(line)
+        if (!frozen) display()
     }
 
     fun clear() {
         lines.clear()
+        if (!frozen) display()
     }
 
     fun addLines(vararg lines: String) {
         this.lines.addAll(lines)
+        if (!frozen) display()
     }
 
     fun freeze() {

@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.internals.templates
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.RobotLog
+import com.sun.tools.javac.jvm.Gen
 import org.firstinspires.ftc.teamcode.internals.display.Display
+import org.firstinspires.ftc.teamcode.internals.display.frames.GeneralFrame
 //import org.firstinspires.ftc.teamcode.internals.display.Display
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareManager
 import org.firstinspires.ftc.teamcode.internals.hardware.HardwareSecret
@@ -29,6 +31,8 @@ abstract class BaseOpMode : LinearOpMode() {
      * Main thread that runs the operation mode.
      */
     private val mainThread: Thread = Thread { run() }
+
+    internal val displayFrame: GeneralFrame = GeneralFrame()
 
     /**
      * Runs the operation mode. Initializes hardware, starts threads, and manages script execution.
@@ -64,6 +68,7 @@ abstract class BaseOpMode : LinearOpMode() {
         instance = this
         HardwareManager.init(hardwareMap, gamepad1, gamepad2, telemetry, HardwareSecret.secret)
         Display.reset()
+        Display.addFrame("default", displayFrame)
         construct()
         waitForStart()
         started = true
