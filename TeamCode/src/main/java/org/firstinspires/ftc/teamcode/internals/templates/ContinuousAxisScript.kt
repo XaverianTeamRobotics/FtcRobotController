@@ -58,7 +58,11 @@ abstract class ContinuousAxisScript(
          * @param stop Lambda function to check the stop condition.
          * @return Lambda function that returns the input value based on the conditions.
          */
-        fun threeWayInput(pos: () -> Boolean, neg: () -> Boolean, stop: () -> Boolean): () -> Double {
+        fun threeWayInput(
+            pos: () -> Boolean,
+            neg: () -> Boolean,
+            stop: () -> Boolean
+        ): () -> Double {
             var state = 0.0
             return {
                 if (pos()) {
@@ -71,6 +75,44 @@ abstract class ContinuousAxisScript(
                 state
             }
         }
+
+        /**
+         * Creates a three-way input function based on positive, negative, and stop conditions.
+         *
+         * @param pos Lambda function to check the positive condition.
+         * @param neg Lambda function to check the negative condition.
+         * @param stop Lambda function to check the stop condition.
+         * @param inverted Lambda function to check if servo rotation is inverted
+         * @return Lambda function that returns the input value based on the conditions.
+         */
+        fun threeWayServoInput(
+            pos: () -> Boolean,
+            neg: () -> Boolean,
+            stop: () -> Boolean,
+            inverted: () -> Boolean
+        ): Double {
+            var state = 0.5
+            if (!inverted()) {
+                if (pos()) {
+                    state = 1.0
+                } else if (neg()) {
+                    state = 0.0
+                } else if (stop()) {
+                    state = 0.5
+                }
+
+            } else if (inverted()) {
+                if (pos()) {
+                    state = 0.0
+                } else if (neg()) {
+                    state = 1.0
+                } else if (stop()) {
+                    state = 0.5
+                }
+            }
+            return state
+        }
+
 
         /**
          * Creates a two-button input function based on positive and negative conditions.
